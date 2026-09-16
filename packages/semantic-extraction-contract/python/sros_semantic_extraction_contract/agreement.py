@@ -22,6 +22,7 @@ from .labels import LABELS, LabelStatus
 __all__ = [
     "ADJUDICATION_RESOLUTIONS",
     "analyse_composition",
+    "analyse_single_human_reference",
     "build_adjudication_queue",
     "cohen_kappa",
     "krippendorff_alpha_nominal",
@@ -291,6 +292,75 @@ def analyse_composition(files: list[dict[str, Any]], contract: dict[str, Any]) -
                 "verdict": "GATE_NOT_AUTHORISED"
                 if kappa_item["status"] != "AUTHORISED"
                 else "COMPUTE",
+            },
+        },
+    }
+
+
+def analyse_single_human_reference(
+    committed: dict[str, Any], contract: dict[str, Any]
+) -> dict[str, Any]:
+    """Composition of a SINGLE_HUMAN_REFERENCE (Mission 1.85.5). Not an agreement report.
+
+    With one annotator nothing can be said about agreement between people, so every inter-annotator metric
+    is NOT_APPLICABLE_SINGLE_ANNOTATOR (a string, never 0), no adjudication queue exists, and the
+    agreement-floor gate has no verdict. The composition counts are the one annotator's own states: they
+    describe a pilot reference, not a gold standard.
+    """
+    from .reference import (
+        HOLDOUT_POLICY,
+        NOT_APPLICABLE_SINGLE_ANNOTATOR,
+        PILOT_NOT_CERTIFICATION,
+        RESULT_SCOPE_DEVELOPMENT_PILOT,
+        ReferenceStrength,
+        single_annotator_agreement,
+    )
+
+    annotators, record_ids, cells = _index([committed])
+    [annotator] = annotators
+    gate = contract["evaluation_protocol"]["composition_gate"]
+    per_label = {}
+    for label in LABELS:
+        if label.status is LabelStatus.NOT_SAFE:
+            continue
+        lid = label.label_id
+        counts = {
+            s: sum(cells[annotator][r][lid]["state"] == s for r in record_ids) for s in STATES
+        }
+        per_label[lid] = {
+            "status": label.status.value,
+            "state_counts": counts,
+            "prevalence_present_among_decided": round(
+                counts["PRESENT"] / (counts["PRESENT"] + counts["ABSENT"]), 6
+            )
+            if counts["PRESENT"] + counts["ABSENT"]
+            else "UNDEFINED",
+            "inter_annotator_agreement": single_annotator_agreement(),
+        }
+    content = json.dumps([r["labels"] for r in committed["records"]], sort_keys=True)
+    return {
+        "$comment": "SINGLE_HUMAN_REFERENCE composition (Mission 1.85.5). One genuine human annotator; no second human exists and none was simulated. Inter-annotator metrics are NOT_APPLICABLE_SINGLE_ANNOTATOR, not zero. A pilot reference, never inter-annotator gold.",
+        "split": "DEVELOPMENT",
+        "reference_strength": ReferenceStrength.SINGLE_HUMAN_REFERENCE.value,
+        "result_scope": RESULT_SCOPE_DEVELOPMENT_PILOT,
+        "result_label": PILOT_NOT_CERTIFICATION,
+        "holdout_policy": HOLDOUT_POLICY,
+        "annotators": annotators,
+        "annotator_files_sha256": [hashlib.sha256(content.encode()).hexdigest()],
+        "records": len(record_ids),
+        "labels": per_label,
+        "adjudication_queue_size": NOT_APPLICABLE_SINGLE_ANNOTATOR,
+        "gates": {
+            "composition": {
+                "rule": gate["per_split_per_label"],
+                "status": gate["status"],
+                "verdict": "GATE_NOT_AUTHORISED"
+                if gate["status"] != "AUTHORISED"
+                else "COMPUTE_ON_THE_SINGLE_HUMAN_REFERENCE",
+            },
+            "agreement_floor": {
+                "status": "REQUIRES_MULTI_HUMAN_REFERENCE",
+                "verdict": NOT_APPLICABLE_SINGLE_ANNOTATOR,
             },
         },
     }

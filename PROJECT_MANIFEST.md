@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.168
+Version: 1.169
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.4 follow-up, first human annotation)
+Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.5)
 
 ---
 
@@ -13,6 +13,20 @@ Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.4 follow-up, first human annot
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.169 - 2026-09-17 (Sprint 1 / Mission 1.85.5)
+
+**Single-human reference pilot mode (N08-B).** The operator has no second independent human annotator and will
+not buy annotation, so a reduced, named evidence standard replaces a fabricated one. Reference strengths
+SINGLE_HUMAN_REFERENCE (exactly one attested human DEVELOPMENT file: RESULT_SCOPE DEVELOPMENT_PILOT,
+PILOT_NOT_CERTIFICATION), MULTI_HUMAN_REFERENCE (unchanged path) and AI_ASSISTED_PROVISIONAL (diagnostic only,
+stored apart, never a human gate or agreement). Inter-annotator metrics for one annotator are
+NOT_APPLICABLE_SINGLE_ANNOTATOR, never 0. Threshold package partitioned (pilot-valid, multi-human, holdout)
+with no value changed, all PROPOSED_NOT_AUTHORISED. Packet v2 carries a reference block and is
+BLOCKED_OPERATOR_DECISIONS; the runner refuses a READY packet without a human reference or with an
+overclaiming one, and an approval must accept the reference strength. HOLDOUT requires a multi-human
+reference or a new operator decision. N08 SINGLE_HUMAN_REFERENCE_RECORDED_OPERATOR_DECISIONS_PENDING, not
+DONE. 0 provider calls, 0 AI annotations, 0 egress. `docs/reports/mission-1.85.5-report.md`.
 
 ## 1.168 - 2026-09-17 (Sprint 1 / Mission 1.85.4 follow-up)
 

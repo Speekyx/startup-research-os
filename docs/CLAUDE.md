@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.169
-Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.4 follow-up)
+Version: 1.170
+Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.5)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.170 | 2026-09-17 | **SINGLE_HUMAN_REFERENCE_RECORDED_OPERATOR_DECISIONS_PENDING: one genuine human annotation is a named pilot reference, not gold, and no second human was invented.** Roadmap N08-B-PILOT; 0 provider calls, 0 AI annotations, 0 egress, 0 findings. **Strengths**: SINGLE_HUMAN_REFERENCE (DEVELOPMENT_PILOT, PILOT_NOT_CERTIFICATION), MULTI_HUMAN_REFERENCE unchanged, AI_ASSISTED_PROVISIONAL diagnostic only and stored apart. **Metrics** for one annotator NOT_APPLICABLE_SINGLE_ANNOTATOR, never 0. **Thresholds** partitioned, unchanged, unauthorised. **Packet** v2 `894d8532...` BLOCKED_OPERATOR_DECISIONS; runner refuses a non-human or overclaiming reference. **Holdout** needs multi-human or a new operator decision. `mission-1.85.5-report.md`. |
 | 1.169 | 2026-09-17 | **First human development annotation imported** (operator-a, 50 records, attested, no quote or note text committed). Packet re-rendered, still BLOCKED_HUMAN_LABELS pending a second independent human annotator; runner pin updated. |
 | 1.168 | 2026-09-17 | **Interactive annotation form.** `semantic_annotation.py label` lets a human annotator answer each question in the terminal with immediate quote checks, per-record saving, resume, and an attestation set true only on an explicit yes. It proposes no answer and reads only the annotator's own working pack and surfaces. No label entered, no model called. |
 | 1.167 | 2026-09-16 | **EVALUATION_TOOLING_READY_HUMAN_LABELS_AND_EGRESS_REVIEW_PENDING: N08-B built every piece of a bounded evaluation offline, and nothing ran.** 0 provider calls, 0 egress, 0 findings, 0 human labels entered. **D-12** re-grounded: embedding versioning, OPEN; NLP_EXTRACTION now gated by N08, clustering by D-12; planner 1.5.0. **Annotation** tooling outside the repository with offsets-and-digests import, agreement and adjudication; human labels pending. **Egress** scan on the exact surface, no redaction: 1 excluded, 49 review required, 0 approved. **Provider** requalified with conditions from raw-read pages; error echo NOT_ESTABLISHED, error bodies never stored. **Extractor** package with no call site; **packet** `1ed9faf8...` BLOCKED_HUMAN_LABELS; runner refuses before reading an approval. `mission-1.85.4-report.md`. |
@@ -3098,6 +3099,26 @@ by labels, egress review and operator decisions, not by code.**
 **Next is human work and operator decisions: two annotators, adjudication, egress review, thresholds, the
 retry reading and the ceiling.** **Do not run the model, fill a pack with a model's labels, approve the blocked
 packet, evaluate or render holdout, or create Opportunity #2. Mission 1.85.5 was not started.**
+
+
+**ANSWERED IN 1.170 (Mission 1.85.5). N08-B pilot: with one human and no second, the reference is named for
+what it is, and the development pilot is blocked by operator decisions, not labels.**
+
+    reference     SINGLE_HUMAN_REFERENCE (operator-a); multi-human path unchanged; AI provisional diagnostic only
+    agreement     every inter-annotator metric NOT_APPLICABLE_SINGLE_ANNOTATOR, never 0; no queue
+    thresholds    partitioned: 10 pilot-valid, 4 multi-human, 9 holdout; values unchanged; none authorised
+    packet        v2 894d8532... BLOCKED_OPERATOR_DECISIONS; approval must accept the reference strength
+    holdout       HOLDOUT_REQUIRES_MULTI_HUMAN_OR_NEW_OPERATOR_DECISION
+
+- **A WEAKER REFERENCE IS NAMED, NEVER DISGUISED.** One person's labels are a pilot reference; relabelling a
+  model as human, or one person as two, would make every origin meaningless.
+- **NOT MEASURED IS NOT ZERO.** A metric that needs two annotators is NOT_APPLICABLE with one.
+- **A PILOT IS NOT A CERTIFICATION.** No pilot result claims inter-human reliability, consensus, holdout
+  generalisation, production readiness or calibrated accuracy.
+
+**Next is operator decisions on the pilot path: egress review, the pilot thresholds, the retry reading and the
+ceiling, then a packet-scoped approval.** **Do not run the model, produce an AI annotation, treat the pilot as
+certification, open holdout, or create Opportunity #2. Mission 1.85.6 was not started.**
 
 
 

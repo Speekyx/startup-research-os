@@ -1,10 +1,16 @@
-"""Mission 1.85.4 (N08-B). The frozen evaluation packet for a FUTURE development-split extraction run.
+"""Mission 1.85.4 (N08-B), reference strength added in Mission 1.85.5. The frozen evaluation packet for a
+FUTURE development-split extraction run.
 
 The packet binds everything a run would depend on, and it cannot be executed:
 
-- its `status` is computed from facts, and while human labels, egress decisions, threshold
-  authorisation or the retry ratification are missing it is BLOCKED_HUMAN_LABELS; the runner refuses any
-  status other than READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL before it reads an approval;
+- its `status` is computed from facts: BLOCKED_HUMAN_LABELS while no human reference gate is satisfied,
+  BLOCKED_OPERATOR_DECISIONS while a human reference exists but egress decisions, threshold authorisation,
+  the retry ratification or the ceiling are missing; the runner refuses any status other than
+  READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL before it reads an approval;
+- its `reference` block states what a result could claim. Exactly one genuine human annotation is a
+  SINGLE_HUMAN_REFERENCE: RESULT_SCOPE DEVELOPMENT_PILOT, result label PILOT_NOT_CERTIFICATION, and only
+  the pilot-valid thresholds are read. Two or more plus adjudication is the unchanged
+  MULTI_HUMAN_REFERENCE path;
 - an approval is never written into the packet (that would change the approved bytes); it is a separate
   file, named by the packet digest, that only the operator creates after the final digest is known;
 - the packet carries DEVELOPMENT records only; holdout is never in a prompt-development packet.
@@ -51,6 +57,15 @@ from sros_semantic_extraction_contract import (  # noqa: E402
     SURFACE_ID,
     SURFACE_VERSION,
 )
+from sros_semantic_extraction_contract.reference import (  # noqa: E402
+    HOLDOUT_POLICY,
+    PILOT_ROADMAP_STATUS,
+    PROHIBITED_PILOT_CLAIMS,
+    REFERENCE_MODEL_ID,
+    ReferenceStrength,
+    assess_reference,
+    holdout_reference_permitted,
+)
 
 DATA = ROOT / "docs" / "data"
 PACKET = DATA / "semantic-extraction-evaluation-packet-development-v1.json"
@@ -63,11 +78,13 @@ PROVIDER_POLICY = DATA / "model-provider-policy-v1.json"
 COST_CEILING_RECORD = DATA / "second-opportunity-execution-cost-ceiling-v1.json"
 ANNOTATION_GLOB = "stack-overflow-semantic-annotations-development-*-v1.json"
 ADJUDICATION = DATA / "stack-overflow-semantic-adjudication-development-v1.json"
+THRESHOLD_PARTITION = DATA / "semantic-extraction-threshold-partition-v1.json"
 
 PACKET_ID = "semantic-extraction-evaluation-packet-development"
-PACKET_VERSION = 1
+PACKET_VERSION = 2
 READY = "READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL"
 BLOCKED = "BLOCKED_HUMAN_LABELS"
+BLOCKED_DECISIONS = "BLOCKED_OPERATOR_DECISIONS"
 MODEL = "claude-sonnet-5"
 MAX_OUTPUT_TOKENS = 4096
 TIMEOUT_SECONDS = 240.0
@@ -138,23 +155,48 @@ def build() -> dict[str, Any]:
     )
 
     annotation_files = sorted(DATA.glob(ANNOTATION_GLOB))
-    thresholds_authorised = all(
-        i["status"] == "AUTHORISED" for i in contract["proposed_thresholds"]["items"]
+    partition = json.loads(THRESHOLD_PARTITION.read_text("utf-8"))
+    reference = assess_reference(
+        [(p.name, json.loads(p.read_text("utf-8"))) for p in annotation_files],
+        split_record_ids={r["normalized_record_id"] for r in development},
+        surface_sha256_by_id={r["normalized_record_id"]: r["surface_sha256"] for r in development},
+        adjudication_present=ADJUDICATION.exists(),
     )
-    blockers = []
-    if len(annotation_files) < 2:
-        blockers.append(
-            f"HUMAN_LABELS_PENDING: {len(annotation_files)} of at least 2 committed development annotation files"
+    single = reference.strength is ReferenceStrength.SINGLE_HUMAN_REFERENCE
+    if single:
+        # The pilot reads only the thresholds that need neither a second human nor holdout.
+        thresholds_authorised = all(
+            i["status"] == "AUTHORISED" for i in partition["buckets"]["SINGLE_HUMAN_PILOT_VALID"]
         )
-    if not ADJUDICATION.exists():
+    else:
+        thresholds_authorised = all(
+            i["status"] == "AUTHORISED" for i in contract["proposed_thresholds"]["items"]
+        )
+    blockers = []
+    for name, problems in reference.refused_files:
+        blockers.append(f"HUMAN_ANNOTATION_FILE_REFUSED: {name} ({', '.join(problems[:5])})")
+    if not single and len(reference.human_files) < 2:
+        blockers.append(
+            f"HUMAN_LABELS_PENDING: {len(reference.human_files)} valid committed development annotation files (exactly 1 for a SINGLE_HUMAN_REFERENCE pilot, at least 2 plus adjudication for MULTI_HUMAN_REFERENCE)"
+        )
+    if not single and not ADJUDICATION.exists():
         blockers.append("ADJUDICATION_PENDING")
+    if (
+        len(reference.human_files) >= 2
+        and ADJUDICATION.exists()
+        and not reference.refused_files
+        and not reference.multi_human_gate
+    ):
+        blockers.append("MULTI_HUMAN_REFERENCE_INVALID: duplicate annotator ids")
     if not approved:
         blockers.append(
             f"EGRESS_REVIEW_PENDING: 0 EGRESS_APPROVED records ({eligibility['state_counts']})"
         )
     if not thresholds_authorised:
         blockers.append(
-            "THRESHOLDS_NOT_AUTHORISED: every evaluation threshold is PROPOSED_NOT_AUTHORISED"
+            "THRESHOLDS_NOT_AUTHORISED: the single-human pilot thresholds are PROPOSED_NOT_AUTHORISED"
+            if single
+            else "THRESHOLDS_NOT_AUTHORISED: every evaluation threshold is PROPOSED_NOT_AUTHORISED"
         )
     blockers.append(
         "RETRY_INTERPRETATION_NOT_RATIFIED: the operator has not ratified the schema-failure retry reading"
@@ -163,13 +205,40 @@ def build() -> dict[str, Any]:
         "COST_CEILING_NOT_ACCEPTED: the hard ceiling rests on the context window and needs operator acceptance"
     )
 
+    if reference.strength is ReferenceStrength.NO_HUMAN_REFERENCE:
+        status = BLOCKED
+    else:
+        status = BLOCKED_DECISIONS if blockers else READY
     packet: dict[str, Any] = {
-        "$comment": "FROZEN FUTURE EVALUATION PACKET (N08-B). NOT EXECUTABLE. Its status is computed from committed facts; the runner refuses any status but READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL before reading an approval, and an approval is a separate operator file named by this packet's digest. Merging this packet authorises nothing.",
+        "$comment": "FROZEN FUTURE EVALUATION PACKET (N08-B). NOT EXECUTABLE. Its status is computed from committed facts; the runner refuses any status but READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL before reading an approval, and an approval is a separate operator file named by this packet's digest. Merging this packet authorises nothing. The reference block states what a result could claim: a SINGLE_HUMAN_REFERENCE result is a DEVELOPMENT_PILOT and PILOT_NOT_CERTIFICATION.",
         "packet_id": PACKET_ID,
         "packet_version": PACKET_VERSION,
-        "mission": "1.85.4",
-        "status": READY if not blockers else BLOCKED,
+        "mission": "1.85.5",
+        "status": status,
         "blockers": blockers,
+        "reference": {
+            "model": REFERENCE_MODEL_ID,
+            "REFERENCE_STRENGTH": reference.strength.value,
+            "RESULT_SCOPE": reference.result_scope,
+            "result_label": reference.result_label,
+            "pilot_gate_satisfied": reference.pilot_gate,
+            "multi_human_gate_satisfied": reference.multi_human_gate,
+            "human_annotation_files": list(reference.human_files),
+            "refused_annotation_files": [name for name, _ in reference.refused_files],
+            "ai_annotations_used_as_reference": 0,
+            "inter_annotator_agreement": reference.inter_annotator_agreement,
+            "prohibited_claims": list(PROHIBITED_PILOT_CLAIMS) if single else [],
+            "holdout_policy": HOLDOUT_POLICY,
+            "holdout_reference_permitted": holdout_reference_permitted(reference.strength),
+            "threshold_partition": {
+                "file": "docs/data/semantic-extraction-threshold-partition-v1.json",
+                "sha256": sha(THRESHOLD_PARTITION),
+                "thresholds_read": "SINGLE_HUMAN_PILOT_VALID"
+                if single
+                else "contract proposed_thresholds, every item",
+            },
+            "roadmap_status_when_ready": PILOT_ROADMAP_STATUS if single else None,
+        },
         "operator_approval_recorded": False,
         "contract": f"{CONTRACT_ID}@{CONTRACT_VERSION}",
         "contract_json_sha256": sha(CONTRACT),
@@ -312,6 +381,7 @@ def build() -> dict[str, Any]:
                 "calls made",
                 "usage and cost from the gateway",
                 "started and finished timestamps",
+                "REFERENCE_STRENGTH, RESULT_SCOPE and result_label copied from this packet",
             ],
             "canonical_writes": "none: no finding, Signal, Claim, Evidence, independence state or score",
         },
@@ -319,7 +389,12 @@ def build() -> dict[str, Any]:
             "file": "docs/data/semantic-extraction-evaluation-approval-development-v1.json, created only by the operator after this packet's final digest is known",
             "decision": "APPROVE_EXACTLY_ONE_EVALUATION_RUN",
             "must_name": ["packet_id", "packet_version", "packet_sha256"],
-            "must_accept": ["hard_ceiling_usd_approved", "retention_bound", "retry_interpretation"],
+            "must_accept": [
+                "hard_ceiling_usd_approved",
+                "retention_bound",
+                "retry_interpretation",
+                "reference strength: accepted_reference_strength equals REFERENCE_STRENGTH",
+            ],
             "runtime": "--execute --approval-sha256 <sha256 of the approval file>",
             "merge_is_not_approval": True,
         },

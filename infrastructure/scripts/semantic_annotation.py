@@ -16,8 +16,12 @@ No command here writes a label. People write labels, in their own working copies
              questions one by one, checks every pasted quote immediately and saves after each record.
              It never proposes an answer. Needs no database.
     analyse
-             Read every committed development annotation file and write the composition and agreement
-             report plus the adjudication queue. Needs at least two annotators. Chooses no threshold.
+             Read every committed development annotation file. With two or more, write the composition
+             and agreement report plus the adjudication queue. With exactly one (Mission 1.85.5), write a
+             SINGLE_HUMAN_REFERENCE composition whose inter-annotator metrics are
+             NOT_APPLICABLE_SINGLE_ANNOTATOR. Chooses no threshold and never invents an annotator.
+
+An AI_ASSISTED_PROVISIONAL annotation is never imported here: the importer refuses any non-human origin.
 
 prepare, lint and import read the held records (DATABASE_URL). analyse reads committed files only.
 """
@@ -38,6 +42,7 @@ sys.path.insert(0, str(ROOT / "infrastructure/scripts"))
 from build_semantic_egress_eligibility import development_surfaces  # noqa: E402
 from sros_semantic_extraction_contract.agreement import (  # noqa: E402
     analyse_composition,
+    analyse_single_human_reference,
     build_adjudication_queue,
 )
 from sros_semantic_extraction_contract.annotation import (  # noqa: E402
@@ -56,6 +61,9 @@ HOLDOUT_PACK_NAME = "stack-overflow-semantic-label-pack-holdout-v1.json"
 CONTRACT = DATA / "first-person-semantic-extraction-contract-v1.json"
 COMPOSITION = DATA / "stack-overflow-semantic-annotation-composition-development-v1.json"
 QUEUE = DATA / "stack-overflow-semantic-adjudication-queue-development-v1.json"
+SINGLE_COMPOSITION = (
+    DATA / "stack-overflow-semantic-single-human-reference-composition-development-v1.json"
+)
 ANNOTATION_GLOB = "stack-overflow-semantic-annotations-development-*-v1.json"
 
 
@@ -216,10 +224,16 @@ def label(path: pathlib.Path) -> int:
 
 def analyse() -> int:
     files = [json.loads(p.read_text("utf-8")) for p in sorted(DATA.glob(ANNOTATION_GLOB))]
-    if len(files) < 2:
-        print(
-            f"HUMAN_LABELS_PENDING  {len(files)} committed development annotation file(s); agreement needs at least two"
+    if not files:
+        print("HUMAN_LABELS_PENDING  0 committed development annotation files")
+        return 0
+    if len(files) == 1:
+        # Mission 1.85.5: one genuine human is a SINGLE_HUMAN_REFERENCE. No second annotation is made up,
+        # no queue exists, and every inter-annotator metric is NOT_APPLICABLE_SINGLE_ANNOTATOR.
+        SINGLE_COMPOSITION.write_bytes(
+            dump(analyse_single_human_reference(files[0], json.loads(CONTRACT.read_text("utf-8"))))
         )
+        print(f"wrote {SINGLE_COMPOSITION.name} (SINGLE_HUMAN_REFERENCE, PILOT_NOT_CERTIFICATION)")
         return 0
     COMPOSITION.write_bytes(
         dump(analyse_composition(files, json.loads(CONTRACT.read_text("utf-8"))))

@@ -1,17 +1,51 @@
 {
- "$comment": "FROZEN FUTURE EVALUATION PACKET (N08-B). NOT EXECUTABLE. Its status is computed from committed facts; the runner refuses any status but READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL before reading an approval, and an approval is a separate operator file named by this packet's digest. Merging this packet authorises nothing.",
+ "$comment": "FROZEN FUTURE EVALUATION PACKET (N08-B). NOT EXECUTABLE. Its status is computed from committed facts; the runner refuses any status but READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL before reading an approval, and an approval is a separate operator file named by this packet's digest. Merging this packet authorises nothing. The reference block states what a result could claim: a SINGLE_HUMAN_REFERENCE result is a DEVELOPMENT_PILOT and PILOT_NOT_CERTIFICATION.",
  "packet_id": "semantic-extraction-evaluation-packet-development",
- "packet_version": 1,
- "mission": "1.85.4",
- "status": "BLOCKED_HUMAN_LABELS",
+ "packet_version": 2,
+ "mission": "1.85.5",
+ "status": "BLOCKED_OPERATOR_DECISIONS",
  "blockers": [
-  "HUMAN_LABELS_PENDING: 1 of at least 2 committed development annotation files",
-  "ADJUDICATION_PENDING",
   "EGRESS_REVIEW_PENDING: 0 EGRESS_APPROVED records ({'EGRESS_EXCLUDED': 1, 'EGRESS_REVIEW_REQUIRED': 49})",
-  "THRESHOLDS_NOT_AUTHORISED: every evaluation threshold is PROPOSED_NOT_AUTHORISED",
+  "THRESHOLDS_NOT_AUTHORISED: the single-human pilot thresholds are PROPOSED_NOT_AUTHORISED",
   "RETRY_INTERPRETATION_NOT_RATIFIED: the operator has not ratified the schema-failure retry reading",
   "COST_CEILING_NOT_ACCEPTED: the hard ceiling rests on the context window and needs operator acceptance"
  ],
+ "reference": {
+  "model": "semantic-reference-strength@1.0.0",
+  "REFERENCE_STRENGTH": "SINGLE_HUMAN_REFERENCE",
+  "RESULT_SCOPE": "DEVELOPMENT_PILOT",
+  "result_label": "PILOT_NOT_CERTIFICATION",
+  "pilot_gate_satisfied": true,
+  "multi_human_gate_satisfied": false,
+  "human_annotation_files": [
+   "stack-overflow-semantic-annotations-development-operator-a-v1.json"
+  ],
+  "refused_annotation_files": [],
+  "ai_annotations_used_as_reference": 0,
+  "inter_annotator_agreement": {
+   "cohen_kappa": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+   "krippendorff_alpha": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+   "positive_specific_agreement": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+   "negative_specific_agreement": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+   "span_agreement_between_humans": "NOT_APPLICABLE_SINGLE_ANNOTATOR",
+   "subject_agreement_between_humans": "NOT_APPLICABLE_SINGLE_ANNOTATOR"
+  },
+  "prohibited_claims": [
+   "INTER_HUMAN_RELIABILITY",
+   "VALIDATED_HUMAN_CONSENSUS",
+   "GENERALISATION_TO_HOLDOUT",
+   "PRODUCTION_READINESS",
+   "CALIBRATED_SEMANTIC_ACCURACY"
+  ],
+  "holdout_policy": "HOLDOUT_REQUIRES_MULTI_HUMAN_OR_NEW_OPERATOR_DECISION",
+  "holdout_reference_permitted": false,
+  "threshold_partition": {
+   "file": "docs/data/semantic-extraction-threshold-partition-v1.json",
+   "sha256": "6b6ff60fa238c9b890dd881fc81f641241ec8bdc3b3e7f186cd32f4652029ccf",
+   "thresholds_read": "SINGLE_HUMAN_PILOT_VALID"
+  },
+  "roadmap_status_when_ready": "DEVELOPMENT_PILOT_SINGLE_HUMAN_REFERENCE"
+ },
  "operator_approval_recorded": false,
  "contract": "first-person-semantic-extraction@1.0.0",
  "contract_json_sha256": "3416ae29f356104eac6397feabc067a8714bb66a479a9a7c7cfbcc73d7c8d951",
@@ -500,7 +534,8 @@
    "approval_sha256",
    "calls made",
    "usage and cost from the gateway",
-   "started and finished timestamps"
+   "started and finished timestamps",
+   "REFERENCE_STRENGTH, RESULT_SCOPE and result_label copied from this packet"
   ],
   "canonical_writes": "none: no finding, Signal, Claim, Evidence, independence state or score"
  },
@@ -515,10 +550,11 @@
   "must_accept": [
    "hard_ceiling_usd_approved",
    "retention_bound",
-   "retry_interpretation"
+   "retry_interpretation",
+   "reference strength: accepted_reference_strength equals REFERENCE_STRENGTH"
   ],
   "runtime": "--execute --approval-sha256 <sha256 of the approval file>",
   "merge_is_not_approval": true
  },
- "packet_sha256": "8b5a8e3dd3631b1b02a8fb6a0a1d3a3e5d42d0d67ee8d973a47b3f6f8e331646"
+ "packet_sha256": "894d853236b951c066bc221ac4780ab866963b66ff1b06649691b5b79cfe9202"
 }
