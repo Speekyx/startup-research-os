@@ -21,7 +21,8 @@ the dependency graph in `service-boundaries.md` §4 acyclic while both contexts
 share one deployable unit in Phase 1.
 
 **Nothing here can dispatch blocked work.** Every domain capability is currently
-blocked (D-03 scoring, D-12 and §34 NLP, and no collector-eligible source), the
+blocked (D-03 scoring, the N08 gate for NLP extraction, D-12 for clustering, §34,
+and no collector-eligible source), the
 planner marks those stages BLOCKED with a stated reason, and a BLOCKED job never
 becomes READY. The guard is mechanical rather than remembered.
 

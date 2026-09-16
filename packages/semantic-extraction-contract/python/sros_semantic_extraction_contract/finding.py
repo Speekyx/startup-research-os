@@ -33,6 +33,7 @@ __all__ = [
     "ValidatedExtraction",
     "ValidatedFinding",
     "ValidationReport",
+    "locate_quote",
     "validate_extraction",
 ]
 
@@ -143,7 +144,7 @@ def _fingerprint(parts: dict[str, Any]) -> str:
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
-def _locate(
+def locate_quote(
     surface: str, quote: Any, occurrence: Any, *, min_len: int = MIN_QUOTE, max_len: int = MAX_QUOTE
 ) -> tuple[int, int] | str:
     if (
@@ -255,7 +256,7 @@ def validate_extraction(payload: Any, context: ExtractionContext) -> ValidationR
         if label is None or label.status is not LabelStatus.EXTRACTABLE:
             refuse((RefusalReason.LABEL_NOT_EXTRACTABLE, f"{where}: {raw['finding_type']!r}"))
             continue
-        span = _locate(context.surface, raw["evidence_quote"], raw["evidence_occurrence"])
+        span = locate_quote(context.surface, raw["evidence_quote"], raw["evidence_occurrence"])
         if not isinstance(span, tuple):
             refuse((RefusalReason(span), f"{where}.evidence"))
             continue
@@ -276,7 +277,7 @@ def validate_extraction(payload: Any, context: ExtractionContext) -> ValidationR
         elif not label.requires_subject:
             refuse((RefusalReason.SUBJECT_NOT_PERMITTED, where))
         else:
-            located = _locate(
+            located = locate_quote(
                 context.surface,
                 raw["subject_quote"],
                 raw["subject_occurrence"],

@@ -55,6 +55,7 @@ SUITES = [
     "packages/contracts/python",
     "packages/llm-gateway/python",
     "packages/semantic-equivalence/python",
+    "packages/semantic-extraction/python",
     "packages/opportunity-engine/python",
     "services/workers/python",
     "services/acquisition/python",

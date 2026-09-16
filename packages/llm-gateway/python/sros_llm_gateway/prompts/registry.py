@@ -8,7 +8,8 @@ it changes system behavior as much as code does."*
 **This registry is deliberately empty of product prompts, and it is not an
 oversight.** It holds the prompts the *product* sends at runtime. Every context
 that would own one — `nlp` extraction, `execution` planning — is blocked or out
-of scope (D-07, D-03, D-12, §34), so registering a classification prompt now
+of scope (D-07, D-03, §34; `nlp` extraction by the N08 semantic-extraction gate,
+clustering by D-12), so registering a classification prompt now
 would mean writing one against a signal shape nothing produces. It would be
 tested only against its own assumptions, and it would be the first thing
 rewritten when the real inputs arrive.

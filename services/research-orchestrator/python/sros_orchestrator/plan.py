@@ -74,6 +74,8 @@ __all__ = [
     "NO_INTERPRETER_IMPLEMENTED",
     "NO_COLLECTOR_IMPLEMENTED",
     "NO_NORMALIZER_IMPLEMENTED",
+    "SEMANTIC_EXTRACTION_GATE",
+    "SEMANTIC_EXTRACTION_DOCUMENT",
     "PlannedStage",
     "ResearchExecutionPlan",
     "ResearchPlanner",
@@ -83,7 +85,7 @@ __all__ = [
 # Bumped whenever the stage graph or the blocking set changes. Recorded on the
 # persisted plan so a session can be read years later against the planner that
 # produced it (llm-reasoning-rules.md §9 applied to orchestration).
-PLANNER_VERSION = "1.4.0"
+PLANNER_VERSION = "1.5.0"
 
 
 class Capability(StrEnum):
@@ -96,11 +98,11 @@ class Capability(StrEnum):
     ACQUISITION = "ACQUISITION"
     NORMALIZATION = "NORMALIZATION"
     # Separated from NLP_EXTRACTION in Mission 1.11.1, and the separation was
-    # required rather than tidy. NLP_EXTRACTION is blocked by D-12, whose stated
-    # reason is embedding model versioning -- true of classification, embedding
-    # and clustering, and FALSE of deterministic arithmetic over canonical
-    # decimals. A blocking reason that has become false is worse than a vague
-    # one: it invites someone to conclude the block no longer applies.
+    # required rather than tidy. NLP_EXTRACTION is blocked by the N08 semantic-extraction
+    # gate and clustering by D-12 (embedding model versioning; re-grounded in Mission
+    # 1.85.4), and neither applies to deterministic arithmetic over canonical decimals.
+    # A blocking reason that has become false is worse than a vague one: it invites
+    # someone to conclude the block no longer applies.
     SIGNAL_DERIVATION = "SIGNAL_DERIVATION"
     # Added in Mission 1.13.1. Separate from SIGNAL_DERIVATION because a
     # Signal states a relation between its inputs and a Claim asserts a
@@ -165,22 +167,38 @@ class BlockedCapability:
 # conclude the block no longer applies. The same correction Mission 1.2 made to
 # the SCORING reason, for the same reason, and it is now derived by
 # `normalization_block` from what actually exists.
+# Mission 1.85.4. Not a decision id: nobody clears it by deciding D-12. It is cleared by human
+# reference labels, operator acceptance of thresholds, a packet-scoped operator approval, the
+# ADR-033 egress gates and the N08 contract validator.
+SEMANTIC_EXTRACTION_GATE = "N08-SEMANTIC-EXTRACTION-GATE"
+SEMANTIC_EXTRACTION_DOCUMENT = "docs/data/first-person-semantic-extraction-contract-v1.md §17"
+
 STATIC_BLOCKED_CAPABILITIES: dict[Capability, BlockedCapability] = {
+    # Re-grounded in Mission 1.85.4. This entry used to cite D-12 for classification, embedding
+    # and clustering. D-12 is embedding model versioning and the re-embedding strategy, and it
+    # never decided anything about non-embedding classification. What gates model-derived
+    # extraction is N08. D-12 stays OPEN and stays on OPPORTUNITY_DISCOVERY, which clusters.
     Capability.NLP_EXTRACTION: BlockedCapability(
         capability=Capability.NLP_EXTRACTION,
-        decision_id="D-12",
+        decision_id=SEMANTIC_EXTRACTION_GATE,
         reason=(
-            "embedding model versioning and the re-embedding strategy are undecided, so "
-            "classification, embedding and clustering cannot run. This is NOT the "
-            "deterministic signal derivation separated into SIGNAL_DERIVATION in "
+            "model-derived semantic extraction from first-person text is gated by N08: human "
+            "reference labels, operator acceptance of thresholds, a packet-scoped operator "
+            "approval, the ADR-033 egress gates and the contract validator, none of which is "
+            "satisfied. D-12 (embedding model versioning) stays OPEN and blocks embeddings, "
+            "similarity and clustering; it is not the reason classification is blocked. This is "
+            "NOT the deterministic signal derivation separated into SIGNAL_DERIVATION in "
             "Mission 1.11.1, which needs no model and no vector"
         ),
-        governing_document="docs/domain/opportunity-ontology-v2.md §16",
+        governing_document=SEMANTIC_EXTRACTION_DOCUMENT,
     ),
     Capability.OPPORTUNITY_DISCOVERY: BlockedCapability(
         capability=Capability.OPPORTUNITY_DISCOVERY,
         decision_id="D-12",
-        reason="discovery consumes NLP signals, which are not produced",
+        reason=(
+            "discovery clusters NLP signals, which are not produced, and clustering needs "
+            "embedding model versioning and a re-embedding strategy (D-12, OPEN)"
+        ),
         governing_document="docs/domain/opportunity-ontology-v2.md §16",
     ),
     # The reason CHANGED in Mission 1.2, because the old one became false.

@@ -1,0 +1,210 @@
+{
+ "$comment": "THRESHOLD DECISION PACKAGE (N08-B). For the operator to approve or revise BEFORE any holdout result is observed. Nothing here is authorised: every item is PROPOSED_NOT_AUTHORISED, and code reads the status rather than the number. Do not weaken a threshold because the corpus is small: an untestable criterion yields EVALUATION_INSUFFICIENT.",
+ "package_id": "semantic-extraction-threshold-decision-package",
+ "version": "1.0.0",
+ "mission": "1.85.4",
+ "source": "docs/data/first-person-semantic-extraction-contract-v1.json proposed_thresholds",
+ "development_records": 50,
+ "holdout_records": 48,
+ "human_labels_available": false,
+ "decision_recorded": false,
+ "operator_options_per_item": [
+  "AUTHORISE_AS_PROPOSED",
+  "REVISE_BEFORE_HOLDOUT (state the new value and why, before any holdout result)",
+  "REJECT"
+ ],
+ "outcome_rule": "PASS only when every authorised criterion passes; FAIL when any authorised criterion fails; EVALUATION_INSUFFICIENT when any authorised criterion cannot be tested and none fails. The rule is fixed before results are seen.",
+ "items": [
+  {
+   "metric": "false_present_rate_upper_95",
+   "label": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "proposed": 0.1,
+   "rationale": "a false PRESENT writes a dissatisfaction nobody expressed into SOLUTION_DISSATISFACTION, a counting dimension no held evidence reaches today",
+   "false_positive_risk": "HIGH: manufactures a business problem that can later be counted",
+   "false_negative_risk": "LOW: one observation is lost; nothing false is asserted",
+   "required_support": {
+    "present_predictions": 30,
+    "gold_present_min": 4,
+    "gold_absent_min": 4
+   },
+   "development_can_estimate": "only as an exploratory point estimate if development gold holds enough PRESENT cells; prevalence on this site is expected to be low, so likely NO",
+   "holdout_can_test": "UNLIKELY: the holdout holds 48 records, and 30 PRESENT predictions would need a PRESENT prevalence near two thirds",
+   "pass": "the Clopper-Pearson 95% upper bound on the false-PRESENT rate among PRESENT predictions in HOLDOUT is <= 0.1, with >= 30 PRESENT predictions scored against gold",
+   "fail": "that upper bound is > 0.1 with at least 30 PRESENT predictions, OR the observed false-PRESENT count alone already exceeds 0.1 of the predictions made",
+   "insufficient": "fewer than 30 PRESENT predictions, or the label's gold composition gate is not met, so the bound cannot reach 0.1 even with zero false positives",
+   "status": "PROPOSED_NOT_AUTHORISED"
+  },
+  {
+   "metric": "false_present_rate_upper_95",
+   "label": "REPORTED_FAILED_ATTEMPT",
+   "proposed": 0.2,
+   "rationale": "lands on PROBLEM_OR_NEED, which is already held deterministically, so a false positive adds less new exposure",
+   "false_positive_risk": "MEDIUM: asserts a failure the asker did not report",
+   "false_negative_risk": "LOW",
+   "required_support": {
+    "present_predictions": 15,
+    "gold_present_min": 4,
+    "gold_absent_min": 4
+   },
+   "development_can_estimate": "POSSIBLY: failed attempts are common in Stack Overflow questions; known only after human labelling",
+   "holdout_can_test": "POSSIBLY: needs 15 PRESENT predictions among 48 records",
+   "pass": "the Clopper-Pearson 95% upper bound on the false-PRESENT rate among PRESENT predictions in HOLDOUT is <= 0.2, with >= 15 PRESENT predictions scored against gold",
+   "fail": "that upper bound is > 0.2 with at least 15 PRESENT predictions, OR the observed false-PRESENT count alone already exceeds 0.2 of the predictions made",
+   "insufficient": "fewer than 15 PRESENT predictions, or the label's gold composition gate is not met, so the bound cannot reach 0.2 even with zero false positives",
+   "status": "PROPOSED_NOT_AUTHORISED"
+  },
+  {
+   "metric": "min_true_present_and_min_true_absent",
+   "label": "each extractable label",
+   "proposed": 1,
+   "rationale": "a classifier that always answers ABSENT, always PRESENT or always abstains must fail",
+   "false_positive_risk": "n/a",
+   "false_negative_risk": "n/a",
+   "required_support": {
+    "gold_present_min": 1,
+    "gold_absent_min": 1
+   },
+   "development_can_estimate": "YES once gold exists",
+   "holdout_can_test": "YES if the composition gate is met",
+   "pass": "true PRESENT >= 1 and true ABSENT >= 1 in HOLDOUT",
+   "fail": "true PRESENT = 0 or true ABSENT = 0 while gold has both",
+   "insufficient": "gold lacks PRESENT or ABSENT cells",
+   "status": "PROPOSED_NOT_AUTHORISED"
+  },
+  {
+   "metric": "mechanical_unsupported_assertions_accepted",
+   "label": "all",
+   "proposed": 0,
+   "rationale": "the deterministic validator refuses a quote that is not in the surface; an accepted one is a validator defect",
+   "false_positive_risk": "HIGH if nonzero",
+   "false_negative_risk": "n/a",
+   "required_support": {},
+   "development_can_estimate": "YES",
+   "holdout_can_test": "YES",
+   "pass": "0 accepted findings whose quote is not the surface text at the computed offsets",
+   "fail": "any such finding",
+   "insufficient": "never",
+   "status": "PROPOSED_NOT_AUTHORISED"
+  },
+  {
+   "metric": "validator_acceptance_rate",
+   "label": "all",
+   "proposed": 0.95,
+   "rationale": "a refusal is a failure, never an abstention; a model that cannot produce valid payloads is not usable",
+   "false_positive_risk": "n/a",
+   "false_negative_risk": "MEDIUM: refused records carry no finding",
+   "required_support": {
+    "records": 20
+   },
+   "development_can_estimate": "YES from the development run",
+   "holdout_can_test": "YES",
+   "pass": "accepted extractions / records attempted >= 0.95",
+   "fail": "below 0.95",
+   "insufficient": "fewer than 20 records attempted",
+   "status": "PROPOSED_NOT_AUTHORISED"
+  },
+  {
+   "metric": "unnecessary_abstention_rate_on_gold_decided",
+   "label": "all",
+   "proposed": 0.1,
+   "rationale": "abstention is benign but must not replace answering",
+   "false_positive_risk": "none",
+   "false_negative_risk": "MEDIUM",
+   "required_support": {
+    "gold_decided_records": 20
+   },
+   "development_can_estimate": "YES once gold exists",
+   "holdout_can_test": "YES",
+   "pass": "ABSTAINED_TEXT_INSUFFICIENT on gold-decided records <= 0.10",
+   "fail": "above 0.10",
+   "insufficient": "fewer than 20 gold-decided records",
+   "status": "PROPOSED_NOT_AUTHORISED"
+  },
+  {
+   "metric": "run_to_run_label_flip_rate",
+   "label": "each extractable label",
+   "proposed": 0.1,
+   "rationale": "a result that changes on re-run cannot be audited; run 1 is the scored run",
+   "false_positive_risk": "indirect",
+   "false_negative_risk": "indirect",
+   "required_support": {
+    "repeated_runs": 3
+   },
+   "development_can_estimate": "YES but each run costs calls and needs its own approval",
+   "holdout_can_test": "YES if the approval covers repeated runs",
+   "pass": "per-cell flip rate across three pinned runs <= 0.10",
+   "fail": "above 0.10",
+   "insufficient": "fewer than three runs approved",
+   "status": "PROPOSED_NOT_AUTHORISED"
+  },
+  {
+   "metric": "inter_annotator_kappa_per_extractable_label",
+   "label": "each extractable label",
+   "proposed": 0.6,
+   "rationale": "below a substantial-agreement floor the label definition, not the model, is the problem",
+   "false_positive_risk": "a low floor accepts an ambiguous definition as gold",
+   "false_negative_risk": "a high floor blocks a usable label; with extreme prevalence kappa understates agreement, so raw, specific agreement and PABAK are shown beside it",
+   "required_support": {
+    "annotators": 2,
+    "records": 50
+   },
+   "development_can_estimate": "YES once two human files exist",
+   "holdout_can_test": "YES",
+   "pass": "kappa >= 0.6, read with the prevalence-robust measures",
+   "fail": "kappa < 0.6 with prevalence and bias indices not explaining it: LABEL_NOT_RELIABLY_ANNOTATABLE",
+   "insufficient": "kappa UNDEFINED (a constant annotator) or fewer than two annotators",
+   "status": "PROPOSED_NOT_AUTHORISED"
+  },
+  {
+   "metric": "composition_gate",
+   "label": "each extractable label, each split",
+   "proposed": {
+    "min_present": 4,
+    "min_absent": 4
+   },
+   "rationale": "precedent Mission 1.26; a split without enough of both cannot test anything",
+   "false_positive_risk": "n/a",
+   "false_negative_risk": "n/a",
+   "required_support": {
+    "gold_present_min": 4,
+    "gold_absent_min": 4
+   },
+   "development_can_estimate": "YES after adjudication",
+   "holdout_can_test": "YES after holdout labelling",
+   "pass": "met",
+   "fail": "never FAIL: an unmet gate is REFERENCE_SET_INSUFFICIENT",
+   "insufficient": "REFERENCE_SET_INSUFFICIENT, answered by a separately authorised preregistered supplementary acquisition, never by moving records or widening a definition",
+   "status": "PROPOSED_NOT_AUTHORISED"
+  },
+  {
+   "metric": "recall",
+   "label": "each extractable label",
+   "proposed": null,
+   "rationale": "descriptive only; conservative misses are tolerated",
+   "false_positive_risk": "none",
+   "false_negative_risk": "reported with its interval",
+   "required_support": {},
+   "development_can_estimate": "YES",
+   "holdout_can_test": "YES",
+   "pass": "not a pass condition",
+   "fail": "not a pass condition",
+   "insufficient": "reported as UNDEFINED when gold PRESENT is zero",
+   "status": "PROPOSED_NOT_AUTHORISED"
+  },
+  {
+   "metric": "cost_and_latency",
+   "label": "all",
+   "proposed": null,
+   "rationale": "cost is bounded by the packet ceiling the operator accepts; latency is recorded, never quality",
+   "false_positive_risk": "n/a",
+   "false_negative_risk": "n/a",
+   "required_support": {},
+   "development_can_estimate": "YES",
+   "holdout_can_test": "YES",
+   "pass": "run stays within the accepted ceiling",
+   "fail": "the runner stops at max_calls; spend above the ceiling is a runner defect",
+   "insufficient": "never",
+   "status": "PROPOSED_NOT_AUTHORISED"
+  }
+ ]
+}

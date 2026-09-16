@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.166
-Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.3)
+Version: 1.167
+Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.4)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.167 | 2026-09-16 | **EVALUATION_TOOLING_READY_HUMAN_LABELS_AND_EGRESS_REVIEW_PENDING: N08-B built every piece of a bounded evaluation offline, and nothing ran.** 0 provider calls, 0 egress, 0 findings, 0 human labels entered. **D-12** re-grounded: embedding versioning, OPEN; NLP_EXTRACTION now gated by N08, clustering by D-12; planner 1.5.0. **Annotation** tooling outside the repository with offsets-and-digests import, agreement and adjudication; human labels pending. **Egress** scan on the exact surface, no redaction: 1 excluded, 49 review required, 0 approved. **Provider** requalified with conditions from raw-read pages; error echo NOT_ESTABLISHED, error bodies never stored. **Extractor** package with no call site; **packet** `1ed9faf8...` BLOCKED_HUMAN_LABELS; runner refuses before reading an approval. `mission-1.85.4-report.md`. |
 | 1.166 | 2026-09-16 | **CONTRACT_PREREGISTERED_HUMAN_LABELS_AND_EGRESS_REQUIRED: what a model may infer from one authorised first-person record is now a versioned contract, and nothing has been inferred.** Roadmap N08-A; 0 provider calls, 0 inferences, 0 embeddings, 0 production findings, 0 human labels entered. **D-12** is embedding versioning, OPEN, no conflict; broader citations recorded as scope drift; nine blockers kept separate. **A per-record finding is not a Signal** (S-1), so the model returns verbatim quotes and closed-enum labels and a model-free validator computes offsets on a versioned HTML-rendered surface, refusing the whole extraction on any failure. **Two extractable labels** (failed attempt, negative evaluation of a named solution); seven recorded with blockers. **Corpus** 98 of 104 held questions frozen, 50/48, blank packs, no text inlined. Thresholds PROPOSED_NOT_AUTHORISED; egress needs requalification and operator approval. `mission-1.85.3-report.md`. |
 | 1.165 | 2026-09-16 | **N05_REPAIRED_ALGORITHM_1_1_0: only established independence counts toward Levels 2 and 3.** A declared-dependent lineage proves one origin and nothing about any other lineage, so algorithm 1.1.0 counts `INDEPENDENT` groups only; Option B not implemented. **Predecessor first**: 24 cases and 91 real claims recorded under 1.0.0 before the change. **Result**: 8 differential levels lower, none higher; masses, saturation, scores, counts, warnings and explanations byte-identical; 91/91 real claims identical apart from `algorithm_version`; unknown-only wording byte-identical. Framework §8, §10, §12 aligned; roadmap N05 DONE. `mission-1.85.2-report.md`. |
 | 1.164 | 2026-09-16 | **NO_GO_OPERATOR_DECISION_REQUIRED: no first-person structured evidence source can be approved under local-private-research-v1, and the blocker is permission, not data shape.** Roadmap N01; 0 research-data requests, 0 model calls, 0 reviews appended, 0 sources registered. **Frozen first**: 8 candidates pushed as `0eee973` before retrieval. **Raw re-read**: 18 of 18 decisive clauses verified from retrieved bytes with SHA-256. **Result**: 0 of 8 eligible; six routes expose a rating, label or declared duplicate and two partly; no candidate approves storage, derived analytics or model processing; GitHub AUP §7 (open-access research on non-personal information, or archiving) would not be satisfied by an open-access commitment alone; Steam restricts commercial and automated use; Google Play and Apple are own-app only; GitLab prohibits bulk collection; Codeberg disallows the API; kernel.org has no Bugzilla terms; Trustpilot prohibits mining. No least-bad source chosen. **Operator decision**: A, start N08; B, a documented product decision. **N05** brief recorded (count only INDEPENDENT groups) for Mission 1.85.2. `mission-1.85.1-report.md`. |
@@ -3073,6 +3074,28 @@ has read a record.**
 NLP_EXTRACTION wording and egress.** **Do not run a model on the corpus, fill a pack with a model's labels,
 persist a finding, register a signal type for findings, or create Opportunity #2. Mission 1.85.4 was not
 started.**
+
+
+**ANSWERED IN 1.167 (Mission 1.85.4). N08-B: the evaluation can be prepared end to end offline, and it is blocked
+by labels, egress review and operator decisions, not by code.**
+
+    D-12          embedding versioning, OPEN; NLP_EXTRACTION gated by N08; clustering by D-12
+    annotation    working copies outside the repo; import commits states, offsets, digests
+    egress        REVIEW_OR_EXCLUDE_NO_REDACTION: 1 excluded, 49 review required, 0 approved
+    provider      anthropic REQUALIFIED_WITH_CONDITIONS; error echo NOT_ESTABLISHED
+    packet        1ed9faf8... BLOCKED_HUMAN_LABELS; runner refuses before reading an approval
+
+- **A DECISION ID MEANS WHAT IT WAS DEFINED TO MEAN.** A blocker cited for more than it decided is corrected
+  where it is current and left alone where it is history.
+- **A TRIGGER IS A REASON TO LOOK, NOT A FINDING.** A regex may exclude on transmission integrity; only a
+  human approves egress, and no path rewrites the text a quote must cite.
+- **SILENCE IS NOT PERMISSION.** When a provider does not say whether errors echo input, the client never
+  stores error bodies.
+- **A PACKET THAT CANNOT BE READY CANNOT BE APPROVED**, and merging it authorises nothing.
+
+**Next is human work and operator decisions: two annotators, adjudication, egress review, thresholds, the
+retry reading and the ceiling.** **Do not run the model, fill a pack with a model's labels, approve the blocked
+packet, evaluate or render holdout, or create Opportunity #2. Mission 1.85.5 was not started.**
 
 
 
@@ -6493,9 +6516,11 @@ observations, `lexical-frequency-contrast@1.0.0` one from the two GDELT ones.
   bounded, CPU-cheap work over records already held. The `nlp` queue is sized
   for LLM-backed work.
 - **`SIGNAL_DERIVATION` is its own capability**, between normalization and NLP
-  extraction, with a derived block. `NLP_EXTRACTION` stays blocked by D-12 —
-  whose reason is embedding versioning, true of classification and clustering
-  and **false** of deterministic arithmetic.
+  extraction, with a derived block. `NLP_EXTRACTION` stays blocked, by the N08
+  semantic-extraction gate since Mission 1.85.4. D-12 is embedding model
+  versioning, stays OPEN and blocks embeddings and clustering; it was never a
+  decision about non-embedding classification. Neither gate applies to
+  deterministic arithmetic.
 
 ### Claim — the unit evidence accumulates against
 
