@@ -5,7 +5,7 @@
  "mission": "1.85.4",
  "status": "BLOCKED_HUMAN_LABELS",
  "blockers": [
-  "HUMAN_LABELS_PENDING: 0 of at least 2 committed development annotation files",
+  "HUMAN_LABELS_PENDING: 1 of at least 2 committed development annotation files",
   "ADJUDICATION_PENDING",
   "EGRESS_REVIEW_PENDING: 0 EGRESS_APPROVED records ({'EGRESS_EXCLUDED': 1, 'EGRESS_REVIEW_REQUIRED': 49})",
   "THRESHOLDS_NOT_AUTHORISED: every evaluation threshold is PROPOSED_NOT_AUTHORISED",
@@ -454,7 +454,12 @@
    "question_id",
    "author"
   ],
-  "human_annotation_files": []
+  "human_annotation_files": [
+   {
+    "file": "stack-overflow-semantic-annotations-development-operator-a-v1.json",
+    "sha256": "449ff10f8a60217bbf4b7887254cf81b492fdba962b39283f39d2acdf1a9fa3c"
+   }
+  ]
  },
  "execution_bounds": {
   "transport_retries": 0,
@@ -515,5 +520,5 @@
   "runtime": "--execute --approval-sha256 <sha256 of the approval file>",
   "merge_is_not_approval": true
  },
- "packet_sha256": "1ed9faf8b3807599fc346a125f2a9c64912874a5b79408357fae55db498d386b"
+ "packet_sha256": "8b5a8e3dd3631b1b02a8fb6a0a1d3a3e5d42d0d67ee8d973a47b3f6f8e331646"
 }

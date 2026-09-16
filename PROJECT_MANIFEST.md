@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.167
+Version: 1.168
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.4 follow-up)
+Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.4 follow-up, first human annotation)
 
 ---
 
@@ -13,6 +13,15 @@ Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.4 follow-up)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.168 - 2026-09-17 (Sprint 1 / Mission 1.85.4 follow-up)
+
+**First human development annotation imported.** operator-a (HUMAN_OPERATOR) labelled all 50 DEVELOPMENT
+records with the interactive form, attested all four statements, passed lint, and was imported: states,
+offsets, quote lengths and digests only, no quote and no note. The packet is re-rendered (1 of at least 2
+annotation files) and stays BLOCKED_HUMAN_LABELS; the runner pin follows the new packet digest. The state
+test now requires every committed annotation to be an attested human DEVELOPMENT file with no quote or note
+text, and still forbids any holdout annotation or adjudication. No model saw or suggested a label.
 
 ## 1.167 - 2026-09-17 (Sprint 1 / Mission 1.85.4 follow-up)
 
