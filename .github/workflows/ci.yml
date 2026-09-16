@@ -1182,6 +1182,18 @@ jobs:
       - name: Semantic gate v1.5.0 repairs D1 and D2 only, and history is untouched
         run: uv run python infrastructure/scripts/render_second_opportunity_semantic_gate_v1_5.py --check
 
+      # Mission 1.84.27. The intervention-class contract, operator decisions D3 and D5, offline:
+      # schema v1.3.0 (the class field's description states the sentinel UNKNOWN_NOT_SUPPORTED),
+      # gate v1.6.0 (gate v1.5.0 called once, the class grounded in the cited claims' statements) and
+      # prompt v1.7.0 (the generation contract, without the sentence that forced a class). The gate
+      # fails on: a predecessor gate, schema, strict projection, prompt v1.6.0 or gate 102/103 record
+      # that moved; a successor module or test file off its pin; a schema or projection diff beyond the
+      # one description; anything prompt v1.7.0 leaves unstated; a class case off its intended verdict,
+      # or a reason v1.6.0 adds that is not class grounding; any other field read differently; V9's or
+      # V10's record edited or either accepted; a V11 artifact; and a script binding the contract.
+      - name: The intervention-class contract holds, and every predecessor is untouched
+        run: uv run python infrastructure/scripts/render_second_opportunity_intervention_class_contract.py --check
+
       # Mission 1.84.2. The one approved provider request happened and its output was rejected
       # at schema validation. The gate refuses: an approval recovered from a failure, or a
       # consumed-approval list that does not name V1's digest with a request against it; a

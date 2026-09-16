@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.160
+Version: 1.161
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-16 (Sprint 1 / Mission 1.84.26)
+Last amended: 2026-09-16 (Sprint 1 / Mission 1.84.27)
 
 ---
 
@@ -13,6 +13,35 @@ Last amended: 2026-09-16 (Sprint 1 / Mission 1.84.26)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.161 - 2026-09-16 (Sprint 1 / Mission 1.84.27)
+
+**`INTERVENTION_CLASS_CONTRACT_IMPLEMENTED_OFFLINE_SENTINEL_AND_CITED_CLAIM_GROUNDING`: operator decisions
+D3 and D5 are resolved at the contract level, offline, as successors beside the frozen contract, and
+nothing is bound to them.** 0 provider calls, 0 model inferences, 0 token counts, 0 retries, nothing
+persisted, no packet, no V11, no runner binding, D4 not authorised. Four read-only agents (contract
+historian, schema architect, adversarial tester, D5 alignment), the main agent the only writer.
+
+**D3, DESIGN E**: the ontology never required a class, and the pressure came from schema v1.2.0 giving
+the field no absence and prompt v1.6.0 asking for *a more neutral class*. **Schema v1.3.0** moves one
+leaf, the class field's description, which states the existing sentinel `UNKNOWN_NOT_SUPPORTED`; the
+strict projection code and profile are unchanged and move the same leaf. **Gate v1.6.0** calls gate
+v1.5.0 once, renames its structural reasons to schema v1.3.0 and appends
+`second-opportunity-intervention-class-grounding@1.0.0`: exactly the sentinel, or one plain-ASCII noun
+phrase of at most six words, with no negator, predicating verb or capital code, whose content words
+occur in the statements of the claims the answer cites, outside quoted literals. No vocabulary list; a
+source name, a dimension name, a trusted identifier or MARKET_ACTIVITY licenses nothing. Rejected: sentinel
+alone (still denylist-only), a structured object (breaks the column and consumers), per-packet enums
+(break digests, need a whitelist), a closed enum, forced INSUFFICIENT_EVIDENCE. **D5, PROMPT v1.7.0**:
+v1.5.0's pieces over schema v1.3.0 plus a generation-contract block that tags each rule GATE_ENFORCED,
+GUIDANCE_ONLY or INSTRUCTION_BEYOND_THE_GATE (denials belong in the framed fields, stated as deliberately
+stricter than the audit); the forcing sentence is gone; nothing unstated; no digit. **SYNTHETIC**: 61
+class cases as intended, 44 moved from accepted to refused, 0 opened, every divergence a class-grounding
+reason; gate 103's 131 sentences read identically in `observed_need`; 8 cross-field displacement cases
+pass both gates, recorded as debt. **HISTORY**: gates v1.2.0 to v1.5.0, schema v1.2.0, projection
+`87028f45...`, prompt v1.6.0 `a89960ce...`, gates 102 and 103's records unchanged; V9 and V10 records
+untouched, still refused under v1.6.0 diagnostically. **GATE 104.** Probe **18 caught, 0 escaped, 2 of 2 controls**, in one run: 17 by rule or pin, 1 by an exception in the contract renderer (six words is written as a word, and twelve has none). 3877 + 7012 tests, 104 gates, 72 new tests, 0 provider requests, 0 model calls, 0 TED bytes, 0 canonical mutation.
+`mission-1.84.27-report.md`.
 
 ## 1.160 - 2026-09-16 (Sprint 1 / Mission 1.84.26)
 
