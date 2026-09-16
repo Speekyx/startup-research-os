@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.165
+Version: 1.166
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.3)
+Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.4)
 
 ---
 
@@ -13,6 +13,24 @@ Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.3)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.166 - 2026-09-16 (Sprint 1 / Mission 1.85.4)
+
+**`EVALUATION_TOOLING_READY_HUMAN_LABELS_AND_EGRESS_REVIEW_PENDING`: everything a bounded model evaluation
+needs exists offline, and the packet that would run it is blocked by facts, not by missing code.** Roadmap
+N08-B. 0 provider calls, 0 inferences, 0 embeddings, 0 Stack Overflow egress, 0 production findings, 0 human
+labels entered; five read-only agents, the main agent the only writer. **D-12 RE-GROUNDED**: embedding
+versioning, OPEN; the planner's NLP_EXTRACTION block now cites the N08 gate and D-12 stays on clustering;
+PLANNER_VERSION 1.5.0. **ANNOTATION**: working copies outside the repository, deterministic import that commits
+states, offsets and digests only, agreement and adjudication tooling, no threshold chosen in code; sub-gate
+HUMAN_LABELS_PENDING. **EGRESS**: REVIEW_OR_EXCLUDE_NO_REDACTION; scan on the exact surface; development 50
+records: 1 excluded (transport delimiter), 49 review required, 0 approved; decision file blank. **PROVIDER**:
+anthropic API route REQUALIFIED_WITH_CONDITIONS from 10 raw-read first-party pages (retention exceptions and
+trust-and-safety retention bound; error echo NOT_ESTABLISHED, so error bodies are never stored); successor
+record, policy file untouched. **EXTRACTOR**: `sros-semantic-extraction`, prompt 1.0.0 with the surface byte for
+byte in one untrusted region, one forced strict tool, no call site. **PACKET** `1ed9faf8...` BLOCKED_HUMAN_LABELS
+with six blockers; the runner refuses any non-ready status before reading an approval. Threshold decision
+package, all PROPOSED_NOT_AUTHORISED. `mission-1.85.4-report.md`.
 
 ## 1.165 - 2026-09-16 (Sprint 1 / Mission 1.85.3)
 
@@ -9332,7 +9350,9 @@ specified.
 
 **Cross-source temporal alignment stays forbidden** while H-29 is open, along
 with `observed_at`, `TIMESTAMPTZ` conversion and any wall-clock "as of" claim.
-Classification, embedding and clustering stay blocked by D-12.
+Embeddings, similarity and clustering stay blocked by D-12 (embedding model versioning, OPEN).
+Model-derived classification stays blocked by the N08 semantic-extraction gate (re-grounded in
+Mission 1.85.4).
 
 **Deterministic OBSERVED claim interpretation was implemented in 1.13.1**, by
 `observed-signal-restatement@1.0.0` and by nothing else, against the Mission
@@ -9372,7 +9392,7 @@ for all seven rows decides whether the evidence the system HAS can be scored. It
 says nothing about whether that evidence bears on anything anybody wants to
 know.
 
-**Everything else on the list is unchanged.** NLP pipelines are blocked by D-12,
+**Everything else on the list is unchanged.** NLP extraction is blocked by the N08 gate, embeddings and clustering by D-12,
 scoring algorithms by the absence of a `CALIBRATED` profile, and authentication
 by ADR-005 being unimplemented.
 

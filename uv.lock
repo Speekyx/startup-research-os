@@ -22,6 +22,7 @@ members = [
     "sros-opportunity",
     "sros-orchestrator",
     "sros-semantic-equivalence",
+    "sros-semantic-extraction",
     "sros-semantic-extraction-contract",
     "sros-signal-model",
     "sros-workers",
@@ -1752,6 +1753,23 @@ dependencies = [
 requires-dist = [
     { name = "sros-contracts", editable = "packages/contracts/python" },
     { name = "sros-llm-gateway", editable = "packages/llm-gateway/python" },
+]
+
+[[package]]
+name = "sros-semantic-extraction"
+version = "0.1.0"
+source = { editable = "packages/semantic-extraction/python" }
+dependencies = [
+    { name = "sros-contracts" },
+    { name = "sros-llm-gateway" },
+    { name = "sros-semantic-extraction-contract" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "sros-contracts", editable = "packages/contracts/python" },
+    { name = "sros-llm-gateway", editable = "packages/llm-gateway/python" },
+    { name = "sros-semantic-extraction-contract", editable = "packages/semantic-extraction-contract/python" },
 ]
 
 [[package]]

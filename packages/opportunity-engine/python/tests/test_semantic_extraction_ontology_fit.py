@@ -68,7 +68,11 @@ def test_no_signal_type_was_registered_for_semantic_findings() -> None:
 
 def test_roadmap_records_n08_as_preregistered_not_done() -> None:
     nodes = {n["id"]: n for n in ROADMAP["nodes"]}
-    assert nodes["N08"]["status"] == CONTRACT["outcome"]
+    assert nodes["N08"]["status"] in {
+        CONTRACT["outcome"],
+        "EVALUATION_TOOLING_READY_HUMAN_LABELS_AND_EGRESS_REVIEW_PENDING",
+    }
+    assert nodes["N08"]["phases"]["N08-A"].startswith(CONTRACT["outcome"])
     assert nodes["N08"]["status"] != "DONE"
     assert nodes["N05"]["status"] == "DONE"
     assert nodes["N02"]["mission"] is None

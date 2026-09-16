@@ -1,0 +1,275 @@
+{
+ "$comment": "Mission 1.85.4 (N08-B). Documentation-only requalification of the anthropic API-key route for a FUTURE N08 evaluation. A successor to the 2026-09-02 posture in model-provider-policy-v1.json, which is not edited. No inference endpoint was called and no Stack Overflow text was sent. Retrieved page bytes are not committed (they are the provider's documents); their digests are.",
+ "requalification_id": "anthropic-api-route-requalification",
+ "version": "1.0.0",
+ "mission": "1.85.4",
+ "provider_id": "anthropic",
+ "route": "commercial API-key route, POST https://api.anthropic.com/v1/messages, synchronous, one forced strict tool",
+ "predecessor": {
+  "file": "docs/data/model-provider-policy-v1.json",
+  "sha256": "cf70d27af9b2a9a5a2c2eab7a4d173e9de1440b42baf30707d9270c54cc74cc6",
+  "posture": "APPROVED",
+  "evidence_retrieved": "2026-09-02",
+  "review_interval_days": 180,
+  "edited": false
+ },
+ "retrieved_on": "2026-09-16",
+ "inference_calls": 0,
+ "stack_overflow_text_sent": 0,
+ "evidence": [
+  {
+   "evidence_id": "E1",
+   "title": "Commercial Terms of Service",
+   "requested_url": "https://www.anthropic.com/legal/commercial-terms",
+   "final_url": "https://www.anthropic.com/legal/commercial-terms",
+   "retrieved_at": "2026-09-16T18:50:57Z",
+   "status": 200,
+   "bytes": 210193,
+   "sha256": "20b672196541db4c4ee2318c5c06e9e0160a4f64227b26c5d6ec460d3e28ea80",
+   "retrieval": "raw bytes via HTTP GET; tags stripped locally; every quote below found verbatim in those bytes",
+   "verified_quotes": [
+    "Anthropic may not train models on Customer Content from Services"
+   ]
+  },
+  {
+   "evidence_id": "E2",
+   "title": "How long do you store my organization's data (commercial)",
+   "requested_url": "https://privacy.anthropic.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data",
+   "final_url": "https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data",
+   "retrieved_at": "2026-09-16T18:51:04Z",
+   "status": 200,
+   "bytes": 102615,
+   "sha256": "5dde3235f71800613dd45261693476883442ef174e7a1a6fe6f72ef50e9f2b25",
+   "retrieval": "raw bytes via HTTP GET; tags stripped locally; every quote below found verbatim in those bytes",
+   "verified_quotes": [
+    "For Anthropic API users, we automatically delete inputs and outputs on our backend within 30 days of receipt or generation, except",
+    "When you use a service with longer retention under your control (e.g. Files API)",
+    "When you and we have agreed otherwise (e.g. zero data retention agreement",
+    "If we need to retain them for longer to enforce our Usage Policy (UP)",
+    "In compliance with the law",
+    "We retain inputs and outputs for up to 2 years and trust and safety classification scores for up to 7 years if your chat is flagged by our automated trust and safety systems as violating our Usage Policy"
+   ]
+  },
+  {
+   "evidence_id": "E3",
+   "title": "Is my data used for model training (commercial)",
+   "requested_url": "https://privacy.anthropic.com/en/articles/7996868-is-my-data-used-for-model-training",
+   "final_url": "https://privacy.claude.com/en/articles/7996868-is-my-data-used-for-model-training",
+   "retrieved_at": "2026-09-16T18:51:07Z",
+   "status": 200,
+   "bytes": 96830,
+   "sha256": "d535541571caa22fadb7b7bf963a99c35359d6b98bf109739310daf26e941815",
+   "retrieval": "raw bytes via HTTP GET; tags stripped locally; every quote below found verbatim in those bytes",
+   "verified_quotes": [
+    "By default, we will not use your inputs or outputs from our commercial products (e.g. Claude for Work, Anthropic API, Claude Gov, etc.) to train our models"
+   ]
+  },
+  {
+   "evidence_id": "E4",
+   "title": "Zero data retention: which products it applies to",
+   "requested_url": "https://privacy.anthropic.com/en/articles/8956058-i-have-a-zero-data-retention-agreement-with-anthropic-what-products-does-it-apply-to",
+   "final_url": "https://privacy.claude.com/en/articles/8956058-i-have-a-zero-data-retention-agreement-with-anthropic-what-products-does-it-apply-to",
+   "retrieved_at": "2026-09-16T18:51:11Z",
+   "status": 200,
+   "bytes": 92950,
+   "sha256": "8e51b9aadb7bac0c2cae439e007d432b6ea23185676af8615082df9511409a87",
+   "retrieval": "raw bytes via HTTP GET; tags stripped locally; every quote below found verbatim in those bytes",
+   "verified_quotes": []
+  },
+  {
+   "evidence_id": "E5",
+   "title": "API errors",
+   "requested_url": "https://docs.claude.com/en/api/errors.md",
+   "final_url": "https://platform.claude.com/docs/en/api/errors.md",
+   "retrieved_at": "2026-09-16T18:51:20Z",
+   "status": 200,
+   "bytes": 28564,
+   "sha256": "3a749633a7c46c383118ae2b6aeb2738cf9cfeae09ae9daa243524a9f27f25b1",
+   "retrieval": "raw bytes via HTTP GET; tags stripped locally; every quote below found verbatim in those bytes",
+   "verified_quotes": [
+    "The API always returns errors as JSON, with a top-level `error` object that always includes a `type` and `message` value"
+   ]
+  },
+  {
+   "evidence_id": "E6",
+   "title": "Data residency",
+   "requested_url": "https://docs.claude.com/en/manage-claude/data-residency.md",
+   "final_url": "https://platform.claude.com/docs/en/manage-claude/data-residency.md",
+   "retrieved_at": "2026-09-16T18:51:22Z",
+   "status": 200,
+   "bytes": 14916,
+   "sha256": "8ca6a4088fb762b9856249fb1a72365049c6dbdf5a47335e77c00c938a5d8b76",
+   "retrieval": "raw bytes via HTTP GET; tags stripped locally; every quote below found verbatim in those bytes",
+   "verified_quotes": []
+  },
+  {
+   "evidence_id": "E7",
+   "title": "API and data retention",
+   "requested_url": "https://docs.claude.com/en/build-with-claude/zero-data-retention.md",
+   "final_url": "https://platform.claude.com/docs/en/manage-claude/api-and-data-retention.md",
+   "retrieved_at": "2026-09-16T18:51:26Z",
+   "status": 200,
+   "bytes": 57524,
+   "sha256": "6cbbdaede3f8ed4b83e77651ecbeebe51420758b212029946970edcf6ffed0c7",
+   "retrieval": "raw bytes via HTTP GET; tags stripped locally; every quote below found verbatim in those bytes",
+   "verified_quotes": [
+    "Conversation content (your prompts and Claude's outputs) is not retained by default; the exception is",
+    "Only the JSON schema is cached, for up to 24 hours since last use",
+    "Claude Fable 5.1, Claude Mythos 5.1, Claude Fable 5, and Claude Mythos 5 are designated Covered Models",
+    "if a chat or session is flagged, Anthropic may retain inputs and outputs for up to 2 years"
+   ]
+  },
+  {
+   "evidence_id": "E8",
+   "title": "Models overview",
+   "requested_url": "https://docs.claude.com/en/models/overview.md",
+   "final_url": "https://platform.claude.com/docs/en/models/overview.md",
+   "retrieved_at": "2026-09-16T18:51:33Z",
+   "status": 200,
+   "bytes": 16851,
+   "sha256": "b2ae292320b5d068b20c426e6e4e0333d1a11e25c8457748ca39de25de283c27",
+   "retrieval": "raw bytes via HTTP GET; tags stripped locally; every quote below found verbatim in those bytes",
+   "verified_quotes": []
+  },
+  {
+   "evidence_id": "E9",
+   "title": "Claude Sonnet 5 overview",
+   "requested_url": "https://docs.claude.com/en/models/sonnet-5/overview.md",
+   "final_url": "https://platform.claude.com/docs/en/models/sonnet-5/overview.md",
+   "retrieved_at": "2026-09-16T18:51:35Z",
+   "status": 200,
+   "bytes": 13348,
+   "sha256": "6ca17e3121ec558ce10f405145ed9df26ba18bc7ac4cee5d42cc16feefe2bd38",
+   "retrieval": "raw bytes via HTTP GET; tags stripped locally; every quote below found verbatim in those bytes",
+   "verified_quotes": []
+  },
+  {
+   "evidence_id": "E10",
+   "title": "Data retention practices for covered models",
+   "requested_url": "https://privacy.claude.com/en/articles/15425996-data-retention-practices-for-covered-models",
+   "final_url": "https://privacy.claude.com/en/articles/15425996-data-retention-practices-for-covered-models",
+   "retrieved_at": "2026-09-16T18:52:56Z",
+   "status": 200,
+   "bytes": 113733,
+   "sha256": "43d38345205b986f804f1e340ed1dd362b959084f40ffc5dac13fa415e96fd69",
+   "retrieval": "raw bytes via HTTP GET; tags stripped locally; every quote below found verbatim in those bytes",
+   "verified_quotes": [
+    "retained for 30 days"
+   ]
+  }
+ ],
+ "properties": [
+  {
+   "property": "training_on_api_inputs_and_outputs",
+   "finding": "no training on Customer Content under the Commercial Terms; commercial API inputs and outputs not used for training by default; feedback submitted by a user is an exception",
+   "evidence": [
+    "E1",
+    "E3"
+   ],
+   "vs_2026_09_02": "MATERIALLY_UNCHANGED"
+  },
+  {
+   "property": "retention",
+   "finding": "API inputs and outputs deleted on the backend within 30 days, EXCEPT: longer-retention services under customer control (Files API), a separate agreement (ZDR), Usage Policy enforcement, and legal compliance. E7 states content is not retained by default except for Covered Models; E2 states 30 days. The stricter reading, 30 days plus the exceptions, is bound.",
+   "evidence": [
+    "E2",
+    "E7"
+   ],
+   "vs_2026_09_02": "MATERIALLY_UNCHANGED_BUT_PREDECESSOR_QUOTE_OMITTED_THE_EXCEPTIONS"
+  },
+  {
+   "property": "trust_and_safety_retention",
+   "finding": "flagged content: inputs and outputs up to 2 years, classification scores up to 7 years, applicable even under ZDR",
+   "evidence": [
+    "E2",
+    "E7"
+   ],
+   "vs_2026_09_02": "NOT_RECORDED_IN_PREDECESSOR"
+  },
+  {
+   "property": "zero_data_retention",
+   "finding": "exists per organization by arrangement; whether the operator's organization has it is NOT_ESTABLISHED and cannot be established from documentation",
+   "evidence": [
+    "E4",
+    "E7"
+   ],
+   "vs_2026_09_02": "NOT_RECORDED_IN_PREDECESSOR"
+  },
+  {
+   "property": "covered_models",
+   "finding": "Fable 5.1, Mythos 5.1, Fable 5 and Mythos 5 require 30-day retention; claude-sonnet-5 is not a Covered Model",
+   "evidence": [
+    "E7",
+    "E10",
+    "E9"
+   ],
+   "vs_2026_09_02": "NEW"
+  },
+  {
+   "property": "strict_tool_schema_caching",
+   "finding": "prompts and outputs are not stored by the structured-output feature; the JSON schema is cached up to 24 hours",
+   "evidence": [
+    "E7"
+   ],
+   "vs_2026_09_02": "NEW"
+  },
+  {
+   "property": "error_echo_and_request_logging",
+   "finding": "errors are JSON with a type and message; the documented examples echo no input. Whether a validation error can echo submitted content, and any provider-side diagnostic logging beyond the retention rules, are NOT_ESTABLISHED. Silence is not permission: the client must treat error bodies as possibly containing source text.",
+   "evidence": [
+    "E5"
+   ],
+   "vs_2026_09_02": "NOT_ESTABLISHED"
+  },
+  {
+   "property": "regional_processing",
+   "finding": "inference geo and workspace geo control where processing and storage happen; neither changes retention",
+   "evidence": [
+    "E6"
+   ],
+   "vs_2026_09_02": "MATERIALLY_UNCHANGED"
+  },
+  {
+   "property": "commercial_vs_consumer",
+   "finding": "commercial pages scope themselves to the API and Claude for Work; the consumer subscription route remains a different, NOT_APPROVED route",
+   "evidence": [
+    "E2",
+    "E3",
+    "E7"
+   ],
+   "vs_2026_09_02": "MATERIALLY_UNCHANGED"
+  },
+  {
+   "property": "intended_model",
+   "finding": "claude-sonnet-5 listed as active; not a Covered Model",
+   "evidence": [
+    "E8",
+    "E9"
+   ],
+   "vs_2026_09_02": "MATERIALLY_UNCHANGED"
+  }
+ ],
+ "source_condition_check": {
+  "source": "stack-exchange local-private-research-v1 review v2, external_model_transmission PERMITTED_WITH_CONDITIONS",
+  "provider_commits_to_no_training": "SATISFIED (E1, E3)",
+  "documented_bounded_retention": "SATISFIED_WITH_EXCEPTIONS (30 days; flagged content up to 2 years; legal retention) — bound in the packet, not assumed away",
+  "inference_only": "BOUND IN PACKET (no batch, files, feedback, console use)"
+ },
+ "verdict": "REQUALIFIED_WITH_CONDITIONS",
+ "conditions_the_packet_must_bind": [
+  "model claude-sonnet-5, not a Covered Model; no Fable or Mythos model",
+  "synchronous POST /v1/messages only: no batch, Files API, MCP connector, web search, code execution, prompt caching or cache_control",
+  "no Console or playground use with Stack Overflow text",
+  "retention bound recorded as 30 days plus the four documented exceptions; flagged content up to 2 years; ZDR not assumed",
+  "the strict tool schema contains no Stack Overflow text",
+  "no feedback or bug reports containing request content",
+  "provider error bodies are treated as possibly containing source text: only request_id, error type, HTTP status and a sha256 of the body may be logged or recorded",
+  "execution falls inside the review window of this requalification (180 days from 2026-09-16) or the evidence is retrieved again"
+ ],
+ "not_established": [
+  "whether a 400 error can echo submitted content",
+  "provider-side diagnostic logging beyond the documented retention rules",
+  "whether the operator organization holds a ZDR arrangement"
+ ],
+ "review_interval_days": 180
+}

@@ -214,6 +214,7 @@ jobs:
                       packages/claim-model/python/sros_claim_model \
                       packages/inferred-claim-evaluator/python/sros_inferred_claim_evaluator \
                       packages/semantic-extraction-contract/python/sros_semantic_extraction_contract \
+                      packages/semantic-extraction/python/sros_semantic_extraction \
                       packages/evidence-reliability/python/sros_evidence_reliability \
                       services/acquisition/python/sros_acquisition \
                       services/nlp/python/sros_nlp \
@@ -239,6 +240,10 @@ jobs:
       # the catalog above, applied to a document that reports findings.
       - name: Sensitivity analysis matches the implementation
         run: uv run python -m sros_evidence_aggregation.sensitivity --check
+      # Mission 1.85.4 (N08-B). The frozen semantic-extraction evaluation packet is rendered from
+      # committed artifacts only. A stale packet would let a later approval name bytes nobody rendered.
+      - name: Semantic extraction evaluation packet is current
+        run: uv run python infrastructure/scripts/render_semantic_extraction_packet.py --check
 
       # Mission 1.39 §34. The convergence registry rendered into its artifact.
       # It reads repository code and no database, so unlike the calibration

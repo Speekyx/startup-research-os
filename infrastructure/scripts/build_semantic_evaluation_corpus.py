@@ -238,7 +238,16 @@ def main(argv: list[str] | None = None) -> int:
     mode.add_argument("--write", action="store_true")
     mode.add_argument("--check", action="store_true")
     mode.add_argument("--render-working-copy", metavar="DIR")
+    # Mission 1.85.4. A working copy renders ONE split. The first version wrote both splits into one
+    # folder, which put holdout texts in front of anyone annotating development. N08-B renders
+    # DEVELOPMENT only; holdout rendering is an N08-C decision.
+    parser.add_argument("--split", choices=["DEVELOPMENT"])
     args = parser.parse_args(argv)
+    if args.render_working_copy and args.split != "DEVELOPMENT":
+        print(
+            "REFUSED  --render-working-copy requires --split DEVELOPMENT; holdout is not rendered in N08-B"
+        )
+        return 1
     manifest, packs, surfaces = build(read_rows())
 
     if args.render_working_copy:
@@ -251,6 +260,7 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         out.mkdir(parents=True, exist_ok=True)
         bad = 0
+        frozen["records"] = [r for r in frozen["records"] if r["split"] == args.split]
         for record in frozen["records"]:
             surface = surfaces.get(record["normalized_record_id"])
             if surface is None or surface_sha256(surface) != record["surface_sha256"]:

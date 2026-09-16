@@ -101,8 +101,8 @@ Every domain capability the planner enumerates is currently unavailable:
 |------------|-----------|--------|
 | `ACQUISITION` | **D-07** | No source registry and no per-source legal review record, so no source may lawfully be collected from |
 | `NORMALIZATION` | D-07 | Nothing to normalize while acquisition is blocked |
-| `NLP_EXTRACTION` | D-12 | Embedding versioning undecided; NLP execution out of scope |
-| `OPPORTUNITY_DISCOVERY` | D-12 | Consumes NLP signals, which are not produced |
+| `NLP_EXTRACTION` | N08-SEMANTIC-EXTRACTION-GATE | Human reference labels, packet-scoped operator approval, ADR-033 egress and the contract validator are not satisfied; D-12 governs embeddings, not classification (re-grounded in Mission 1.85.4) |
+| `OPPORTUNITY_DISCOVERY` | D-12 | Clusters NLP signals, which are not produced; clustering needs embedding model versioning (D-12, OPEN) |
 | `SCORING` | **D-03** | The evidence aggregation rules are undefined; implementing scoring would mean choosing them |
 
 So `plan_session` produces a plan whose stages are **all** `BLOCKED`, each

@@ -618,10 +618,27 @@ class TestPlanning(unittest.TestCase):
         SIGNAL_DERIVATION between normalization and NLP extraction, so a plan
         produced before it has one fewer job and a different dependency edge.
         1.4.0 is the second: Mission 1.13.1 inserted CLAIM_INTERPRETATION after
-        SIGNAL_DERIVATION."""
+        SIGNAL_DERIVATION. 1.5.0 is a blocking-set change with the graph unchanged:
+        Mission 1.85.4 re-grounded NLP_EXTRACTION on the N08 semantic-extraction gate
+        and kept D-12 (embedding model versioning) on OPPORTUNITY_DISCOVERY."""
         from sros_orchestrator.plan import PLANNER_VERSION
 
-        assert PLANNER_VERSION == "1.4.0"
+        assert PLANNER_VERSION == "1.5.0"
+
+    def test_nlp_extraction_is_gated_by_n08_and_not_by_d12(self) -> None:
+        """Mission 1.85.4. D-12 is embedding model versioning; it never decided anything
+        about non-embedding classification. Model-derived extraction is gated by N08."""
+        block = BLOCKED_CAPABILITIES[Capability.NLP_EXTRACTION]
+        self.assertEqual(block.decision_id, "N08-SEMANTIC-EXTRACTION-GATE")
+        self.assertTrue(block.governing_document.endswith("§17"))
+        for phrase in ("human", "reference labels", "ADR-033", "D-12", "OPEN"):
+            self.assertIn(phrase, block.reason)
+
+    def test_d12_remains_open_and_governs_clustering(self) -> None:
+        block = BLOCKED_CAPABILITIES[Capability.OPPORTUNITY_DISCOVERY]
+        self.assertEqual(block.decision_id, "D-12")
+        self.assertIn("OPEN", block.reason)
+        self.assertIn("embedding", block.reason)
 
     def test_scoring_is_blocked_on_calibration_not_on_the_formula(self) -> None:
         """Mission 1.2. The formula exists since Mission 1.1, so the old reason
@@ -640,6 +657,7 @@ class TestPlanning(unittest.TestCase):
                     job.blocked_reason.startswith(d)
                     for d in (
                         "D-12",
+                        "N08-SEMANTIC-EXTRACTION-GATE",
                         "NO-COLLECTOR",
                         "SOURCE-REGISTRY-GATE",
                         "NO-EXTRACTOR",

@@ -1,0 +1,9 @@
+{
+ "$comment": "HUMAN EGRESS DECISIONS for the DEVELOPMENT split. Filled only by a human operator after local review; never by a model, a script or a regex. REVIEW_REQUIRED is derived, never recorded. A bulk decision may only accept records with zero triggers and must list them with their surface digests and the sha256 of the sorted id list.",
+ "scan": "residual-identifier-scan@1.0.0",
+ "pattern_table_sha256": "99b698867196f5cd408b3d034cea62f2f04c2361462a402d3303d806bab2a593",
+ "surface": "se-question-text-surface@1.0.0",
+ "policy": "REVIEW_OR_EXCLUDE_NO_REDACTION",
+ "decisions": [],
+ "bulk_decisions": []
+}

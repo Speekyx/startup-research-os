@@ -1,9 +1,12 @@
 # `services/nlp`
 
 **Status:** **partially implemented.** Two deterministic signal extractors exist
-(Mission 1.11.1) and five real Signals do. Everything else on this page --
-embeddings, clustering, LLM classification, independence estimation -- is still
-a boundary and is blocked by D-12.
+(Mission 1.11.1) and five real Signals do. Everything else on this page is
+still a boundary. Embeddings, similarity and clustering are blocked by D-12
+(embedding model versioning, OPEN) and by the profile's `embeddings: false`. LLM
+classification and extraction are blocked by the N08 semantic-extraction gate
+(human reference labels, packet-scoped operator approval, ADR-033 egress, the
+contract validator), not by D-12. Independence estimation is not implemented.
 
 ```text
 sros_nlp/extractors/   numeric-period-change@1.0.0

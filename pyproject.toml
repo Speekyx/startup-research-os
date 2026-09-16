@@ -17,6 +17,7 @@ members = [
     "packages/opportunity-engine/python",
     "packages/inferred-claim-evaluator/python",
     "packages/semantic-extraction-contract/python",
+    "packages/semantic-extraction/python",
     "services/workers/python",
     "services/research-orchestrator/python",
     "services/acquisition/python",
@@ -34,6 +35,7 @@ sros-inferred-claim-evaluator = { workspace = true }
 sros-evidence-reliability = { workspace = true }
 sros-semantic-equivalence = { workspace = true }
 sros-semantic-extraction-contract = { workspace = true }
+sros-semantic-extraction = { workspace = true }
 sros-opportunity = { workspace = true }
 sros-workers = { workspace = true }
 sros-orchestrator = { workspace = true }
@@ -57,7 +59,7 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 bypass-selection = true
 
-# Python quality toolchain (Mission 0.2 Â§25).
+# Python quality toolchain (Mission 0.2 Ã‚Â§25).
 #
 # Deliberately small: ruff for lint AND format, mypy for types, stdlib unittest
 # for tests. Three tools, one config file. No tool is added here to imitate a
