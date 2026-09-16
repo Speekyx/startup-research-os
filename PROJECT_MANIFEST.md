@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.166
+Version: 1.167
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.4)
+Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.4 follow-up)
 
 ---
 
@@ -13,6 +13,16 @@ Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.4)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.167 - 2026-09-17 (Sprint 1 / Mission 1.85.4 follow-up)
+
+**Interactive annotation form for human annotators.** `semantic_annotation.py label PACK` asks the eight
+questions per record in the terminal, checks each pasted quote against the local surface at once (the same
+rules as the import validator: exact text, occurrence, no markers, no quoted material, prose only where the
+label requires it), saves after every record, resumes, and asks the attestation statements, each true only
+when the person answers yes. It proposes no answer, needs no database, and refuses a pack inside the
+repository or outside DEVELOPMENT. Module `annotation_session.py`, 5 tests driven by a scripted synthetic
+annotator. No label was entered, no model called, nothing else changed.
 
 ## 1.166 - 2026-09-16 (Sprint 1 / Mission 1.85.4)
 

@@ -27,7 +27,12 @@ Every document that reports these labels repeats that limit.
    - Do not paste its contents into a chat tool.
    - Do not sync it to a service with AI features.
    - Do not look at another annotator's file.
-3. **Label every record.** Cells use `PRESENT`, `ABSENT` or `UNCERTAIN`; see contract §5–§6 for the definitions.
+3. **Easiest: use the interactive form.**
+   ```
+   uv run python infrastructure/scripts/semantic_annotation.py label <dir>/pack-development-<id>.json
+   ```
+   It shows each question from `surfaces/`, asks the eight questions one by one (`o` yes, `n` no, `?` not sure, `t` show the text again, `q` quit), checks every pasted quote against the text immediately, and saves after each record; run it again to resume. At the end it asks the four attestation statements and sets each to true only if you answer `o`. It never proposes an answer and needs no database. Editing the JSON by hand (below) remains possible.
+   **Label every record.** Cells use `PRESENT`, `ABSENT` or `UNCERTAIN`; see contract §5–§6 for the definitions.
    - **Extractable labels.** `PRESENT` needs `evidence: [{"quote": "<exact text>", "occurrence": 1}]`.
      - `NEGATIVE_EVALUATION_OF_NAMED_SOLUTION` also needs `subject: {"quote": "<exact name>", "occurrence": 1}`.
      - Copy quotes exactly from the surface file. The tool computes offsets.

@@ -11,6 +11,10 @@ No command here writes a label. People write labels, in their own working copies
     import   PACK
              Validate a completed pack and write its committed form (states, offsets, digests; no
              quotes, no notes) to docs/data. Refuses on any problem.
+    label    PACK
+             Interactive form: shows each question from the local surfaces folder, asks the eight
+             questions one by one, checks every pasted quote immediately and saves after each record.
+             It never proposes an answer. Needs no database.
     analyse
              Read every committed development annotation file and write the composition and agreement
              report plus the adjudication queue. Needs at least two annotators. Chooses no threshold.
@@ -160,6 +164,56 @@ def import_pack(path: pathlib.Path) -> int:
     return 0
 
 
+def label(path: pathlib.Path) -> int:
+    from sros_semantic_extraction_contract.annotation_session import (
+        SessionQuit,
+        dumps,
+        run_session,
+        surface_matches,
+    )
+
+    refuse_holdout_path(path)
+    if path.resolve().is_relative_to(ROOT.resolve()):
+        print("REFUSED  a working pack lives outside the repository")
+        return 1
+    pack = json.loads(path.read_text("utf-8"))
+    if pack.get("split") != "DEVELOPMENT":
+        raise HoldoutAccessError("the interactive form opens DEVELOPMENT packs only")
+    folder = path.parent / "surfaces"
+    surfaces: dict[str, str] = {}
+    for position, rid in enumerate(pack["record_order"], start=1):
+        file = folder / f"{position:03d}-{rid}.txt"
+        expected = next(
+            r["surface_sha256"] for r in pack["records"] if r["normalized_record_id"] == rid
+        )
+        text = file.read_bytes().decode("utf-8") if file.exists() else ""
+        if not surface_matches(text, expected):
+            print(
+                f"REFUSED  {file.name} is missing or does not match its digest; run prepare again in a new folder"
+            )
+            return 1
+        surfaces[rid] = text
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None:
+            reconfigure(encoding="utf-8")
+
+    def save(current: dict[str, Any]) -> None:
+        temporary = path.with_suffix(".json.tmp")
+        temporary.write_bytes(dumps(current).encode("utf-8"))
+        temporary.replace(path)
+
+    try:
+        run_session(pack, surfaces, ask=input, say=print, save=save)
+    except (SessionQuit, KeyboardInterrupt, EOFError):
+        print(
+            "\nArrêt. Tout ce qui a été confirmé est enregistré ; relance la même commande pour reprendre."
+        )
+        return 0
+    print("\nTerminé. Vérifie maintenant avec la commande lint (elle a besoin de DATABASE_URL).")
+    return 0
+
+
 def analyse() -> int:
     files = [json.loads(p.read_text("utf-8")) for p in sorted(DATA.glob(ANNOTATION_GLOB))]
     if len(files) < 2:
@@ -184,6 +238,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--out", required=True)
     sub.add_parser("lint").add_argument("pack")
     sub.add_parser("import").add_argument("pack")
+    sub.add_parser("label").add_argument("pack")
     sub.add_parser("analyse")
     args = parser.parse_args(argv)
     if args.command == "prepare":
@@ -192,6 +247,8 @@ def main(argv: list[str] | None = None) -> int:
         return lint(pathlib.Path(args.pack))
     if args.command == "import":
         return import_pack(pathlib.Path(args.pack))
+    if args.command == "label":
+        return label(pathlib.Path(args.pack))
     return analyse()
 
 
