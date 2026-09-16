@@ -36,6 +36,9 @@ SUITES = [
     # Mission 1.52. The deterministic INFERRED evaluator: pure functions over
     # contracts and the claim model, with no database and no network.
     "packages/inferred-claim-evaluator/python",
+    # Mission 1.85.3 (N08-A). The semantic extraction contract: text surface, labels and the
+    # deterministic validator, over the contracts only, with no model, no network and no database.
+    "packages/semantic-extraction-contract/python",
     "services/workers/python",
     "services/research-orchestrator/python",
 ]

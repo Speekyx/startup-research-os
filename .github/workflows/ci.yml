@@ -213,6 +213,7 @@ jobs:
                       packages/signal-model/python/sros_signal_model \
                       packages/claim-model/python/sros_claim_model \
                       packages/inferred-claim-evaluator/python/sros_inferred_claim_evaluator \
+                      packages/semantic-extraction-contract/python/sros_semantic_extraction_contract \
                       packages/evidence-reliability/python/sros_evidence_reliability \
                       services/acquisition/python/sros_acquisition \
                       services/nlp/python/sros_nlp \

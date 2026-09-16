@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.165
-Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.2)
+Version: 1.166
+Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.3)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.166 | 2026-09-16 | **CONTRACT_PREREGISTERED_HUMAN_LABELS_AND_EGRESS_REQUIRED: what a model may infer from one authorised first-person record is now a versioned contract, and nothing has been inferred.** Roadmap N08-A; 0 provider calls, 0 inferences, 0 embeddings, 0 production findings, 0 human labels entered. **D-12** is embedding versioning, OPEN, no conflict; broader citations recorded as scope drift; nine blockers kept separate. **A per-record finding is not a Signal** (S-1), so the model returns verbatim quotes and closed-enum labels and a model-free validator computes offsets on a versioned HTML-rendered surface, refusing the whole extraction on any failure. **Two extractable labels** (failed attempt, negative evaluation of a named solution); seven recorded with blockers. **Corpus** 98 of 104 held questions frozen, 50/48, blank packs, no text inlined. Thresholds PROPOSED_NOT_AUTHORISED; egress needs requalification and operator approval. `mission-1.85.3-report.md`. |
 | 1.165 | 2026-09-16 | **N05_REPAIRED_ALGORITHM_1_1_0: only established independence counts toward Levels 2 and 3.** A declared-dependent lineage proves one origin and nothing about any other lineage, so algorithm 1.1.0 counts `INDEPENDENT` groups only; Option B not implemented. **Predecessor first**: 24 cases and 91 real claims recorded under 1.0.0 before the change. **Result**: 8 differential levels lower, none higher; masses, saturation, scores, counts, warnings and explanations byte-identical; 91/91 real claims identical apart from `algorithm_version`; unknown-only wording byte-identical. Framework §8, §10, §12 aligned; roadmap N05 DONE. `mission-1.85.2-report.md`. |
 | 1.164 | 2026-09-16 | **NO_GO_OPERATOR_DECISION_REQUIRED: no first-person structured evidence source can be approved under local-private-research-v1, and the blocker is permission, not data shape.** Roadmap N01; 0 research-data requests, 0 model calls, 0 reviews appended, 0 sources registered. **Frozen first**: 8 candidates pushed as `0eee973` before retrieval. **Raw re-read**: 18 of 18 decisive clauses verified from retrieved bytes with SHA-256. **Result**: 0 of 8 eligible; six routes expose a rating, label or declared duplicate and two partly; no candidate approves storage, derived analytics or model processing; GitHub AUP §7 (open-access research on non-personal information, or archiving) would not be satisfied by an open-access commitment alone; Steam restricts commercial and automated use; Google Play and Apple are own-app only; GitLab prohibits bulk collection; Codeberg disallows the API; kernel.org has no Bugzilla terms; Trustpilot prohibits mining. No least-bad source chosen. **Operator decision**: A, start N08; B, a documented product decision. **N05** brief recorded (count only INDEPENDENT groups) for Mission 1.85.2. `mission-1.85.1-report.md`. |
 | 1.163 | 2026-09-16 | **BUSINESS_EVIDENCE_ROADMAP_READY_FIRST_PERSON_STRUCTURED_SOURCES_NEXT: Mission 1.84 is closed for the current TED packet (D4), and the next phase is multi-source business evidence acquisition.** 0 provider calls, 0 model inferences, 0 external data persisted, no review appended, no V11, no Opportunity #2; five read-only agents, the main agent the only writer. **Coverage**: 3 of 20 business dimensions supported (all TED, category scope), 2 partial, 15 unsupported; 8 of 29 sources locally reviewed, 5 collected, every registered first-person source RESTRICTED, PROHIBITED or unreviewed. **Two blockers**: governance, and no authorised reading of first-person text. **First families**: product reviews and public issue trackers, whose ratings, labels and declared duplicates reach OBSERVED evidence without text reading. **Ontology**: no new claim type, direction or table; gaps G1 to G9 recorded with minimal changes. **Independence**: 0 groups because nothing writes one; `levels.py` counts DECLARED_DEPENDENT groups as established independence, a latent hazard to fix before any detector; seven dependence rules designed, not active. **Scoring**: no component READY. **Mission 1.85.1**: qualification of a frozen F-REVIEW and F-ISSUE candidate list, no collector, with a stop rule. Roadmap artifact checked by 26 tests. `mission-1.85.0-report.md`. |
@@ -3046,6 +3047,32 @@ established independence.**
 
 **Next is still the operator's N01 decision.** **Do not start N06 or write any independence state, do not
 change saturation, and do not create Opportunity #2. Mission 1.85.3 was not started.**
+
+
+**ANSWERED IN 1.166 (Mission 1.85.3). N08-A: the semantic extraction contract is preregistered, and no model
+has read a record.**
+
+    contract      first-person-semantic-extraction@1.0.0, architecture B, non-canonical, one witness
+    labels        2 extractable, 7 annotation-only / blocked / not safe
+    corpus        98 of 104 held Stack Overflow questions frozen, 50 development / 48 holdout
+    packs         blank; reference_origin null; AI_ASSISTED_PROVISIONAL refused; no text inlined
+    roadmap       N08 CONTRACT_PREREGISTERED_HUMAN_LABELS_AND_EGRESS_REQUIRED; N05 DONE; N01 unchanged
+
+- **THE MODEL IS AN INTERPRETER, NOT A SOURCE.** A finding cites a verbatim span of the held text, and the
+  observation and the interpretation stay separately addressable.
+- **ONE RECORD IS ONE OBSERVATION**, so a finding is never a Signal, several findings are one witness, and a
+  re-run or another model is not independent evidence.
+- **THE MODEL SUPPLIES QUOTES, NEVER OFFSETS.** The validator finds them in a surface it recomputes, and a
+  quote from someone else or an emotional word in error text is refused by where it sits.
+- **A BLOCKER RECOVERED IS A BLOCKER DEFINED.** D-12 is about embeddings; reading it as a ban on all
+  classification is drift, recorded and left for an operator decision.
+- **A THRESHOLD IS PROPOSED UNTIL A PERSON ACCEPTS IT**, and a corpus too small to certify one is
+  EVALUATION_INSUFFICIENT, never a lower bar.
+
+**Next is human labelling of the development pack and the operator's decisions on thresholds, the
+NLP_EXTRACTION wording and egress.** **Do not run a model on the corpus, fill a pack with a model's labels,
+persist a finding, register a signal type for findings, or create Opportunity #2. Mission 1.85.4 was not
+started.**
 
 
 
