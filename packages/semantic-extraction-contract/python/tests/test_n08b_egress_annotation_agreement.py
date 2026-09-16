@@ -23,6 +23,7 @@ from sros_semantic_extraction_contract.agreement import (
 from sros_semantic_extraction_contract.annotation import (
     ATTESTATION_FLAGS,
     ATTESTATION_ID,
+    AnnotationOrigin,
     HoldoutAccessError,
     annotator_record_order,
     validate_annotation_pack,
@@ -557,8 +558,20 @@ class TestAgreement(unittest.TestCase):
 
 
 class TestN08BState(unittest.TestCase):
-    def test_no_human_annotation_is_committed_and_the_blank_packs_are_untouched(self) -> None:
-        self.assertEqual(list(DATA.glob("stack-overflow-semantic-annotations-*")), [])
+    def test_committed_annotations_are_attested_human_development_files_and_the_blank_packs_are_untouched(
+        self,
+    ) -> None:
+        self.assertEqual(list(DATA.glob("stack-overflow-semantic-annotations-holdout-*")), [])
+        for path in DATA.glob("stack-overflow-semantic-annotations-*"):
+            committed = json.loads(path.read_text("utf-8"))
+            self.assertEqual(committed["split"], "DEVELOPMENT", path.name)
+            self.assertIn(committed["reference_origin"], {o.value for o in AnnotationOrigin})
+            self.assertTrue(
+                all(committed["attestation"][flag] is True for flag in ATTESTATION_FLAGS), path.name
+            )
+            text = path.read_text("utf-8")
+            self.assertNotIn('"quote"', text, path.name)
+            self.assertNotIn('"note"', text, path.name)
         self.assertEqual(
             list(DATA.glob("stack-overflow-semantic-adjudication-development-v1.json")), []
         )

@@ -48,7 +48,7 @@ READY = "READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL"
 APPROVAL_DECISION = "APPROVE_EXACTLY_ONE_EVALUATION_RUN"
 # Pinned, not read from the packet: a runner that took its expectation from the file it checks would
 # check nothing. Re-pinned only when a mission deliberately re-renders the packet.
-EXPECTED_PACKET_SHA256 = "1ed9faf8b3807599fc346a125f2a9c64912874a5b79408357fae55db498d386b"
+EXPECTED_PACKET_SHA256 = "8b5a8e3dd3631b1b02a8fb6a0a1d3a3e5d42d0d67ee8d973a47b3f6f8e331646"
 
 
 class Refused(SystemExit):
