@@ -1,8 +1,9 @@
 # Evidence Aggregation Framework V1
 
 **Status:** Authoritative. Created in Mission 1.1, resolving **D-03 at the framework level**.
-**Version:** 1.0
-**Algorithm version:** 1.0.0
+**Version:** 1.1
+**Algorithm version:** 1.1.0
+**Amended:** 2026-09-16, Mission 1.85.2 (roadmap N05). Levels 2 and 3 count only `INDEPENDENT` groups; a declared-dependent lineage does not establish independence (§10). Algorithm 1.0.0 counted it. Masses, saturation and the Evidence Score are unchanged; §8 and §12 are clarified to match.
 **Date:** 2026-08-29
 **Required by:** `scoring-framework-v1.1.md` §13, which blocks `services/scoring` until this document exists and is authorised.
 **Related:** `evidence-confidence-framework-v1.md`, `opportunity-ontology-v2.md` §7/§9/§14, [ADR-014](../architecture/adr/ADR-014-evidence-aggregation-reference-implementation.md).
@@ -274,10 +275,11 @@ there is no safe reading of either. Both raise.
 
 ## 8. Accumulation, contradiction and the Evidence Score
 
-### Saturation across independent groups
+### Saturation across contribution groups
 
-For independent group strengths `g_1 ... g_n`, computed **separately** for each
-direction:
+For contribution-group strengths `g_1 ... g_n` (an independent record, a declared
+dependent lineage, or the one unknown-provenance bucket, §7), computed
+**separately** for each direction:
 
 ```text
 S = 1 - PRODUCT(1 - g_i)
@@ -416,8 +418,8 @@ erases exactly that.
 |-------|----------|
 | 0 Hypothesis | no scorable supporting evidence |
 | 1 Weak Signal | ≥1 scorable supporting record |
-| 2 Repeated Signal | ≥ `repeated_signal_min_groups` supporting groups **of established independence** |
-| 3 Strong Multi-Source | ≥ `multi_source_min_groups` groups of established independence **and** ≥ `multi_source_min_families` source families |
+| 2 Repeated Signal | ≥ `repeated_signal_min_groups` supporting groups **of established independence** (`INDEPENDENT` groups only) |
+| 3 Strong Multi-Source | ≥ `multi_source_min_groups` groups of established independence (`INDEPENDENT` only) **and** ≥ `multi_source_min_families` source families |
 | 4 Market Evidence | ≥1 supporting record categorised `MARKET_ACTIVITY` or `DIRECT_VALIDATION`, **with established provenance** |
 | 5 Direct Validation | ≥1 supporting record categorised `DIRECT_VALIDATION`, **with established provenance** |
 
@@ -431,6 +433,17 @@ counted as one group. One record of established provenance plus ten unlabelled
 ones is not two observations, because the ten may all derive from the one.
 Unlabelled evidence therefore cannot reach Level 2 alone *or* in combination
 with established evidence; it can only reach Level 1.
+
+**A declared-dependent lineage is excluded too** (algorithm 1.1.0). Declaring
+`KNOWN_DEPENDENT` establishes that some records share one origin; it establishes
+nothing about whether that origin is independent of any other lineage. Two
+lineages are therefore not two independent observations, and only `INDEPENDENT`
+groups count toward Levels 2 and 3. A lineage still contributes its strength to
+`support_strength` (§8), for the same reason the unknown bucket does. Algorithm
+1.0.0 counted every group that was not the unknown bucket, so two copies of two
+origins read as a Repeated Signal. Whether dependent provenance should satisfy
+the *established provenance* condition of Levels 4 and 5 is a separate question
+this amendment does not decide.
 
 Note this is stricter than the rule for `support_strength`, where the unknown
 bucket does contribute one group's worth of strength. The asymmetry is
@@ -498,8 +511,8 @@ An `EvidenceAggregationProfile` carries: `profile_id`, `version`, `status`,
 `calibrated_at`, `notes`.
 
 **Two versions, because two things move independently.** `algorithm_version`
-changes when the equations change; the profile `version` changes when a
-parameter does. A single version would hide which one moved.
+changes when the equations or the structural rules (grouping, level gates)
+change; the profile `version` changes when a parameter does. A single version would hide which one moved.
 
 ### Status gates
 

@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.164
-Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.1)
+Version: 1.165
+Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.2)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.165 | 2026-09-16 | **N05_REPAIRED_ALGORITHM_1_1_0: only established independence counts toward Levels 2 and 3.** A declared-dependent lineage proves one origin and nothing about any other lineage, so algorithm 1.1.0 counts `INDEPENDENT` groups only; Option B not implemented. **Predecessor first**: 24 cases and 91 real claims recorded under 1.0.0 before the change. **Result**: 8 differential levels lower, none higher; masses, saturation, scores, counts, warnings and explanations byte-identical; 91/91 real claims identical apart from `algorithm_version`; unknown-only wording byte-identical. Framework §8, §10, §12 aligned; roadmap N05 DONE. `mission-1.85.2-report.md`. |
 | 1.164 | 2026-09-16 | **NO_GO_OPERATOR_DECISION_REQUIRED: no first-person structured evidence source can be approved under local-private-research-v1, and the blocker is permission, not data shape.** Roadmap N01; 0 research-data requests, 0 model calls, 0 reviews appended, 0 sources registered. **Frozen first**: 8 candidates pushed as `0eee973` before retrieval. **Raw re-read**: 18 of 18 decisive clauses verified from retrieved bytes with SHA-256. **Result**: 0 of 8 eligible; six routes expose a rating, label or declared duplicate and two partly; no candidate approves storage, derived analytics or model processing; GitHub AUP §7 (open-access research on non-personal information, or archiving) would not be satisfied by an open-access commitment alone; Steam restricts commercial and automated use; Google Play and Apple are own-app only; GitLab prohibits bulk collection; Codeberg disallows the API; kernel.org has no Bugzilla terms; Trustpilot prohibits mining. No least-bad source chosen. **Operator decision**: A, start N08; B, a documented product decision. **N05** brief recorded (count only INDEPENDENT groups) for Mission 1.85.2. `mission-1.85.1-report.md`. |
 | 1.163 | 2026-09-16 | **BUSINESS_EVIDENCE_ROADMAP_READY_FIRST_PERSON_STRUCTURED_SOURCES_NEXT: Mission 1.84 is closed for the current TED packet (D4), and the next phase is multi-source business evidence acquisition.** 0 provider calls, 0 model inferences, 0 external data persisted, no review appended, no V11, no Opportunity #2; five read-only agents, the main agent the only writer. **Coverage**: 3 of 20 business dimensions supported (all TED, category scope), 2 partial, 15 unsupported; 8 of 29 sources locally reviewed, 5 collected, every registered first-person source RESTRICTED, PROHIBITED or unreviewed. **Two blockers**: governance, and no authorised reading of first-person text. **First families**: product reviews and public issue trackers, whose ratings, labels and declared duplicates reach OBSERVED evidence without text reading. **Ontology**: no new claim type, direction or table; gaps G1 to G9 recorded with minimal changes. **Independence**: 0 groups because nothing writes one; `levels.py` counts DECLARED_DEPENDENT groups as established independence, a latent hazard to fix before any detector; seven dependence rules designed, not active. **Scoring**: no component READY. **Mission 1.85.1**: qualification of a frozen F-REVIEW and F-ISSUE candidate list, no collector, with a stop rule. Roadmap artifact checked by 26 tests. `mission-1.85.0-report.md`. |
 | 1.162 | 2026-09-16 | **INTERVENTION_CLASS_CONTRACT_IMPLEMENTED_OFFLINE_SENTINEL_AND_CITED_CLAIM_GROUNDING: D3 and D5 are resolved at the contract level, offline, as schema v1.3.0, gate v1.6.0 and prompt v1.7.0 beside the frozen contract, and nothing is bound to them.** 0 provider calls, 0 model inferences, 0 token counts, nothing persisted, no packet, no V11, no runner binding, D4 not authorised; four read-only agents, the main agent the only writer. **D3, design E**: schema v1.3.0 moves one leaf, the class field's description, stating the existing sentinel `UNKNOWN_NOT_SUPPORTED`; the strict projection code and profile are unchanged. Gate v1.6.0 calls v1.5.0 once, renames structure and appends class grounding: exactly the sentinel, or one plain-ASCII noun phrase of at most six words with no negator, predicating verb or capital code, whose content words occur in the cited claims' statements outside quoted literals; no vocabulary list, and no source name, dimension name, identifier or MARKET_ACTIVITY licenses a word. Sentinel alone, a structured object, per-packet enums, a closed enum and forced INSUFFICIENT_EVIDENCE rejected. **D5**: prompt v1.7.0 drops *name a more neutral class* and tags every contract rule GATE_ENFORCED, GUIDANCE_ONLY or INSTRUCTION_BEYOND_THE_GATE; nothing unstated. **Synthetic**: 61 class cases as intended, 44 newly refused, 0 opened, every divergence class grounding; gate 103's 131 sentences unchanged in `observed_need`; 8 cross-field displacement cases pass both gates, recorded as debt. **History**: every predecessor gate, schema v1.2.0, projection `87028f45...`, prompt v1.6.0 `a89960ce...` unchanged; V9 and V10 untouched and still refused diagnostically. **GATE 104.** Probe **18 caught, 0 escaped, 2 of 2 controls**, in one run: 17 by rule or pin, 1 by an exception in the contract renderer (six words is written as a word, and twelve has none). 3877 + 7012 tests, 104 gates, 72 new tests, 0 provider requests, 0 model calls, 0 TED bytes, 0 canonical mutation. `mission-1.84.27-report.md`. |
@@ -3023,6 +3024,28 @@ choose the next path.**
 1.85.2 may proceed with the N05 repair, which needs no source. **Do not collect from any evaluated candidate,
 treat robots silence or an own-account API as permission, change the product to meet a publication clause
 without a recorded decision, or create Opportunity #2. Mission 1.85.2 was not started.**
+
+
+**ANSWERED IN 1.165 (Mission 1.85.2). N05 is repaired: a declared-dependent lineage no longer counts as
+established independence.**
+
+    algorithm     1.0.0 -> 1.1.0; Levels 2 and 3 count INDEPENDENT groups only
+    predecessor   24 cases + 91 real claims recorded under 1.0.0 before the change
+    differential  8 levels lower, 0 higher; masses, saturation, scores byte-identical
+    real claims   91/91 identical apart from algorithm_version; 112 rows still UNKNOWN
+    roadmap       N05 DONE; N01 still needs A or B
+
+- **A LINEAGE PROVES ONE ORIGIN, NOT INDEPENDENCE FROM ANOTHER.** Two clusters of copies are two origins of
+  unknown relation, never two independent observations.
+- **RECORD THE PREDECESSOR BEFORE CHANGING IT.** A baseline regenerated by the successor is not a baseline, so
+  the replay refuses to record under any other version and refuses to overwrite.
+- **FIX THE LEVEL WITHOUT TOUCHING THE MASS.** Masses and scores never read the level, which is what made
+  Option A safe and Option B unnecessary.
+- **A MUTANT THAT CANNOT CHANGE ANY OUTCOME IS NOT AN ESCAPE**, and the probe says which it was rather than
+  counting it either way.
+
+**Next is still the operator's N01 decision.** **Do not start N06 or write any independence state, do not
+change saturation, and do not create Opportunity #2. Mission 1.85.3 was not started.**
 
 
 
@@ -6638,6 +6661,9 @@ negotiable:
 - **Duplicates cannot multiply.** Records sharing an origin form one group and
   the strongest member counts. Unknown provenance forms **one** group per claim
   and direction — it is never promoted to independent.
+- **Only established independence counts toward a level.** Levels 2 and 3 count
+  `INDEPENDENT` groups only; a declared-dependent lineage proves one origin and
+  nothing about any other lineage (algorithm 1.1.0, Mission 1.85.2).
 - **Support and contradiction are aggregated separately** and decomposed into
   four masses that sum to 1. There is no flat contradiction penalty.
 - **No invented parameters.** No per-platform reliability coefficient, no

@@ -16,7 +16,10 @@ Two structural rules carry the ladder:
 **Independence gates levels 2 and 3.** Level 2 is *Repeated Signal*. Repetition
 means separate observations, not separate copies, so it requires independent
 groups rather than record count. A duplicated article cannot create a repeated
-signal, which is the whole point of §11.
+signal, which is the whole point of §11. Only groups of ESTABLISHED independence
+count: the unknown-provenance bucket does not, and neither does a declared
+dependent lineage, which proves one origin and nothing about how it relates to
+any other lineage (algorithm 1.1.0, Mission 1.85.2).
 
 **Category gates levels 4 and 5.** Level 4 is *Market Evidence* and Level 5 is
 *Direct Validation*; both are statements about what was observed. No quantity of
@@ -108,6 +111,23 @@ def _qualifying_items(
     return qualifying
 
 
+def _declared_dependent_clause(groups: Sequence[IndependenceGroup]) -> str:
+    """Why declared lineages were not counted. Empty when none was declared.
+
+    Empty is what keeps every message for evidence without a declared lineage
+    byte-identical to algorithm 1.0.0. The clause states a count and no lineage
+    names: a name is caller-supplied text of unbounded length, and a count is
+    all a reader needs to know that lineages were present and set aside.
+    """
+    lineages = sum(1 for g in groups if g.kind is GroupKind.DECLARED_DEPENDENT)
+    if not lineages:
+        return ""
+    return (
+        f"; {lineages} declared-dependent lineage group(s) do not count: each is one "
+        "origin, and distinct lineages are not established as independent of each other"
+    )
+
+
 def assess_evidence_level(
     items: Sequence[EvidenceItem],
     contributions: dict[str, ItemContribution],
@@ -140,7 +160,15 @@ def assess_evidence_level(
     # one known record plus a bucket of unlabelled ones is not two observations,
     # because the unlabelled ones may all derive from the known one. "Repeated"
     # has to mean established repetition or it means nothing (§22).
-    independent_groups = [g for g in support_groups if g.kind is not GroupKind.UNKNOWN]
+    #
+    # A DECLARED_DEPENDENT group is excluded too. Declaring a lineage establishes
+    # that its records share one origin; it establishes nothing about whether two
+    # lineages are independent of each other, so two lineages are not two
+    # independent observations (Mission 1.85.2, roadmap N05). Grouping and
+    # saturation are untouched: a lineage still contributes its strength.
+    independent_groups = [g for g in support_groups if g.kind is GroupKind.INDEPENDENT]
+    unknown_group_count = sum(1 for g in support_groups if g.kind is GroupKind.UNKNOWN)
+    dependent_clause = _declared_dependent_clause(support_groups)
     families = {item.source_family for item in scorable_support if item.source_family}
 
     level = 0
@@ -162,11 +190,11 @@ def assess_evidence_level(
                 f"Repeated Signal needs {repeated_signal_min_groups} supporting groups of "
                 f"established independence, found {len(independent_groups)}"
                 + (
-                    f" (plus {len(support_groups) - len(independent_groups)} "
-                    "unknown-provenance group, which does not count)"
-                    if len(support_groups) > len(independent_groups)
+                    f" (plus {unknown_group_count} unknown-provenance group, which does not count)"
+                    if unknown_group_count
                     else ""
                 )
+                + dependent_clause
             )
 
     if level >= 2:
@@ -184,6 +212,7 @@ def assess_evidence_level(
                 f"Strong Multi-Source needs {multi_source_min_groups} independent groups "
                 f"across {multi_source_min_families} source families, found "
                 f"{len(independent_groups)} groups across {len(families)} families"
+                + dependent_clause
             )
 
     # Category gates. Reached independently of the counts above: the kind of

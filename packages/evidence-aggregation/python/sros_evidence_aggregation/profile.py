@@ -4,7 +4,7 @@ Mission 1.1 §20, §21, §41.
 
 Two things move independently and must be versioned independently:
 
-    algorithm_version   the equations       -- defined by Mission 1.1
+    algorithm_version   the equations and structural rules -- defined by Mission 1.1
     profile version     the parameters      -- NOT calibrated by Mission 1.1
 
 Conflating them is how a system ends up unable to say whether a result changed

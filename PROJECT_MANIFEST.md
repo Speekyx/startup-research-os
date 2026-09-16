@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.163
+Version: 1.164
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.1)
+Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.2)
 
 ---
 
@@ -13,6 +13,22 @@ Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.1)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.164 - 2026-09-16 (Sprint 1 / Mission 1.85.2)
+
+**`N05_REPAIRED_ALGORITHM_1_1_0`: Levels 2 and 3 count only `INDEPENDENT` groups, and nothing else moved.**
+Roadmap node N05, Option A by operator decision; Option B (merging lineages or changing saturation) not
+implemented. No network, model, source, review, collector, new evidence, independence writer or persistence
+mutation; four read-only agents, the main agent the only writer. **ROOT CAUSE**: `levels.py` counted every
+non-unknown support group, so a declared-dependent lineage read as established independence. **PREDECESSOR
+FIRST**: 24 differential cases and all 91 real claims recorded under algorithm 1.0.0 before the change
+(`evidence-aggregation-independence-level-predecessor-v1.json`, immutable). **RESULT**: levels change only
+where a lineage was counted (C03 2->1, C04 3->1, C06 2->1, C12 3->2; A03, A04, A06, A12 lower); no mass,
+saturation, score, count, warning or explanation moved; no level rose; 91/91 real claims identical apart from
+`algorithm_version`. The unknown-only blocked reason is byte-identical; a bounded clause names how many
+lineages did not count. **ALGORITHM 1.0.0 -> 1.1.0**, sensitivity doc regenerated (14 version lines).
+Framework §8, §10, §12 aligned. Levels 4 and 5, family counting and the engine's version check recorded as
+debt. Roadmap N05 DONE; N01 unchanged. `mission-1.85.2-report.md`.
 
 ## 1.163 - 2026-09-16 (Sprint 1 / Mission 1.85.1)
 

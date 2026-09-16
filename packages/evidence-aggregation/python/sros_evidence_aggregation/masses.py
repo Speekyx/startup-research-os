@@ -42,11 +42,15 @@ from .errors import InvalidFactorError
 
 __all__ = ["ALGORITHM_VERSION", "MassDecomposition", "decompose", "evidence_score"]
 
-# The equations, not the parameters. A change here invalidates comparison
-# between results; a change to a profile's parameters does not. Two versions
-# because the two move independently, and a single version would hide which
-# one moved.
-ALGORITHM_VERSION = "1.0.0"
+# The equations and structural rules, not the parameters. A change here
+# invalidates comparison between results; a change to a profile's parameters
+# does not. Two versions because the two move independently, and a single
+# version would hide which one moved.
+#
+# 1.1.0 (Mission 1.85.2, roadmap N05): Levels 2 and 3 count only INDEPENDENT
+# groups; a declared-dependent lineage no longer counts as established
+# independence. Masses, saturation and score are identical to 1.0.0.
+ALGORITHM_VERSION = "1.1.0"
 
 # Masses are computed from validated inputs, so any deviation from an exact sum
 # of 1 is representation error. This bound is a couple of orders above the
