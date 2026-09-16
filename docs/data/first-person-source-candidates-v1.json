@@ -1,0 +1,67 @@
+{
+  "$comment": "Mission 1.85.1. The candidate set, frozen before any documentation was retrieved. frozen_set_sha256 is sha256 over the canonical JSON (sort_keys, compact separators) of every field except $comment and frozen_set_sha256. The list may change after retrieval only to correct a duplicate or misidentified service, and any such correction is recorded, never silent.",
+  "frozen_at": "2026-09-16",
+  "mission": "mission-1.85.1",
+  "roadmap_node": "N01",
+  "max_unregistered": 4,
+  "candidates": [
+    {
+      "candidate_id": "github",
+      "registered": true,
+      "family": "F-ISSUE",
+      "service": "GitHub REST API, public repository issues",
+      "why_plausible": "documented issues endpoint exposing labels, state, state_reason and reactions"
+    },
+    {
+      "candidate_id": "steam",
+      "registered": true,
+      "family": "F-REVIEW",
+      "service": "Steam store user reviews",
+      "why_plausible": "Valve documents a user-reviews route with a recommended (thumbs) flag per review"
+    },
+    {
+      "candidate_id": "google-play",
+      "registered": true,
+      "family": "F-REVIEW",
+      "service": "Google Play Developer API reviews resource",
+      "why_plausible": "documented reviews resource exposing a star rating per review"
+    },
+    {
+      "candidate_id": "apple-app-store",
+      "registered": true,
+      "family": "F-REVIEW",
+      "service": "App Store Connect API customer reviews and Apple RSS feeds",
+      "why_plausible": "documented customer-review resource exposing a rating per review"
+    },
+    {
+      "candidate_id": "gitlab-com",
+      "registered": false,
+      "family": "F-ISSUE",
+      "service": "GitLab.com REST API, public project issues",
+      "why_plausible": "documented issues API exposing labels, state and upvote counts"
+    },
+    {
+      "candidate_id": "codeberg",
+      "registered": false,
+      "family": "F-ISSUE",
+      "service": "Codeberg (Forgejo) REST API, public repository issues",
+      "why_plausible": "documented Forgejo issues API exposing labels and state on a non-profit public forge"
+    },
+    {
+      "candidate_id": "kernel-org-bugzilla",
+      "registered": false,
+      "family": "F-ISSUE",
+      "service": "bugzilla.kernel.org REST API",
+      "why_plausible": "Bugzilla REST exposes dupe_of; issue-identity-candidates-v1 recorded /rest/ allowed by robots and the data licence not addressed"
+    },
+    {
+      "candidate_id": "trustpilot",
+      "registered": false,
+      "family": "F-REVIEW",
+      "service": "Trustpilot official API, public business-unit reviews",
+      "why_plausible": "documented public API exposing a star rating per review"
+    }
+  ],
+  "frozen_set_sha256": "c2f0189421df66b6ad629329b006fdd9715dce3a85ef0f324b91cfff63874b91",
+  "corrections": []
+}

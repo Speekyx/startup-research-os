@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.162
+Version: 1.163
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.0)
+Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.1)
 
 ---
 
@@ -13,6 +13,30 @@ Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.0)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.163 - 2026-09-16 (Sprint 1 / Mission 1.85.1)
+
+**`NO_GO_OPERATOR_DECISION_REQUIRED`: no first-person structured evidence source can be approved under
+`local-private-research-v1`, and the blocker is permission, not data shape.** Roadmap node N01. 0
+research-data requests, 0 model calls, 0 reviews appended, 0 sources registered, catalog and historical
+reviews byte-identical. Five read-only documentation agents and one N05 agent; the main agent the only
+writer.
+
+**FROZEN FIRST**: 8 candidates (github, steam, google-play, apple-app-store; gitlab-com, codeberg,
+kernel-org-bugzilla, trustpilot) frozen and pushed as `0eee973` before any retrieval, digest `c2f01894...`,
+no correction. **RAW RE-READ**: every decisive clause was re-read from the retrieved bytes, 18 of 18
+verified, SHA-256 recorded; summarised retrievals never carry a decisive reason alone. **RESULT**: 0 of 8
+eligible; six routes expose the wanted structured field (a rating, a label, a declared duplicate) and two
+partly; no candidate approves storage, derived analytics or model processing. GitHub AUP §7 limits use to
+open-access research on non-personal information or archiving, so an open-access commitment alone would not
+qualify it; Steam's instruments restrict commercial and automated use; Google Play and Apple rating routes
+are own-app only and their terms forbid databases or automated analysis; GitLab's API terms prohibit bulk
+collection; Codeberg's robots disallows the API; kernel.org publishes no terms for Bugzilla; Trustpilot
+prohibits mining and scraping. **NO LEAST-BAD SOURCE WAS CHOSEN.** **OPERATOR DECISION**: A, start N08 (the
+authorised first-person text semantic-extraction contract); B, a documented product decision satisfying a
+publication or licensing condition, none of which alone would qualify a candidate today. **N05** repair brief
+recorded (Option A: count only INDEPENDENT groups; no result can become stronger) and assigned to Mission
+1.85.2. Record `first-person-source-qualification-v1.json`, checked by 56 tests. `mission-1.85.1-report.md`.
 
 ## 1.162 - 2026-09-16 (Sprint 1 / Mission 1.85.0)
 

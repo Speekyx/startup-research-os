@@ -221,11 +221,11 @@
     {"component": "per_market_scores", "status": ["BLOCKED_BY_EVIDENCE"], "why": "needs an evidence set per MarketScope"}
   ],
   "nodes": [
-    {"id": "N01", "name": "first-person source qualification (F-REVIEW, F-ISSUE)", "kind": "GOVERNANCE", "depends_on": [], "mission": "1.85.1"},
-    {"id": "N02", "name": "record kind and quantity family ADR for the qualified family (G1, G2, G9)", "kind": "ONTOLOGY", "depends_on": ["N01"], "mission": "1.85.2"},
-    {"id": "N03", "name": "collector, normalizer, deterministic extractor and OBSERVED template for one qualified source", "kind": "IMPLEMENTATION", "depends_on": ["N02"], "mission": "1.85.3"},
-    {"id": "N04", "name": "acquisition lineage fields for dependence (text hash, native parent, root, duplicate-of, canonical URL)", "kind": "ONTOLOGY", "depends_on": ["N02"], "mission": "1.85.3"},
-    {"id": "N05", "name": "I-HAZARD decision and engine fix: dependent groups never count as established independence", "kind": "INDEPENDENCE", "depends_on": [], "mission": "1.85.4"},
+    {"id": "N01", "name": "first-person source qualification (F-REVIEW, F-ISSUE)", "kind": "GOVERNANCE", "depends_on": [], "mission": "1.85.1", "status": "NO_GO_OPERATOR_DECISION_REQUIRED", "result_artifact": "docs/data/first-person-source-qualification-v1.json"},
+    {"id": "N02", "name": "record kind and quantity family ADR for the qualified family (G1, G2, G9)", "kind": "ONTOLOGY", "depends_on": ["N01"], "mission": null, "status": "BLOCKED_BY_N01", "bound_family": null},
+    {"id": "N03", "name": "collector, normalizer, deterministic extractor and OBSERVED template for one qualified source", "kind": "IMPLEMENTATION", "depends_on": ["N02"], "mission": null},
+    {"id": "N04", "name": "acquisition lineage fields for dependence (text hash, native parent, root, duplicate-of, canonical URL)", "kind": "ONTOLOGY", "depends_on": ["N02"], "mission": null},
+    {"id": "N05", "name": "I-HAZARD decision and engine fix: dependent groups never count as established independence", "kind": "INDEPENDENCE", "depends_on": [], "mission": "1.85.2", "brief": "docs/reports/mission-1.85.1-report.md, section N05 minimal repair brief"},
     {"id": "N06", "name": "deterministic dependence detection (D-EXACT, D-REPOST, D-THREAD first) with rule versions", "kind": "INDEPENDENCE", "depends_on": ["N04", "N05"], "mission": null},
     {"id": "N07", "name": "human reliability review per new scope", "kind": "RELIABILITY", "depends_on": ["N03"], "mission": null},
     {"id": "N08", "name": "semantic extraction contract for first-person text (G3): D-12 decision, egress reviews, reference labels", "kind": "ONTOLOGY", "depends_on": [], "mission": null},
@@ -237,6 +237,15 @@
     {"id": "N14", "name": "calibration reference set and CALIBRATED profile (D-03 blockers 2-5)", "kind": "SCORING", "depends_on": ["N11", "N12", "N13"], "mission": null},
     {"id": "N15", "name": "ranking and selection of one opportunity", "kind": "SELECTION", "depends_on": ["N14"], "mission": null}
   ],
+  "node_status_note": "A node with no status field has not started.",
+  "mission_1_85_1_result": {
+    "outcome": "NO_GO",
+    "candidates_evaluated": 8,
+    "eligible": 0,
+    "selected_source": null,
+    "operator_decision": ["A: start N08, the authorised first-person text semantic-extraction contract", "B: a documented product decision that would satisfy a source's publication or licensing condition"],
+    "next_mission_independent_of_decision": "1.85.2 repairs the N05 level hazard (Option A); it needs no source"
+  },
   "critical_path": ["N01", "N02", "N03", "N07", "N12", "N13", "N14", "N15"],
   "critical_branches": [
     {"name": "independence", "path": ["N02", "N04", "N06", "N11", "N14"], "why": "calibration needs claims with two or more groups of established independence; without them the aggregator equals the pass-through baseline"},

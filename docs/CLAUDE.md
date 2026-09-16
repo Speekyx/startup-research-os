@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.163
-Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.0)
+Version: 1.164
+Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.1)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.164 | 2026-09-16 | **NO_GO_OPERATOR_DECISION_REQUIRED: no first-person structured evidence source can be approved under local-private-research-v1, and the blocker is permission, not data shape.** Roadmap N01; 0 research-data requests, 0 model calls, 0 reviews appended, 0 sources registered. **Frozen first**: 8 candidates pushed as `0eee973` before retrieval. **Raw re-read**: 18 of 18 decisive clauses verified from retrieved bytes with SHA-256. **Result**: 0 of 8 eligible; six routes expose a rating, label or declared duplicate and two partly; no candidate approves storage, derived analytics or model processing; GitHub AUP §7 (open-access research on non-personal information, or archiving) would not be satisfied by an open-access commitment alone; Steam restricts commercial and automated use; Google Play and Apple are own-app only; GitLab prohibits bulk collection; Codeberg disallows the API; kernel.org has no Bugzilla terms; Trustpilot prohibits mining. No least-bad source chosen. **Operator decision**: A, start N08; B, a documented product decision. **N05** brief recorded (count only INDEPENDENT groups) for Mission 1.85.2. `mission-1.85.1-report.md`. |
 | 1.163 | 2026-09-16 | **BUSINESS_EVIDENCE_ROADMAP_READY_FIRST_PERSON_STRUCTURED_SOURCES_NEXT: Mission 1.84 is closed for the current TED packet (D4), and the next phase is multi-source business evidence acquisition.** 0 provider calls, 0 model inferences, 0 external data persisted, no review appended, no V11, no Opportunity #2; five read-only agents, the main agent the only writer. **Coverage**: 3 of 20 business dimensions supported (all TED, category scope), 2 partial, 15 unsupported; 8 of 29 sources locally reviewed, 5 collected, every registered first-person source RESTRICTED, PROHIBITED or unreviewed. **Two blockers**: governance, and no authorised reading of first-person text. **First families**: product reviews and public issue trackers, whose ratings, labels and declared duplicates reach OBSERVED evidence without text reading. **Ontology**: no new claim type, direction or table; gaps G1 to G9 recorded with minimal changes. **Independence**: 0 groups because nothing writes one; `levels.py` counts DECLARED_DEPENDENT groups as established independence, a latent hazard to fix before any detector; seven dependence rules designed, not active. **Scoring**: no component READY. **Mission 1.85.1**: qualification of a frozen F-REVIEW and F-ISSUE candidate list, no collector, with a stop rule. Roadmap artifact checked by 26 tests. `mission-1.85.0-report.md`. |
 | 1.162 | 2026-09-16 | **INTERVENTION_CLASS_CONTRACT_IMPLEMENTED_OFFLINE_SENTINEL_AND_CITED_CLAIM_GROUNDING: D3 and D5 are resolved at the contract level, offline, as schema v1.3.0, gate v1.6.0 and prompt v1.7.0 beside the frozen contract, and nothing is bound to them.** 0 provider calls, 0 model inferences, 0 token counts, nothing persisted, no packet, no V11, no runner binding, D4 not authorised; four read-only agents, the main agent the only writer. **D3, design E**: schema v1.3.0 moves one leaf, the class field's description, stating the existing sentinel `UNKNOWN_NOT_SUPPORTED`; the strict projection code and profile are unchanged. Gate v1.6.0 calls v1.5.0 once, renames structure and appends class grounding: exactly the sentinel, or one plain-ASCII noun phrase of at most six words with no negator, predicating verb or capital code, whose content words occur in the cited claims' statements outside quoted literals; no vocabulary list, and no source name, dimension name, identifier or MARKET_ACTIVITY licenses a word. Sentinel alone, a structured object, per-packet enums, a closed enum and forced INSUFFICIENT_EVIDENCE rejected. **D5**: prompt v1.7.0 drops *name a more neutral class* and tags every contract rule GATE_ENFORCED, GUIDANCE_ONLY or INSTRUCTION_BEYOND_THE_GATE; nothing unstated. **Synthetic**: 61 class cases as intended, 44 newly refused, 0 opened, every divergence class grounding; gate 103's 131 sentences unchanged in `observed_need`; 8 cross-field displacement cases pass both gates, recorded as debt. **History**: every predecessor gate, schema v1.2.0, projection `87028f45...`, prompt v1.6.0 `a89960ce...` unchanged; V9 and V10 untouched and still refused diagnostically. **GATE 104.** Probe **18 caught, 0 escaped, 2 of 2 controls**, in one run: 17 by rule or pin, 1 by an exception in the contract renderer (six words is written as a word, and twelve has none). 3877 + 7012 tests, 104 gates, 72 new tests, 0 provider requests, 0 model calls, 0 TED bytes, 0 canonical mutation. `mission-1.84.27-report.md`. |
 | 1.161 | 2026-09-16 | **SEMANTIC_GATE_V1_5_0_D1_D2_IMPLEMENTED_DIVERGENCE_LIMITED_TO_AUTHORISED_REPAIRS: gate v1.5.0 sits beside v1.4.0 and repairs exactly the two assertion-scope defects the operator authorised.** 0 provider calls, 0 model inferences, 0 token counts, nothing persisted, no packet, no V11; four read-only agents, the main agent the only writer. **D1**: a noun list governed by one leading `whether` or denial keeps that scope when the predicate follows its last item; a coordinated-clause boundary is vetoed only on positive evidence of a list (scope anchor, bare-noun items, short noun-phrase conjunct, unsaturated head), so *No evidence establishes software demand, and buyers are willing to pay.* still splits and fails. **D2**: a gated modifier in the one modifier slot of a clause-initial subject followed at once by a denial of its existence is not asserted, bounded to that noun phrase and stopping where the answer predicates of the subject again. **Versioned, not edited**: three new modules; the audit's re-bound functions and the evaluator are v1.3.0's syntax trees with declared renames; the seam reproduces v1.3.0's `classify` on 842 readings; v1.4.0, v1.3.0, v1.2.0 and gate 102's diagnosis unchanged. **Differential**: 131 cases, 46 repaired and 7 reason-only changes all attributed (A 23, B 24, A+B 6), 0 unattributed, 0 assertions added, 0 policy refusals passed, 4 residual over-refusals; 148 frozen sweep sentences unchanged. **V10** keeps its record; under v1.5.0 it would be refused on `market` alone, no candidate. The report was checked against the code before commit and found one fail-open (*No staff bid or buyers are willing to pay.*), closed and pinned as N104. **GATE 103.** Probe **18 caught, 0 escaped, 2 of 2 controls**, 5 of them re-freezing the pin after breaking a rule. 3877 + 6940 tests, 103 gates, 198 new tests, 0 provider requests, 0 model calls, 0 TED bytes, 0 canonical mutation. `mission-1.84.26-report.md`. |
@@ -2995,6 +2996,33 @@ retrieve first-party documentation only, append a local review only on retrieved
 exactly one source and resource or record the no-go with the operator's two-way decision. **Do not build a
 collector, call a model, synthesise, create Opportunity #2, or reopen the TED packet. Mission 1.85.1 was
 not started.**
+
+
+**ANSWERED IN 1.164 (Mission 1.85.1). No first-person structured source qualifies, and the operator must
+choose the next path.**
+
+    frozen        8 candidates, pushed before retrieval
+    raw re-read   18 of 18 decisive clauses, SHA-256 recorded
+    eligible      0; six routes expose the wanted field, two partly
+    never granted storage, derived analytics, model processing (any candidate)
+    decision      A: start N08   B: a documented product decision
+    next          Mission 1.85.2 repairs N05 (count only INDEPENDENT groups)
+
+- **THE DATA SHAPE WAS NEVER THE BLOCKER.** A rating, a label and a declared duplicate are all exposed by
+  official routes; what no operator grants is the right to keep and analyse them.
+- **AN OWN-ACCOUNT API IS NOT A RESEARCH ROUTE.** Google Play and Apple document per-review ratings, for the
+  developer's own apps only.
+- **ROBOTS SILENCE IS NOT A GRANT, AND ROBOTS PROHIBITION IS NOT UNCLEAR.** kernel.org's permissive file
+  grants nothing; Codeberg's and GitLab's API disallows are binding signals.
+- **A SINGLE CONDITION RARELY CARRIES A WHOLE VERDICT.** GitHub's open-access clause looked like the only
+  obstacle; its non-personal scope, storage and model processing would remain.
+- **A RETRIEVAL SUMMARY IS STILL NOT A DOCUMENT.** Every decisive clause was re-read from bytes before it was
+  recorded, and two needed a second look.
+
+**Next is an operator decision, and nothing was started.** Choose A or B for first-person evidence. Mission
+1.85.2 may proceed with the N05 repair, which needs no source. **Do not collect from any evaluated candidate,
+treat robots silence or an own-account API as permission, change the product to meet a publication clause
+without a recorded decision, or create Opportunity #2. Mission 1.85.2 was not started.**
 
 
 
