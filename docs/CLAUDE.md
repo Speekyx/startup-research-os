@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.167
-Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.4)
+Version: 1.168
+Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.4 follow-up)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.168 | 2026-09-17 | **Interactive annotation form.** `semantic_annotation.py label` lets a human annotator answer each question in the terminal with immediate quote checks, per-record saving, resume, and an attestation set true only on an explicit yes. It proposes no answer and reads only the annotator's own working pack and surfaces. No label entered, no model called. |
 | 1.167 | 2026-09-16 | **EVALUATION_TOOLING_READY_HUMAN_LABELS_AND_EGRESS_REVIEW_PENDING: N08-B built every piece of a bounded evaluation offline, and nothing ran.** 0 provider calls, 0 egress, 0 findings, 0 human labels entered. **D-12** re-grounded: embedding versioning, OPEN; NLP_EXTRACTION now gated by N08, clustering by D-12; planner 1.5.0. **Annotation** tooling outside the repository with offsets-and-digests import, agreement and adjudication; human labels pending. **Egress** scan on the exact surface, no redaction: 1 excluded, 49 review required, 0 approved. **Provider** requalified with conditions from raw-read pages; error echo NOT_ESTABLISHED, error bodies never stored. **Extractor** package with no call site; **packet** `1ed9faf8...` BLOCKED_HUMAN_LABELS; runner refuses before reading an approval. `mission-1.85.4-report.md`. |
 | 1.166 | 2026-09-16 | **CONTRACT_PREREGISTERED_HUMAN_LABELS_AND_EGRESS_REQUIRED: what a model may infer from one authorised first-person record is now a versioned contract, and nothing has been inferred.** Roadmap N08-A; 0 provider calls, 0 inferences, 0 embeddings, 0 production findings, 0 human labels entered. **D-12** is embedding versioning, OPEN, no conflict; broader citations recorded as scope drift; nine blockers kept separate. **A per-record finding is not a Signal** (S-1), so the model returns verbatim quotes and closed-enum labels and a model-free validator computes offsets on a versioned HTML-rendered surface, refusing the whole extraction on any failure. **Two extractable labels** (failed attempt, negative evaluation of a named solution); seven recorded with blockers. **Corpus** 98 of 104 held questions frozen, 50/48, blank packs, no text inlined. Thresholds PROPOSED_NOT_AUTHORISED; egress needs requalification and operator approval. `mission-1.85.3-report.md`. |
 | 1.165 | 2026-09-16 | **N05_REPAIRED_ALGORITHM_1_1_0: only established independence counts toward Levels 2 and 3.** A declared-dependent lineage proves one origin and nothing about any other lineage, so algorithm 1.1.0 counts `INDEPENDENT` groups only; Option B not implemented. **Predecessor first**: 24 cases and 91 real claims recorded under 1.0.0 before the change. **Result**: 8 differential levels lower, none higher; masses, saturation, scores, counts, warnings and explanations byte-identical; 91/91 real claims identical apart from `algorithm_version`; unknown-only wording byte-identical. Framework §8, §10, §12 aligned; roadmap N05 DONE. `mission-1.85.2-report.md`. |
