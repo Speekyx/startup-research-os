@@ -1,0 +1,2230 @@
+{
+ "$comment": "BLANK HUMAN-LABEL PACK. Every state is UNLABELLED. Fill a copy, never this file in place. A label produced by a model is never a reference label and must not be entered here. Text is not inlined: render a local working copy with build_semantic_evaluation_corpus.py --render-working-copy and check each surface_sha256.",
+ "dataset_id": "stack-overflow-semantic-extraction-reference",
+ "dataset_version": "1.0.0",
+ "split": "HOLDOUT",
+ "synthetic": false,
+ "corpus": "stack-overflow-semantic-evaluation-corpus@1.0.0",
+ "label_set": "first-person-semantic-labels@1.0.0",
+ "rubric": "docs/data/first-person-semantic-extraction-contract-v1.md#6-label-definitions-and-annotation-rules",
+ "text_surface": "se-question-text-surface@1.0.0",
+ "reference_origin": null,
+ "reference_origin_allowed": [
+  "HUMAN_OPERATOR",
+  "HUMAN_EXPERT",
+  "HUMAN_NON_EXPERT"
+ ],
+ "annotator_id": null,
+ "annotation_started_at": null,
+ "annotation_completed_at": null,
+ "records": [
+  {
+   "normalized_record_id": "2345bc4a-9b04-529a-944b-c924ac96fb97",
+   "question_id": "78086387",
+   "question_url": "https://stackoverflow.com/questions/78086387/troubles-with-postgres-while-building-docker-container",
+   "surface_sha256": "cf436dd1881a65dbc17db113608761b40db758b5fa80cad15289026946d8b627",
+   "surface_length": 11328,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "51f83f75-bbe9-5efe-a152-b98d30f633e9",
+   "question_id": "78086639",
+   "question_url": "https://stackoverflow.com/questions/78086639/how-to-get-a-windows-docker-container-to-auto-start-on-login-with-docker-desktop",
+   "surface_sha256": "a4edc39d8b77e2f68c0c4a57e436638859033dd4793448ab9c69f5d4af6481b8",
+   "surface_length": 509,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "bac85e0e-33ef-5386-aa21-04594764829d",
+   "question_id": "78086887",
+   "question_url": "https://stackoverflow.com/questions/78086887/failed-to-retrieve-oidc-token-from-https-login-microsoftonline-com-oauth2-v",
+   "surface_sha256": "0b3f043d7449cb5302070ba73ba37fdea7adcf1207f67b5be2722f1efc445508",
+   "surface_length": 1604,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "4ea9e723-48a6-5934-9ac4-fae60eaeb71b",
+   "question_id": "78087887",
+   "question_url": "https://stackoverflow.com/questions/78087887/qstandardpaths-runtime-directory-tmp-is-not-owned-by-uid-1000-but-a-directo",
+   "surface_sha256": "02f7b5bdd6a68012e391484e0fa1043020c53df0e9a69344c5e8ce61783858ef",
+   "surface_length": 921,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "64811324-ff6d-5508-92e7-22d970195306",
+   "question_id": "78088329",
+   "question_url": "https://stackoverflow.com/questions/78088329/what-is-the-purpose-of-mounting-volumes-that-contain-already-mounted-volumes",
+   "surface_sha256": "207d4ac45ef69ea54df8f47ed96734bd44a37cbe61b2383e3f2394ce38d353ab",
+   "surface_length": 709,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "7ec2d1d1-21ee-5a79-8bc0-e5ab2c8713d1",
+   "question_id": "78088481",
+   "question_url": "https://stackoverflow.com/questions/78088481/docker-compose-mongodb-connection",
+   "surface_sha256": "96b408628c4a197af235ea371b51aa7f1ac72c79f9383f3500866982e7e3adfe",
+   "surface_length": 1742,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "bd65db57-f40c-5e07-a50b-9b50d6c937db",
+   "question_id": "78088909",
+   "question_url": "https://stackoverflow.com/questions/78088909/flask-application-with-dbt-potgres-in-same-container",
+   "surface_sha256": "ac75e5e29e529e8f25276b7958834e584033e5b6c0fec29755a427cb596942f6",
+   "surface_length": 387,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "accc6497-f8f7-56f0-a176-4a068606d702",
+   "question_id": "78089113",
+   "question_url": "https://stackoverflow.com/questions/78089113/docker-image-from-customized-grafana-source-code",
+   "surface_sha256": "850f05586c9e488ff96b5189f1224e087301eeb864404277503ee5f1c834bfdf",
+   "surface_length": 6238,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "84c72d0e-2af3-5c0f-b7d4-42a844be7736",
+   "question_id": "78090396",
+   "question_url": "https://stackoverflow.com/questions/78090396/wordpress-web-ui-dosent-load-in-browser",
+   "surface_sha256": "9b34934895751c45111f04c94409db615fbcd236eaf341119d58a989c6fedb72",
+   "surface_length": 7762,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "4848492f-d22b-55f3-a9cb-16e732260980",
+   "question_id": "78090939",
+   "question_url": "https://stackoverflow.com/questions/78090939/springboot-application-deploy-in-render-fail",
+   "surface_sha256": "8e4b6ba1af90bbf875418a2539e03391eb95a3066a14c805c936e3980d22ee38",
+   "surface_length": 1262,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "4218f4c0-77eb-56a3-9d34-cab864d70f7d",
+   "question_id": "78091032",
+   "question_url": "https://stackoverflow.com/questions/78091032/how-to-use-docker-compose-in-c-program",
+   "surface_sha256": "af2686e3f9feb2a0fe7b053372b8f2b80153f398b4d78a1f17a42cdb6bc5075f",
+   "surface_length": 760,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "c59615ea-31e2-517d-ad51-63ea334cfceb",
+   "question_id": "78091723",
+   "question_url": "https://stackoverflow.com/questions/78091723/invalid-reference-format-on-building-docker-image-on-github-actions",
+   "surface_sha256": "ca26ef6dcb62bbb99010449e353fe126cf06bc53f50d767ed26b3198361cece1",
+   "surface_length": 822,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "8ae1a5b6-47f9-5176-ba64-047013547455",
+   "question_id": "78092648",
+   "question_url": "https://stackoverflow.com/questions/78092648/how-to-make-batch-jobs-logs-available-when-the-jobs-run-inside-ephemeral-docker",
+   "surface_sha256": "48ec23ee4ad75580f141bcd75b430e23af7b84562a8f0219ae95ebfac3bac236",
+   "surface_length": 1462,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "0e84a404-2e8a-5139-8bee-b1e82f93122b",
+   "question_id": "78092806",
+   "question_url": "https://stackoverflow.com/questions/78092806/unexpected-wsl-error-on-docker-desktop-with-hyper-v-on-windows-11",
+   "surface_sha256": "9ff544fe694bafc1400dc42f00617670dd416469a6494acdeb39a5c05b5b8cae",
+   "surface_length": 842,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "cb12bfd6-7762-57ef-a7f0-bc059f47dac7",
+   "question_id": "78092816",
+   "question_url": "https://stackoverflow.com/questions/78092816/i-am-using-docker-compose-yml-to-generate-a-docker-container-and-initial-schemas",
+   "surface_sha256": "15c91a7a3c2504ed4b048c4788d7232bb97690f117a41000dbd206382c447780",
+   "surface_length": 2578,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "521c3f0f-0bcd-5a5a-b88e-dda408d40b2d",
+   "question_id": "78093369",
+   "question_url": "https://stackoverflow.com/questions/78093369/installing-psycopg-in-alpine-docker-image",
+   "surface_sha256": "8970dbb55f46289a6c78076f4e9e5e6426b61d170792bfd29979c994b4ceb097",
+   "surface_length": 978,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "28f792b8-7492-5b73-8aea-882a2812402b",
+   "question_id": "78095532",
+   "question_url": "https://stackoverflow.com/questions/78095532/model-does-not-exit-in-your-database-prisma-and-error-p1001",
+   "surface_sha256": "2fd049fd38ceef06832574e2be4a9fec8b57c62706396991fef6f39bce4d0d12",
+   "surface_length": 1033,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "b337a8a7-75ea-53a1-9037-fee8dab05d3f",
+   "question_id": "78095632",
+   "question_url": "https://stackoverflow.com/questions/78095632/docker-on-visionfive2-risc-v",
+   "surface_sha256": "066b988c93afb24f17aa49fa07afab11cb3f17292816bfb867c2e3a7527a24c0",
+   "surface_length": 2565,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "6922d1c5-8ddc-52ab-8449-7f0a34b5f654",
+   "question_id": "78096223",
+   "question_url": "https://stackoverflow.com/questions/78096223/docker-building-a-go-image-with-cgo-enabled-1-fails",
+   "surface_sha256": "d51ff73f04cbe150b3e8a19be1a326f901d97e0c1731307c8aa645a24161e1cd",
+   "surface_length": 852,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "0e60332d-cd75-5d82-95e1-2de677822c05",
+   "question_id": "78096388",
+   "question_url": "https://stackoverflow.com/questions/78096388/importerror-when-deploying-lambda-function-to-aws-using-docker-and-lambda-layers",
+   "surface_sha256": "29c3652f376d34a9f631c5d74f778a11885f9f28aedb9cf285364421cdbe67ce",
+   "surface_length": 1916,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "8b4a3dbd-3547-58ab-8822-96ea49f6a228",
+   "question_id": "78096903",
+   "question_url": "https://stackoverflow.com/questions/78096903/docker-compose-file-set-keys-from-environment",
+   "surface_sha256": "90778935da5f9daa9c59ec3bddff6da9d76891838083ac57006b912d28e2f5b5",
+   "surface_length": 1037,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "85170528-cdb6-5963-8a11-faa20efb774f",
+   "question_id": "78097071",
+   "question_url": "https://stackoverflow.com/questions/78097071/how-can-i-set-up-a-database-through-an-npm-package-in-a-docker-container",
+   "surface_sha256": "b216b1e435a309ebb2b9c714051f4b5e3581f488154e0affa529743c8fa76c2b",
+   "surface_length": 3282,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "c4b381fe-61bd-5fc6-862c-de32cda7a8c6",
+   "question_id": "78097184",
+   "question_url": "https://stackoverflow.com/questions/78097184/cant-pass-env-variables-from-github-actions-to-docker-container",
+   "surface_sha256": "065b8db737719387cb3cba8338fa577b9aa1245ccab539f8d573ce694905cba6",
+   "surface_length": 1787,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "8148a39c-dbe0-5104-85cf-e84c95d0e8c0",
+   "question_id": "78097216",
+   "question_url": "https://stackoverflow.com/questions/78097216/postman-requests-from-host-machine-are-not-able-to-reach-tomcat-server-running-o",
+   "surface_sha256": "685c89dc7f4dd7c165b2538c193656986549659356829d7c6bec1c45b7a13b57",
+   "surface_length": 2539,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "7ddc50a1-63ea-5c8d-9636-2afca8a30d31",
+   "question_id": "78097574",
+   "question_url": "https://stackoverflow.com/questions/78097574/how-to-setup-the-netcdf4-package-in-multistage-docker-build",
+   "surface_sha256": "ee1ec55caaf904845616f30a2f09d2736f53ca512616aa65f96c90dd03ed2ed1",
+   "surface_length": 2054,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "9cc713fa-3672-5d97-9778-eb778b40dd0b",
+   "question_id": "78097579",
+   "question_url": "https://stackoverflow.com/questions/78097579/spring-boot-application-doesnt-expose-the-port-in-docker",
+   "surface_sha256": "54d1d47ee1131513b3a611bc2bfdb106195fb12626b5e40e9fe5e0c982ee1bff",
+   "surface_length": 5499,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "392a52cb-5216-5e4a-87c4-c968208f3e68",
+   "question_id": "78097745",
+   "question_url": "https://stackoverflow.com/questions/78097745/puppeteer-is-not-found-after-dockerization",
+   "surface_sha256": "c4ddd17e024cdf118727348ca5e315b31a80e3a760e57804c300bc0ae2ee6941",
+   "surface_length": 1128,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "a8f37bb2-a149-57a8-a504-1156217facae",
+   "question_id": "78098031",
+   "question_url": "https://stackoverflow.com/questions/78098031/problem-with-nginx-configuration-on-a-docker",
+   "surface_sha256": "12b67f88753559c9db13f5d0e49a3c8eface7988d881fd80063123f999a49ec1",
+   "surface_length": 2549,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "daa3f817-a5c4-55bc-bef1-4ce0f9089c54",
+   "question_id": "78098368",
+   "question_url": "https://stackoverflow.com/questions/78098368/python-multithreading-i-o-operation",
+   "surface_sha256": "c3bfe4ba84702b11931dd2f8d0c0f37164ad8be9f11ff568bae86cd1675071b2",
+   "surface_length": 1089,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "a75c4cc1-e364-5064-9134-cf8186824356",
+   "question_id": "78098469",
+   "question_url": "https://stackoverflow.com/questions/78098469/python-setup-py-error-install-requires-must-be-a-string-or-list-of-strings",
+   "surface_sha256": "e90ad37a5d8bd12e44d1d7bddfee9fbebdaa710eff21b46a75d10b6783d08fa9",
+   "surface_length": 2140,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "ffbb911a-a763-5078-b66d-ef33a1fa33d9",
+   "question_id": "78098533",
+   "question_url": "https://stackoverflow.com/questions/78098533/how-to-matrix-multiply-each-column-from-two-matrices-in-numpy",
+   "surface_sha256": "0eea65d1a48f27e0aed90e25c4950ec60bbdb8cfdae7b621aa77098ccb9981aa",
+   "surface_length": 941,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "e4f77c9b-3912-5a39-8856-be5de23a7ef2",
+   "question_id": "78098567",
+   "question_url": "https://stackoverflow.com/questions/78098567/extracting-text-and-comment-from-google-doc-python",
+   "surface_sha256": "023f13e4655d7036ffaa61d8a58e5375fa25fb841dcabd1121bd3839222fcdd5",
+   "surface_length": 1413,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "5f4bb5b9-c1b2-5cd1-8199-9932155e7f82",
+   "question_id": "78098568",
+   "question_url": "https://stackoverflow.com/questions/78098568/setting-docker-network-as-external-via-terraform",
+   "surface_sha256": "407a47e97251fdb49adb365166783be6ddd195f9395bf166919a82944bbab643",
+   "surface_length": 752,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "e534358a-db2f-5138-ae9a-eb2efe806c05",
+   "question_id": "78098723",
+   "question_url": "https://stackoverflow.com/questions/78098723/check-if-variable-challenge-is-in-a-list-of-valid-values",
+   "surface_sha256": "a144e521709b9671f92db9ac9a127d61181f99867e2fdfe46a121350c3ee7ba2",
+   "surface_length": 1596,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "eceb2ee0-f394-52d9-a294-7215eb333503",
+   "question_id": "78098740",
+   "question_url": "https://stackoverflow.com/questions/78098740/does-padded-rows-fake-inputs-affect-backpropagation",
+   "surface_sha256": "f248ad1e94c046e727f929a994c993c48caea41d286f3d113090df7ead881d9c",
+   "surface_length": 1131,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "126357a7-5a36-52b7-bec5-a47dbae51340",
+   "question_id": "78099384",
+   "question_url": "https://stackoverflow.com/questions/78099384/how-to-create-docker-containers-dynamically-in-azure-when-message-is-passed-in-s",
+   "surface_sha256": "16fbc4258971e789aec5c8f3cd04e945d3f8e20ddc37be3ced893944fce4429d",
+   "surface_length": 401,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "e3d0cfd3-dc87-517c-8af0-5b5eabab1523",
+   "question_id": "78099680",
+   "question_url": "https://stackoverflow.com/questions/78099680/unable-to-run-uvicorn-under-gunicorn-in-a-docker-container",
+   "surface_sha256": "937c439139effc4a714157fa04941dcd7003c3323774dc401b1a634346cc1438",
+   "surface_length": 2564,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "af5aac8f-3ca1-525f-91c9-0f7c2c470be5",
+   "question_id": "78100915",
+   "question_url": "https://stackoverflow.com/questions/78100915/executing-airflow-tasks-that-are-themselves-in-docker-containers",
+   "surface_sha256": "2c93beab4f21fc42a235027869ab3351d43172a01e56575dad5d1bbcbe1544e4",
+   "surface_length": 6850,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "0633c03e-846d-5039-88ff-2e796f5f65d7",
+   "question_id": "78101562",
+   "question_url": "https://stackoverflow.com/questions/78101562/reduce-the-size-of-docker-and-laravel-7-4",
+   "surface_sha256": "c99f00244f58d14b89910a30e62bb1683ed3eeb9ef6a2c15529d693dddf2daf2",
+   "surface_length": 6903,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "1380353c-f2b6-5ff8-9075-6a3c46151873",
+   "question_id": "78102512",
+   "question_url": "https://stackoverflow.com/questions/78102512/docker-error-response-from-daemon-duplicate-mount-point-mounting-multiple-do",
+   "surface_sha256": "506b4c14d24f4f8ad728acff995ecf85fba948b7d7e372c34decf7b65f092519",
+   "surface_length": 1045,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "684acb90-cd6d-51de-a174-2c0b77f50404",
+   "question_id": "78103385",
+   "question_url": "https://stackoverflow.com/questions/78103385/flutter-web-docker-unable-to-build-m1",
+   "surface_sha256": "8bbd6ad90e30315b03c62f25366e366093e28c80d9460d782af1c31e5f95c067",
+   "surface_length": 5737,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "c21a7ae8-d196-5b69-a101-4cbddfdea5f3",
+   "question_id": "78103879",
+   "question_url": "https://stackoverflow.com/questions/78103879/spring-boot-app-in-docker-container-sql-server-integrated-security",
+   "surface_sha256": "4367e2f7755c304d36132ea7a59d0a2d20044b41cbb6c63b1e4778e18745b378",
+   "surface_length": 614,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "d84b0550-4eac-5a7b-8f60-4c1f909885cd",
+   "question_id": "78103907",
+   "question_url": "https://stackoverflow.com/questions/78103907/how-can-i-create-a-dockerfile-that-runs-both-my-nodejs-server-and-also-launches",
+   "surface_sha256": "56d5421c3b8ff7436973e9d33e16907ae9ddc5df43c69a21a42182f3dc78a5b2",
+   "surface_length": 893,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "4dee53bf-8312-5937-9175-b2f9426a52a0",
+   "question_id": "78103994",
+   "question_url": "https://stackoverflow.com/questions/78103994/deploying-to-gcp-unable-to-prepare-context-unable-to-evaluate-symlinks-in-dock",
+   "surface_sha256": "61386d48aacaf8a39889b3b601089c82c3bdf93afccdc97f6b0c2f8c92f9382f",
+   "surface_length": 1519,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "0f503183-a932-57c3-9057-22e41683d3a6",
+   "question_id": "78104052",
+   "question_url": "https://stackoverflow.com/questions/78104052/how-to-change-the-admin-password-with-etherpad-lite-that-runs-inside-a-docker-co",
+   "surface_sha256": "5eba888ab6febf72491df1691487bfdc3056002fb24d9f628e0298a78f8461a8",
+   "surface_length": 1129,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "423cfaa8-2507-5b23-b66b-1b823080ac4a",
+   "question_id": "78104298",
+   "question_url": "https://stackoverflow.com/questions/78104298/add-add-opens-java-base-java-lang-all-unnamed-in-docker-file",
+   "surface_sha256": "1d76b6789897209459d15e9fe6889738b64e463c870e8a0f532c7d7dde52a7ec",
+   "surface_length": 715,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "7be18700-0fdd-576f-8564-b2be789fe14a",
+   "question_id": "78105286",
+   "question_url": "https://stackoverflow.com/questions/78105286/docker-build-with-low-ram-causing-oom-raspberry-pi-4b",
+   "surface_sha256": "98d297ea48f274569e9b109e68b4282d631303aa8898ccebe0e8d0ae70452922",
+   "surface_length": 1139,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  },
+  {
+   "normalized_record_id": "89af1bd1-5537-5825-89ae-4fdc5d1de44b",
+   "question_id": "78105288",
+   "question_url": "https://stackoverflow.com/questions/78105288/yolov7-docker-image-size-exceeding-6gb-issue",
+   "surface_sha256": "236a773deaf80440a34f4fa7478858e97359a4edac984752fca43fe1e1d675a4",
+   "surface_length": 863,
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "UNLABELLED",
+     "evidence": [],
+     "subject": null,
+     "note": null
+    },
+    "SUCCESSFUL_WORKAROUND": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "EXPLICIT_FEATURE_REQUEST": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "REPEATED_DIFFICULTY_SAME_AUTHOR": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "SWITCHING_INTENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_HYPOTHETICAL_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    },
+    "STATED_PAST_PAYMENT": {
+     "state": "UNLABELLED",
+     "note": null
+    }
+   },
+   "record_note": null
+  }
+ ]
+}

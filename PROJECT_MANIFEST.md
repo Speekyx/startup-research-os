@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.164
+Version: 1.165
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.2)
+Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.3)
 
 ---
 
@@ -13,6 +13,26 @@ Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.2)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.165 - 2026-09-16 (Sprint 1 / Mission 1.85.3)
+
+**`CONTRACT_PREREGISTERED_HUMAN_LABELS_AND_EGRESS_REQUIRED`: a versioned contract for what a model may infer
+from one authorised first-person text record, and a preregistered way to prove it, with no model run.**
+Roadmap N08-A. 0 provider calls, 0 model inferences, 0 embeddings, 0 external requests, 0 production
+Signals, Claims or Evidence, 0 human labels entered; five read-only agents, the main agent the only writer.
+**D-12 RECOVERED**: embedding versioning, OPEN, no conflict; texts citing it against all classification
+recorded as scope drift, not edited; nine blockers kept separate. **DESIGN**: a per-record finding cannot be
+a Signal (S-1 needs two observations), so architecture B: the model returns verbatim quotes and closed-enum
+labels, a model-free validator computes offsets on a versioned text surface (`se-question-text-surface@1.0.0`,
+HTML rendered with CODE and QUOTE regions) and refuses the whole extraction on any failure; the result is
+non-canonical, MODEL_DERIVED, one witness, never a Signal. **LABELS**: two extractable
+(`REPORTED_FAILED_ATTEMPT` -> PROBLEM_OR_NEED, `NEGATIVE_EVALUATION_OF_NAMED_SOLUTION` ->
+SOLUTION_DISSATISFACTION), seven recorded as annotation-only, blocked or not safe; hypothetical willingness to
+pay blocked. **CORPUS**: 104 held Stack Overflow questions, 98 frozen (50 development, 48 holdout), 6 excluded
+for an unreported per-item licence; blank human-label packs with no text inlined. Thresholds all
+PROPOSED_NOT_AUTHORISED; egress needs provider requalification and a packet-scoped operator approval. New
+package `sros-semantic-extraction-contract`, 31 tests. Roadmap N08 set to the outcome, not DONE.
+`mission-1.85.3-report.md`.
 
 ## 1.164 - 2026-09-16 (Sprint 1 / Mission 1.85.2)
 

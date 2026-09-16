@@ -1,0 +1,716 @@
+{
+ "$comment": "Mission 1.85.3, roadmap N08-A. First-person semantic extraction contract and evaluation preregistration. Design only: no model has read any record, no provider execution is approved, no production finding exists. Human-readable companion: first-person-semantic-extraction-contract-v1.md.",
+ "contract_id": "first-person-semantic-extraction",
+ "contract_version": "1.0.0",
+ "mission": "1.85.3",
+ "roadmap_node": "N08",
+ "phase": "N08-A",
+ "outcome": "CONTRACT_PREREGISTERED_HUMAN_LABELS_AND_EGRESS_REQUIRED",
+ "counters": {
+  "PROVIDER_CALLS": 0,
+  "MODEL_INFERENCES": 0,
+  "EMBEDDING_CALLS": 0,
+  "NEW_EXTERNAL_DATA_REQUESTS": 0,
+  "NEW_EXTERNAL_DATA_PERSISTED": 0,
+  "PRODUCTION_MODEL_DERIVED_SIGNALS": 0,
+  "PRODUCTION_CLAIMS": 0,
+  "PRODUCTION_EVIDENCE": 0,
+  "NEW_INDEPENDENCE_STATES": 0,
+  "NEW_SCORES": 0,
+  "HUMAN_LABELS_ENTERED": 0
+ },
+ "d12_decision_map": {
+  "d12": {
+   "definition": "Embedding model versioning and re-embedding strategy",
+   "defined_in": [
+    "docs/architecture/specification-audit.md:227",
+    "docs/architecture/mission-0.1.1-decisions.md:63",
+    "docs/architecture/adr/ADR-006-provider-agnostic-llm-gateway.md:216"
+   ],
+   "status": "OPEN, never decided",
+   "conflicts_with_this_contract": false,
+   "why": "this contract uses no embedding, vector, similarity or clustering"
+  },
+  "scope_drift": {
+   "finding": "several documents cite D-12 as blocking classification in general, which is not its recorded definition",
+   "locations": [
+    "services/research-orchestrator/python/sros_orchestrator/plan.py:168-183 (NLP_EXTRACTION capability block)",
+    "services/nlp/README.md:4-6",
+    "PROJECT_MANIFEST.md (classification, embedding and clustering stay blocked by D-12)",
+    "packages/llm-gateway/python/sros_llm_gateway/prompts/registry.py:11"
+   ],
+   "handling": "recorded, not edited. Whether the NLP_EXTRACTION block should be re-grounded for non-embedding classification is an operator decision for N08-B; this mission unblocks no capability"
+  },
+  "separate_blockers": [
+   {
+    "id": "B1",
+    "blocker": "D-12 embedding versioning",
+    "blocks": "embeddings, vector identity, similarity or clustering",
+    "status": "OPEN",
+    "affects_n08a": "no"
+   },
+   {
+    "id": "B1b",
+    "blocker": "use profile embeddings: false",
+    "blocks": "embeddings, independently of D-12",
+    "status": "IN FORCE",
+    "affects_n08a": "no"
+   },
+   {
+    "id": "B2",
+    "blocker": "NLP_EXTRACTION capability block citing D-12",
+    "blocks": "the planner NLP extraction stage",
+    "status": "IN FORCE, wording broader than D-12",
+    "affects_n08a": "not for design; must be resolved explicitly before a pipeline stage runs"
+   },
+   {
+    "id": "B3",
+    "blocker": "validate_signals.py Gateway and provider import ban in sros_nlp and sros_signal_model",
+    "blocks": "model-calling code placed in the signal layer",
+    "status": "FROZEN placement rule",
+    "affects_n08a": "the contract and the future extractor live in their own packages"
+   },
+   {
+    "id": "B4",
+    "blocker": "validate_claims.py OBSERVED-only interpreter guard",
+    "blocks": "non-OBSERVED claim construction in sros_nlp.interpreters",
+    "status": "FROZEN",
+    "affects_n08a": "no"
+   },
+   {
+    "id": "B5",
+    "blocker": "Signal rule S-1 (two distinct observations), numeric magnitude, closed quantity family, a model call per observation is a design error",
+    "blocks": "a per-record finding being a Signal",
+    "status": "FROZEN",
+    "affects_n08a": "the finding is a non-canonical artifact, never a Signal"
+   },
+   {
+    "id": "B6",
+    "blocker": "SAME_PROBLEM_FAMILY PARKED; production problem-family inference NOT_AUTHORISED",
+    "blocks": "cross-record problem identity and recurrence counts",
+    "status": "PARKED",
+    "affects_n08a": "out of scope, not revived"
+   },
+   {
+    "id": "B7",
+    "blocker": "EXACT problem equivalence evaluated and established nothing; no production run",
+    "blocks": "semantic equivalence as Signal, Claim or Evidence",
+    "status": "NOT_AUTHORISED",
+    "affects_n08a": "out of scope"
+   },
+   {
+    "id": "B8",
+    "blocker": "human reference labels NOT_ESTABLISHED",
+    "blocks": "the words validated and gold, and production inference",
+    "status": "OPEN",
+    "affects_n08a": "the blank packs exist; labels are the next step"
+   },
+   {
+    "id": "B9",
+    "blocker": "ADR-033 four gates",
+    "blocks": "sending source text to an external model",
+    "status": "source, profile and provider gates recorded as permitting Stack Exchange to an APPROVED provider; no packet-scoped operator approval exists",
+    "affects_n08a": "requirements recorded; nothing sent"
+   }
+  ],
+  "frozen": [
+   "S-1 two distinct observations",
+   "DETERMINISTIC and MODEL_DERIVED provenance CHECKs",
+   "the model is never the evidence and no chain-of-thought is stored",
+   "OBSERVED-only interpreter guard and Gateway import ban",
+   "ADR-033 four gates, each with its own reason code",
+   "UNKNOWN is never promoted",
+   "reliability is per scope and never inherited; independence is never established by a model",
+   "question text is untrusted; ABSTAIN is mandatory; no numeric confidence is requested from the model",
+   "Mission 1.24, 1.25 and 1.27 verdicts (PARKED, NOT_AUTHORISED)",
+   "N05 algorithm 1.1.0"
+  ],
+  "open": [
+   "D-12 itself",
+   "whether the NLP_EXTRACTION block covers non-embedding classification",
+   "the staging schema for validated extractions",
+   "a count Signal over validated findings (quantity family, truthful derivation_confidence, provider column)",
+   "the INFERRED claim path for model-derived Signals",
+   "human reference labels",
+   "operator acceptance of the proposed thresholds",
+   "a packet-scoped egress approval"
+  ]
+ },
+ "architecture_comparison": {
+  "criteria": [
+   "provenance",
+   "reproducibility",
+   "hallucination surface",
+   "exact source citation",
+   "uncertainty",
+   "multiple findings per text",
+   "idempotency",
+   "provider portability",
+   "human reviewability",
+   "MODEL_DERIVED compatibility",
+   "Claim and Evidence semantics",
+   "independence",
+   "cost and scale"
+  ],
+  "options": {
+   "A_direct_model_to_signal": {
+    "verdict": "REJECTED",
+    "why": "violates Signal S-1 because one record is one observation; puts model output one step from Evidence; several findings from one text would read as several witnesses; derivation_confidence would carry a number nobody calibrated"
+   },
+   "B_model_to_validated_observation_to_deterministic_builder": {
+    "verdict": "SELECTED",
+    "why": "the model returns quotes and closed-enum types only; a model-free validator computes offsets against a recomputed surface and refuses on any mismatch; the artifact is non-canonical; only a later deterministic builder over two or more records may produce a Signal"
+   },
+   "C_model_to_candidate_to_human_promotion_to_signal": {
+    "verdict": "REJECTED_FOR_THE_WRITE_PATH",
+    "why": "a promoted candidate is still one observation, so promotion does not make it a Signal; a durable candidate registry is Claims before Claims (ADR-038); human judgement is kept in evaluation, not in the write path"
+   }
+  }
+ },
+ "selected_architecture": {
+  "flow": "held NormalizedRecord -> text surface (deterministic) -> [future: four gates, prompt, forced strict tool] -> model payload -> deterministic validator -> non-canonical validated extraction -> [future N08-C: deterministic count builder over two or more records]",
+  "packages": {
+   "contract": "packages/semantic-extraction-contract (sros_semantic_extraction_contract): standard library and sros-contracts only; surface, labels, validator, fingerprints; no prompt, no model, no network, no persistence",
+   "future_extractor": "packages/semantic-extraction (N08-B): the contract plus sros-llm-gateway only; prompt, strict-tool projection, authorization before serialization; must not depend on sros-acquisition or sros-nlp; sros_nlp must be forbidden from importing it"
+  },
+  "model_writes_nothing": true,
+  "model_supplies_offsets": false,
+  "derivation_kind": "MODEL_DERIVED",
+  "is_signal": false,
+  "is_claim": false,
+  "is_evidence": false
+ },
+ "extraction_schema": {
+  "text_surface": "se-question-text-surface@1.0.0",
+  "model_payload": {
+   "extraction_state": [
+    "FINDINGS_PRESENT",
+    "NO_FINDING_ESTABLISHED",
+    "ABSTAINED_TEXT_INSUFFICIENT"
+   ],
+   "findings": {
+    "max_items": 8,
+    "item_keys": [
+     "finding_type",
+     "evidence_quote",
+     "evidence_occurrence",
+     "subject_quote",
+     "subject_occurrence"
+    ],
+    "finding_type": "EXTRACTABLE labels only",
+    "evidence_quote_length": [
+     8,
+     400
+    ],
+    "subject_quote_length": [
+     2,
+     120
+    ],
+    "no_other_keys": true,
+    "no_free_text_rationale": true,
+    "no_numeric_confidence": true
+   }
+  },
+  "validated_extraction": {
+   "extraction_id": "sha256 over lineage and provenance, model and prompt included, outputs excluded",
+   "lineage": [
+    "workspace_id",
+    "normalized_record_id",
+    "observation_key",
+    "source_id"
+   ],
+   "provenance": [
+    "contract",
+    "label_set",
+    "surface",
+    "surface_sha256",
+    "extractor",
+    "prompt",
+    "provider",
+    "model",
+    "visible_length"
+   ],
+   "finding": [
+    "finding_id: sha256 over extraction_id, type, evidence span and subject span",
+    "finding_type",
+    "evidence_start and evidence_end, computed by the validator",
+    "evidence_quote",
+    "subject_start, subject_end, subject_quote",
+    "evidence_dimension",
+    "observation_category",
+    "does_not_establish: the contract constant, never from the model"
+   ],
+   "derivation_kind": "MODEL_DERIVED",
+   "is_signal": false,
+   "independent_witness_count": 1
+  },
+  "refusal_reasons": [
+   "PAYLOAD_NOT_AN_OBJECT",
+   "UNKNOWN_OR_MISSING_KEY",
+   "UNKNOWN_EXTRACTION_STATE",
+   "STATE_FINDINGS_MISMATCH",
+   "TOO_MANY_FINDINGS",
+   "LABEL_NOT_EXTRACTABLE",
+   "QUOTE_INVALID",
+   "QUOTE_CONTAINS_MARKER",
+   "QUOTE_NOT_IN_SURFACE",
+   "OCCURRENCE_INVALID",
+   "SPAN_BEYOND_VISIBLE_TEXT",
+   "SPAN_IN_QUOTED_MATERIAL",
+   "SPAN_IN_CODE_NOT_PERMITTED",
+   "SUBJECT_REQUIRED",
+   "SUBJECT_NOT_PERMITTED",
+   "DUPLICATE_FINDING",
+   "SURFACE_DIGEST_MISMATCH",
+   "PROVENANCE_INCOMPLETE"
+  ],
+  "refusal_policy": "every check runs; any refusal rejects the whole extraction; a refusal is never an abstention and never a zero-finding answer; a schema failure is logged as possible injection, retried at most once, never falls back to another provider"
+ },
+ "labels": [
+  {
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "status": "EXTRACTABLE",
+   "ontology_fit": "SUPPORTED_BY_EXISTING_ONTOLOGY",
+   "definition": "The asker states, in their own words, that they tried a specific approach and it did not work: an error, a wrong result, or no effect. A question that only asks how to do something, with no attempt reported as failing, is not this label. A failed workaround is this label.",
+   "evidence_dimension": "PROBLEM_OR_NEED",
+   "observation_category": "REPORTED_BEHAVIOUR",
+   "requires_subject": false,
+   "evidence_may_be_in_code": true,
+   "does_not_establish": [
+    "that the problem recurs, or that any other record states the same problem",
+    "how many people are affected, severity, or pain",
+    "demand, willingness to pay, purchase intent or a market",
+    "that the asker's statement is true",
+    "independence from any other finding",
+    "that the tool or approach tried is inadequate (SOLUTION_GAP)",
+    "dissatisfaction with any solution"
+   ],
+   "blocker": null
+  },
+  {
+   "label_id": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "status": "EXTRACTABLE",
+   "ontology_fit": "SUPPORTED_BY_EXISTING_ONTOLOGY",
+   "definition": "The asker states, in their own words and outside code or quoted material, a negative evaluation of a solution named in the text (a tool, library, service or product), not merely that it produced an error. Asking why a tool behaves a certain way is not an evaluation.",
+   "evidence_dimension": "SOLUTION_DISSATISFACTION",
+   "observation_category": "STATED_OPINION",
+   "requires_subject": true,
+   "evidence_may_be_in_code": false,
+   "does_not_establish": [
+    "that the problem recurs, or that any other record states the same problem",
+    "how many people are affected, severity, or pain",
+    "demand, willingness to pay, purchase intent or a market",
+    "that the asker's statement is true",
+    "independence from any other finding",
+    "that the asker would switch",
+    "that the complaint is representative of any population",
+    "which canonical subject the named solution is (held as a verbatim string only)"
+   ],
+   "blocker": null
+  },
+  {
+   "label_id": "SUCCESSFUL_WORKAROUND",
+   "status": "ANNOTATION_ONLY",
+   "ontology_fit": "REQUIRES_SCOPE_DECISION",
+   "definition": "The asker states that an alternative approach they used does work.",
+   "evidence_dimension": null,
+   "observation_category": "REPORTED_BEHAVIOUR",
+   "requires_subject": false,
+   "evidence_may_be_in_code": true,
+   "does_not_establish": [
+    "that the problem recurs, or that any other record states the same problem",
+    "how many people are affected, severity, or pain",
+    "demand, willingness to pay, purchase intent or a market",
+    "that the asker's statement is true",
+    "independence from any other finding",
+    "SOLUTION_GAP: a working workaround is evidence that a solution exists"
+   ],
+   "blocker": "whether a burdensome but working workaround bears on PROBLEM_OR_NEED is undecided"
+  },
+  {
+   "label_id": "EXPLICIT_FEATURE_REQUEST",
+   "status": "ANNOTATION_ONLY",
+   "ontology_fit": "SUPPORTED_BY_EXISTING_ONTOLOGY",
+   "definition": "The asker asks that a named tool add a capability it is stated to lack.",
+   "evidence_dimension": "PROBLEM_OR_NEED",
+   "observation_category": "STATED_OPINION",
+   "requires_subject": true,
+   "evidence_may_be_in_code": false,
+   "does_not_establish": [
+    "that the problem recurs, or that any other record states the same problem",
+    "how many people are affected, severity, or pain",
+    "demand, willingness to pay, purchase intent or a market",
+    "that the asker's statement is true",
+    "independence from any other finding",
+    "that the capability does not already exist"
+   ],
+   "blocker": "'is there a way to' is the ordinary question form on this site; incidence is measured first"
+  },
+  {
+   "label_id": "REPEATED_DIFFICULTY_SAME_AUTHOR",
+   "status": "BLOCKED",
+   "ontology_fit": "REQUIRES_SCOPE_DECISION",
+   "definition": "The asker states that the same difficulty happens to them repeatedly.",
+   "evidence_dimension": null,
+   "observation_category": "REPORTED_BEHAVIOUR",
+   "requires_subject": false,
+   "evidence_may_be_in_code": false,
+   "does_not_establish": [
+    "that the problem recurs, or that any other record states the same problem",
+    "how many people are affected, severity, or pain",
+    "demand, willingness to pay, purchase intent or a market",
+    "that the asker's statement is true",
+    "independence from any other finding"
+   ],
+   "blocker": "RECURRENCE_OR_FREQUENCY was written for recurrence across observations, not one author"
+  },
+  {
+   "label_id": "SWITCHING_INTENT",
+   "status": "BLOCKED",
+   "ontology_fit": "REQUIRES_TAXONOMY_EXTENSION",
+   "definition": "The asker states an intention to replace one named solution with another.",
+   "evidence_dimension": null,
+   "observation_category": "STATED_OPINION",
+   "requires_subject": true,
+   "evidence_may_be_in_code": false,
+   "does_not_establish": [
+    "that the problem recurs, or that any other record states the same problem",
+    "how many people are affected, severity, or pain",
+    "demand, willingness to pay, purchase intent or a market",
+    "that the asker's statement is true",
+    "independence from any other finding"
+   ],
+   "blocker": "no dimension asks about switching; SOLUTION_DISSATISFACTION never means that they would switch"
+  },
+  {
+   "label_id": "STATED_HYPOTHETICAL_PAYMENT",
+   "status": "BLOCKED",
+   "ontology_fit": "REQUIRES_TAXONOMY_EXTENSION",
+   "definition": "The asker states they would pay for something.",
+   "evidence_dimension": null,
+   "observation_category": "STATED_OPINION",
+   "requires_subject": false,
+   "evidence_may_be_in_code": false,
+   "does_not_establish": [
+    "that the problem recurs, or that any other record states the same problem",
+    "how many people are affected, severity, or pain",
+    "demand, willingness to pay, purchase intent or a market",
+    "that the asker's statement is true",
+    "independence from any other finding",
+    "that anyone paid or committed to pay (WILLINGNESS_TO_PAY)"
+   ],
+   "blocker": "WILLINGNESS_TO_PAY asks whether an actor paid or committed to pay; a hypothetical is neither"
+  },
+  {
+   "label_id": "STATED_PAST_PAYMENT",
+   "status": "BLOCKED",
+   "ontology_fit": "REQUIRES_SCOPE_DECISION",
+   "definition": "The asker states they paid for a named product or service.",
+   "evidence_dimension": null,
+   "observation_category": "REPORTED_BEHAVIOUR",
+   "requires_subject": true,
+   "evidence_may_be_in_code": false,
+   "does_not_establish": [
+    "that the problem recurs, or that any other record states the same problem",
+    "how many people are affected, severity, or pain",
+    "demand, willingness to pay, purchase intent or a market",
+    "that the asker's statement is true",
+    "independence from any other finding",
+    "a verified transaction, an amount or a price"
+   ],
+   "blocker": "whether an unidentified actor's self-report counts as 'paid', and linking it to a need (G7)"
+  },
+  {
+   "label_id": "UNMET_NEED_AS_SOLUTION_GAP",
+   "status": "NOT_SAFE",
+   "ontology_fit": "NOT_SAFE_TO_REPRESENT",
+   "definition": "A statement that no solution exists.",
+   "evidence_dimension": null,
+   "observation_category": null,
+   "requires_subject": false,
+   "evidence_may_be_in_code": false,
+   "does_not_establish": [
+    "that the problem recurs, or that any other record states the same problem",
+    "how many people are affected, severity, or pain",
+    "demand, willingness to pay, purchase intent or a market",
+    "that the asker's statement is true",
+    "independence from any other finding"
+   ],
+   "blocker": "SOLUTION_GAP never means that absence of evidence of a solution is evidence of its absence"
+  }
+ ],
+ "excluded_candidate": {
+  "label": "PROBLEM_STATEMENT",
+  "why": "on Stack Overflow every question states being stuck by site design, and community_question_volume already maps to PROBLEM_OR_NEED deterministically; a near-constant label separates nothing"
+ },
+ "prohibited_inferences": [
+  {
+   "from": "asking a question",
+   "never": "market demand"
+  },
+  {
+   "from": "popularity, score or view count",
+   "never": "importance, market size or willingness to pay"
+  },
+  {
+   "from": "a tag",
+   "never": "a product category or the subject of a finding"
+  },
+  {
+   "from": "an accepted answer",
+   "never": "an objectively solved problem"
+  },
+  {
+   "from": "one asker's statement",
+   "never": "population frequency"
+  },
+  {
+   "from": "a hypothetical purchase",
+   "never": "actual spend"
+  },
+  {
+   "from": "model confidence or model agreement",
+   "never": "evidence reliability"
+  },
+  {
+   "from": "two findings from one record, or re-runs, or different models",
+   "never": "independent evidence"
+  },
+  {
+   "from": "two differently worded questions",
+   "never": "the same problem"
+  },
+  {
+   "from": "an error message containing emotional words",
+   "never": "a negative evaluation"
+  },
+  {
+   "from": "text inside a quote, a pasted issue or code",
+   "never": "the asker's own statement"
+  }
+ ],
+ "persistence_boundary": {
+  "n08a": "nothing persisted; the validator returns an in-memory object",
+  "stage_1_non_canonical_artifact": "minimal later schema, not created: nlp.semantic_record_extractions (one row per extraction identity, state CHECK, provenance NOT NULL, RLS) and nlp.semantic_findings (spans with CHECK 0 <= start < end, parent state FINDINGS_PRESENT); no foreign key from research.claims or scoring.evidence; the writer lives outside sros_nlp",
+  "stage_2_signal": "a Signal only from a deterministic builder over validated findings from two or more distinct observation_keys; requires an ADR for the quantity family (COMMUNITY_QUESTION_VOLUME is scoped to a site's own tag vocabulary), a truthful derivation_confidence semantics for MODEL_DERIVED, and a provider column",
+  "human_promotion": "not in the write path for the two EXTRACTABLE labels; human judgement is used for reference labels and adjudication; any BLOCKED label later unblocked must state whether it needs human promotion"
+ },
+ "source_lineage_rules": [
+  "every finding carries the normalized_record_id and observation_key of exactly one held record",
+  "the surface is recomputed from the held record and its digest must equal the digest the prompt was built from",
+  "a finding cites a span of the surface, never a tag, score, view count or answer metadata",
+  "the source observation and the model interpretation stay separately addressable; the NormalizedRecord is never modified",
+  "attribution (Stack Exchange Network, CC BY-SA 4.0, item link) travels with any derived artifact that is displayed"
+ ],
+ "independence_inheritance_rules_for_n06": [
+  "all findings from one normalized record inherit that record's single observation lineage: one witness",
+  "multiple findings from one question are not independent evidence",
+  "model re-runs are not independent evidence",
+  "different models interpreting the same question are not independent evidence",
+  "one prompt and model across many records is a shared interpretive cause, recorded and never assumed away",
+  "extraction writes no independence state"
+ ],
+ "prompt_injection_boundary": {
+  "source_text": "UNTRUSTED DATA: one UntrustedText region per surface, delimiter-neutralised",
+  "gate_order": "the four ADR-033 gates are resolved before any string containing source text exists",
+  "tools": "one forced strict tool; no browsing, no execution, no other tools",
+  "withheld_from_the_model": [
+   "score",
+   "view_count",
+   "answer_count",
+   "is_answered",
+   "accepted_answer_id",
+   "tags",
+   "question_url",
+   "author (never acquired)"
+  ],
+  "what_an_injection_can_reach": "choosing an enum value or a quote that must already exist in the source; the validator, not the model, decides offsets, labels and lineage",
+  "fixtures": "docs/data/first-person-semantic-extraction-fixtures-v1.json",
+  "residual": "an injected but verbatim quote with a wrong label passes the validator and is caught only by human evaluation (fixture prompt_injection_text)"
+ },
+ "evaluation_protocol": {
+  "corpus": "docs/data/stack-overflow-semantic-evaluation-corpus-v1.json",
+  "packs": [
+   "docs/data/stack-overflow-semantic-label-pack-development-v1.json",
+   "docs/data/stack-overflow-semantic-label-pack-holdout-v1.json"
+  ],
+  "annotation": {
+   "states": [
+    "UNLABELLED",
+    "PRESENT",
+    "ABSENT",
+    "UNCERTAIN"
+   ],
+   "extractable_labels": "PRESENT requires at least one verbatim evidence span of the surface; NEGATIVE_EVALUATION_OF_NAMED_SOLUTION also requires a verbatim subject; UNCERTAIN requires a note",
+   "incidence_labels": "ANNOTATION_ONLY and BLOCKED labels are marked PRESENT, ABSENT or UNCERTAIN without spans, to measure incidence only",
+   "holder_rule": "only the asker's own first-person statements count; quoted, attributed, negated or hypothetical text is ABSENT",
+   "multi_label": "labels are independent; no label implies another",
+   "origin": "reference_origin is required and one of HUMAN_OPERATOR, HUMAN_EXPERT, HUMAN_NON_EXPERT; AI_ASSISTED_PROVISIONAL is refused for this dataset"
+  },
+  "annotators": "at least two humans on separate blank copies, blind to each other and to any model output, with a deterministic per-annotator shuffle",
+  "agreement": "Cohen's kappa per extractable label (Krippendorff's alpha for more than two), plus positive-specific agreement and raw counts, because prevalence is extreme",
+  "adjudication": "a third human or a recorded joint session; both original labels kept; unresolved stays UNCERTAIN; adjudication never consults model output",
+  "gold": "a label is gold for a split only when agreement meets the accepted floor and the composition gate passes; otherwise LABEL_NOT_RELIABLY_ANNOTATABLE or REFERENCE_SET_INSUFFICIENT, never fixed by moving records, relabelling or widening a definition",
+  "composition_gate": {
+   "per_split_per_label": {
+    "min_present": 4,
+    "min_absent": 4
+   },
+   "status": "PROPOSED_NOT_AUTHORISED",
+   "precedent": "Mission 1.26"
+  },
+  "metrics": [
+   "precision, recall and F1 on PRESENT per label per split, with Clopper-Pearson intervals, descriptive and never a pass condition alone",
+   "confusion counts including abstentions",
+   "abstention quality: abstain rate on gold UNCERTAIN and on gold-decided records",
+   "unsupported-assertion rate: mechanical (validator refusal) and semantic (a human judges the span does not support the label), reported apart",
+   "span correctness: exact and overlap; subject exact match",
+   "deterministic schema validity: refusals counted as failures, not abstentions",
+   "run-to-run consistency over three pinned runs; run 1 is the scored run",
+   "cost and latency, recorded and never treated as quality"
+  ],
+  "constant_classifier_defeat": "the criterion is computed so that all-ABSENT, all-PRESENT and all-ABSTAIN classifiers each fail against the frozen gold counts"
+ },
+ "proposed_thresholds": {
+  "status": "PROPOSED_NOT_AUTHORISED",
+  "derivation": "A false PRESENT manufactures a business problem that can travel to a Signal and a Claim, while a false ABSENT loses one observation. Thresholds therefore cap false PRESENT with an upper confidence bound and tolerate conservative misses. With zero false PRESENT among n PRESENT predictions the 95% upper bound is about 3/n, so certifying a rate r_max needs n >= 3/r_max PRESENT predictions in the scored split.",
+  "items": [
+   {
+    "metric": "false_present_rate_upper_95",
+    "label": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+    "threshold": 0.1,
+    "required_present_predictions": 30,
+    "why": "writes to SOLUTION_DISSATISFACTION, a counting dimension no held evidence reaches today",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "false_present_rate_upper_95",
+    "label": "REPORTED_FAILED_ATTEMPT",
+    "threshold": 0.2,
+    "required_present_predictions": 15,
+    "why": "lands on PROBLEM_OR_NEED, already held deterministically, so a false positive adds less new exposure",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "min_true_present_and_min_true_absent",
+    "threshold": 1,
+    "why": "defeats constant classifiers",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "mechanical_unsupported_assertions_accepted",
+    "threshold": 0,
+    "why": "the validator refuses them by construction; an accepted one is a validator defect",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "validator_acceptance_rate",
+    "threshold": 0.95,
+    "why": "refusals are failures; a model that cannot produce valid payloads is not usable",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "unnecessary_abstention_rate_on_gold_decided",
+    "threshold": 0.1,
+    "why": "abstention is benign but must not replace answering",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "run_to_run_label_flip_rate",
+    "threshold": 0.1,
+    "why": "a result that changes on re-run cannot be audited",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "inter_annotator_kappa_per_extractable_label",
+    "threshold": 0.6,
+    "why": "a conventional substantial-agreement floor; below it the label definition, not the model, is the problem",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "recall",
+    "threshold": null,
+    "why": "descriptive only; conservative misses are tolerated, but true PRESENT >= 1 is required",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "cost_usd_ceiling_per_run",
+    "threshold": null,
+    "why": "fixed in the future execution packet from priced token bounds, never estimated here",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   },
+   {
+    "metric": "latency",
+    "threshold": null,
+    "why": "recorded, never quality",
+    "status": "PROPOSED_NOT_AUTHORISED"
+   }
+  ],
+  "sufficiency_projection": "The holdout holds 48 records. Certifying 0.10 for NEGATIVE_EVALUATION_OF_NAMED_SOLUTION needs about 30 PRESENT predictions, which a 48-record Stack Overflow holdout is unlikely to contain. The preregistered response is EVALUATION_INSUFFICIENT for that label and a separately authorised, preregistered supplementary acquisition, never a lowered threshold."
+ },
+ "future_provider_egress_requirements": {
+  "source_permission": "stack-exchange, local-private-research-v1, review v2: external_model_transmission PERMITTED_WITH_CONDITIONS (provider must commit to no training and bounded documented retention; inference only). The held records were normalized under review v1; a future run must confirm the v2 conditions verify as satisfied at run time.",
+  "provider_permission": "model-provider-policy-v1.json: anthropic API-key route APPROVED on documents retrieved 2026-09-02 (review interval 180 days); subscription route NOT_APPROVED; gemini unpaid route NOT_APPROVED. Requalification is a required future step: the runtime does not check review age, so the future mission re-verifies route, endpoint, model, no-training and retention documents and records it. Nothing is approved from memory.",
+  "operator_approval": "a packet-scoped approval naming packet id, version and recomputed sha256; the exact question_id set; representation schema and field allowlist; truncation limit; residual-identifier policy; prompt and rubric ids and digests; provider, route, endpoint, model and policy version; max calls, token bounds, USD ceiling and retry policy; exclusions (no training, fine-tuning, embeddings, publication, other site or source); output storage and retention.",
+  "may_leave": [
+   "the rendered text surface of an included record"
+  ],
+  "withheld": [
+   "score",
+   "view_count",
+   "answer_count",
+   "is_answered",
+   "accepted_answer_id",
+   "tags",
+   "question_url",
+   "question_id (use an opaque packet-local index)"
+  ],
+  "never_leaves": [
+   "author fields (never acquired)",
+   "raw API payloads and provenance",
+   "workspace and session identifiers",
+   "credentials, local paths and operator identity"
+  ],
+  "residual_personal_information": "Acquisition removed structured owner objects only; body text can still carry emails, user home paths, IP addresses, handles and pasted tokens. The frozen manifest records per-record counts of such patterns, never the text. Preferred policy: exclude or individually review flagged records rather than redact, because redaction changes the surface a span must cite. If redaction is chosen it must be deterministic, versioned, part of the surface version and part of the packet digest.",
+  "retention_and_training_controls": [
+   "contractual no-training on the exact route",
+   "documented bounded retention",
+   "commercial API-key route only",
+   "no retention-altering feature (batch, file storage) unless separately assessed",
+   "an explicit operator decision on zero retention",
+   "open questions to re-verify: trust-and-safety retention and human review"
+  ],
+  "logging": [
+   "gateway telemetry carries ids, tokens and cost only",
+   "correlation ids and task names never embed question text",
+   "provider error bodies must not echo prompt content into logs (to verify in N08-B)",
+   "stored model payloads contain verbatim quotes and stay local"
+  ],
+  "local_model_route": "Removes the transmission, profile-egress and provider-posture gates and the third-party retention question. Keeps the model_processing conditions, attribution, operator approval, evaluation, prompt-injection handling and personal data in stored outputs. Adds the weights licence for commercial-purpose use. Requires a local adapter, a policy posture and proof that the route is local. It does not remove the need for human reference labels."
+ },
+ "implementation_plan": {
+  "N08-B": [
+   "human labelling of the development pack by at least two annotators, adjudication, agreement and composition verdicts",
+   "operator acceptance or revision of the proposed thresholds",
+   "operator decision on the NLP_EXTRACTION and D-12 wording (re-ground it, or keep it blocked and run extraction outside the planner)",
+   "packages/semantic-extraction: prompt regions, strict-tool projection, authorization before serialization, and the sros_nlp import ban extended to it",
+   "egress packet: residual-identifier policy, provider requalification, packet-scoped operator approval",
+   "at most one bounded development run under that approval, with nothing persisted"
+  ],
+  "N08-C": [
+   "holdout labelling and one preregistered holdout run",
+   "a verdict per label: PASS, FAIL or EVALUATION_INSUFFICIENT",
+   "only on PASS: ADR and migration for the non-canonical staging tables",
+   "ADR for a count Signal over validated findings (quantity family, truthful derivation_confidence, provider column) and the INFERRED claim path",
+   "record the independence inheritance invariants in N06",
+   "no Opportunity, no score, no V11"
+  ]
+ },
+ "roadmap": {
+  "N08": "CONTRACT_PREREGISTERED_HUMAN_LABELS_AND_EGRESS_REQUIRED",
+  "N05": "DONE, unchanged",
+  "N01": "NO_GO_OPERATOR_DECISION_REQUIRED, unchanged",
+  "N02": "unbound",
+  "N06": "not started"
+ }
+}
