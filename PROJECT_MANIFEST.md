@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.161
+Version: 1.162
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-16 (Sprint 1 / Mission 1.84.27)
+Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.0)
 
 ---
 
@@ -13,6 +13,33 @@ Last amended: 2026-09-16 (Sprint 1 / Mission 1.84.27)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.162 - 2026-09-16 (Sprint 1 / Mission 1.85.0)
+
+**`BUSINESS_EVIDENCE_ROADMAP_READY_FIRST_PERSON_STRUCTURED_SOURCES_NEXT`: Mission 1.84 is closed for the
+current TED packet (operator decision D4), and SROS turns from synthesis-contract hardening to
+multi-source business evidence acquisition.** A research-architecture mission: 0 provider calls, 0 model
+inferences, 0 external data persisted, no review appended, no V11, no Opportunity #2. Five read-only
+agents (coverage, source landscape, ontology, independence and reliability, scoring), the main agent the
+only writer and the verifier of every load-bearing claim.
+
+**COVERAGE**: 3 of 20 business dimensions supported (market activity, buyer existence, economic value,
+all TED at CPV-division scope), 2 partial (pain, existing spend), 15 unsupported, including frustration,
+recurrence, workaround, willingness to pay, switching, solution gap, competitor weakness, feature demand
+and unmet need. 8 of 29 sources hold a local review and 5 are collected; every registered first-person
+source is RESTRICTED, PROHIBITED or unreviewed. **TWO BLOCKERS**: governance, and no authorised way to
+read first-person text (D-12, egress, the PARKED problem-family relation). **FIRST FAMILIES**: product
+reviews and public issue trackers, the only ones exposing missing dimensions as source-native fields (a
+rating, a label, a declared duplicate) that reach OBSERVED evidence without text reading. **ONTOLOGY**:
+no new claim type, direction or evidence table; real gaps are a record kind (G1), a quantity-family ADR
+(G2), the text-classification contract (G3), stated WTP (G4), scope admission (G5), problem subjects
+(G6), subject resolution (G7), quote lineage (G8), guard vocabulary (G9). **INDEPENDENCE**: 0 groups
+because nothing writes one; a latent hazard verified in `levels.py`, which counts DECLARED_DEPENDENT
+groups as established independence, must be fixed before any dependence detector; seven deterministic
+dependence rules designed and not activated. **SCORING**: no component READY. **MISSION 1.85.1** is
+source qualification for a frozen F-REVIEW and F-ISSUE candidate list, with a stop rule, and no collector.
+Roadmap `docs/data/business-evidence-acquisition-roadmap-v1.json`, checked by 26 tests.
+`mission-1.85.0-report.md`.
 
 ## 1.161 - 2026-09-16 (Sprint 1 / Mission 1.84.27)
 
