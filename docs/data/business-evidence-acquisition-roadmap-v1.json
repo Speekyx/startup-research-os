@@ -1,0 +1,292 @@
+{
+  "$comment": "Mission 1.85.0. Machine-readable roadmap from 'SROS can prove market or procurement activity exists' to 'SROS can identify, compare and select real product opportunities'. Written by hand from five read-only analyses and checked by packages/opportunity-engine/python/tests/test_business_evidence_roadmap.py against the repository (source catalog, EvidenceDimension enum, dependency graph shape). It is a plan, not a permission: nothing here authorises acquisition, a review verdict, a model call or a score.",
+  "roadmap_version": "business-evidence-acquisition-roadmap@1.0.0",
+  "mission": "mission-1.85.0",
+  "start_commit": "76cecfeb9c470b8b95801375dbd74cd56e83828d",
+  "operator_decisions_in_force": [
+    "D4: NO further synthesis on the current TED packet; Mission 1.84 is CLOSED for it",
+    "NO V11; NO Opportunity #2; historical V1-V10 artifacts immutable; gates v1.2.0-v1.6.0 not reopened",
+    "TED remains one existing source of category-scope market and budget evidence, not a target"
+  ],
+  "canonical_counters_observed_read_only": {
+    "raw_records": 325,
+    "normalized_records": 325,
+    "signals": 60,
+    "claims": 91,
+    "claim_revisions": 92,
+    "evidence": 112,
+    "evidence_supports": 111,
+    "evidence_contradicts": 1,
+    "evidence_independence_state_unknown": 112,
+    "evidence_reliability_column_filled": 0,
+    "reliability_assessments_current": 4,
+    "evidence_independence_groups": 0,
+    "opportunities": 1,
+    "opportunity_hypothesis_revisions": 2,
+    "scores": "absent",
+    "raw_records_by_source": {
+      "gdelt": 6,
+      "stack-exchange": 104,
+      "ted-eu": 188,
+      "wikimedia-pageviews": 21,
+      "world-bank": 6
+    }
+  },
+  "coverage_states": ["SUPPORTED_TODAY", "PARTIALLY_SUPPORTED", "NOT_SUPPORTED"],
+  "business_dimensions": [
+    {"id": "market_activity", "evidence_dimension": "MARKET_ACTIVITY", "coverage": "SUPPORTED_TODAY", "held_by": ["ted-eu"], "bound": "published award totals for one CPV division; category scope; not market size or growth"},
+    {"id": "buyer_existence", "evidence_dimension": "BUYER_OR_BUDGET_EXISTENCE", "coverage": "SUPPORTED_TODAY", "held_by": ["ted-eu"], "bound": "public-sector contracting authorities only; never 'would buy THIS'"},
+    {"id": "economic_value", "evidence_dimension": "ECONOMIC_VALUE", "coverage": "SUPPORTED_TODAY", "held_by": ["ted-eu"], "bound": "BT-161 includes options and renewals; not money paid"},
+    {"id": "pain", "evidence_dimension": "PROBLEM_OR_NEED", "coverage": "PARTIALLY_SUPPORTED", "held_by": ["stack-exchange"], "bound": "one count of help questions under one tag; not people, not severity, not a shared problem"},
+    {"id": "existing_spend", "evidence_dimension": null, "coverage": "PARTIALLY_SUPPORTED", "held_by": ["ted-eu"], "bound": "nearest proxy only; award totals are not realised expenditure"},
+    {"id": "frustration", "evidence_dimension": "SOLUTION_DISSATISFACTION", "coverage": "NOT_SUPPORTED", "held_by": []},
+    {"id": "frequency", "evidence_dimension": "RECURRENCE_OR_FREQUENCY", "coverage": "NOT_SUPPORTED", "held_by": []},
+    {"id": "recurrence", "evidence_dimension": "RECURRENCE_OR_FREQUENCY", "coverage": "NOT_SUPPORTED", "held_by": []},
+    {"id": "severity", "evidence_dimension": null, "coverage": "NOT_SUPPORTED", "held_by": [], "ontology_note": "a qualifier on PROBLEM_OR_NEED, not a dimension"},
+    {"id": "workaround", "evidence_dimension": null, "coverage": "NOT_SUPPORTED", "held_by": [], "ontology_note": "PROBLEM_OR_NEED plus SOLUTION_GAP, bounded; no new member"},
+    {"id": "economic_cost_of_pain", "evidence_dimension": null, "coverage": "NOT_SUPPORTED", "held_by": []},
+    {"id": "willingness_to_pay", "evidence_dimension": "WILLINGNESS_TO_PAY", "coverage": "NOT_SUPPORTED", "held_by": [], "ontology_note": "the member requires paid or committed to pay; a stated hypothetical has no member (gap G4)"},
+    {"id": "switching_intent", "evidence_dimension": null, "coverage": "NOT_SUPPORTED", "held_by": [], "ontology_note": "explicitly refused by SOLUTION_DISSATISFACTION never_means; maps to nothing"},
+    {"id": "adoption_intent", "evidence_dimension": null, "coverage": "NOT_SUPPORTED", "held_by": []},
+    {"id": "retention", "evidence_dimension": null, "coverage": "NOT_SUPPORTED", "held_by": [], "ontology_note": "no public statement measures retention; structural, not legal"},
+    {"id": "solution_gap", "evidence_dimension": "SOLUTION_GAP", "coverage": "NOT_SUPPORTED", "held_by": []},
+    {"id": "competitor_weakness", "evidence_dimension": "COMPETITIVE_SUPPLY", "coverage": "NOT_SUPPORTED", "held_by": [], "ontology_note": "COMPETITIVE_SUPPLY never means competitors are weak; a low rating on a competitor listing is SOLUTION_DISSATISFACTION scoped to that product"},
+    {"id": "review_sentiment", "evidence_dimension": "SOLUTION_DISSATISFACTION", "coverage": "NOT_SUPPORTED", "held_by": []},
+    {"id": "feature_demand", "evidence_dimension": "PROBLEM_OR_NEED", "coverage": "NOT_SUPPORTED", "held_by": [], "ontology_note": "product-scoped PROBLEM_OR_NEED; no new member"},
+    {"id": "unmet_need", "evidence_dimension": "SOLUTION_GAP", "coverage": "NOT_SUPPORTED", "held_by": []}
+  ],
+  "source_families": [
+    {
+      "id": "F-REVIEW",
+      "name": "product and app reviews with a source-native rating field",
+      "registered_sources": ["apple-app-store", "google-play", "steam"],
+      "governance_state": "registered sources RESTRICTED under the commercial profile on purpose clauses; none reviewed under local-private-research-v1; SaaS review sites unregistered",
+      "dimensions_strong": ["frustration", "review_sentiment", "competitor_weakness", "feature_demand", "pain"],
+      "dimensions_weak": ["switching_intent", "existing_spend", "unmet_need"],
+      "deterministic_observed_path": "count of reviews of one listing in one source-native rating band in one window",
+      "requires_semantic_extraction_for": ["pain", "switching_intent", "feature_demand"],
+      "independence": "one platform is one apparatus; copied reviews across platforms are a known dependence mode",
+      "collection_automated": "only through a documented official API route after a local-profile approval"
+    },
+    {
+      "id": "F-ISSUE",
+      "name": "public issue trackers with publisher-declared duplicate relations and labels",
+      "registered_sources": ["github"],
+      "governance_state": "github RESTRICTED (AUP section 7 open-access publication condition); Mission 1.21 found TDF Bugzilla robots-blocked, Launchpad without field minimisation, kernel.org without a published licence; other trackers unassessed",
+      "dimensions_strong": ["recurrence", "frequency", "feature_demand", "pain", "workaround"],
+      "dimensions_weak": ["severity", "unmet_need", "solution_gap"],
+      "deterministic_observed_path": "count of issues carrying the tracker's own label, and count of publisher-declared duplicates of one issue",
+      "requires_semantic_extraction_for": ["workaround", "severity"],
+      "independence": "publisher-declared duplicate links are source-native dependence facts",
+      "collection_automated": "only through a documented REST route permitted by robots and licence"
+    },
+    {
+      "id": "F-QA",
+      "name": "community Q&A beyond Stack Overflow",
+      "registered_sources": ["stack-exchange"],
+      "governance_state": "local APPROVED_WITH_CONDITIONS for the stackoverflow site only; other network sites each need a resource authorisation; both Docker reliability scopes declined by the operator",
+      "dimensions_strong": ["pain"],
+      "dimensions_weak": ["workaround", "feature_demand"],
+      "deterministic_observed_path": "question counts under a site tag; accepted-answer state",
+      "requires_semantic_extraction_for": ["workaround"],
+      "independence": "one site is one apparatus",
+      "collection_automated": "yes, existing collector"
+    },
+    {
+      "id": "F-DISCUSSION",
+      "name": "community discussion (Reddit, forums, Hacker News, social)",
+      "registered_sources": ["reddit", "hacker-news", "bluesky", "x-twitter", "discord"],
+      "governance_state": "reddit REQUIRES_REVIEW (terms never retrieved); hacker-news RESTRICTED; others REQUIRES_REVIEW; none reviewed locally",
+      "dimensions_strong": ["pain", "frustration", "switching_intent", "competitor_weakness", "feature_demand", "unmet_need", "review_sentiment", "workaround"],
+      "dimensions_weak": ["willingness_to_pay", "existing_spend", "adoption_intent"],
+      "deterministic_observed_path": "vote and comment counts only; every business dimension needs text reading",
+      "requires_semantic_extraction_for": ["pain", "frustration", "switching_intent", "competitor_weakness", "feature_demand", "unmet_need", "workaround", "willingness_to_pay", "review_sentiment", "existing_spend", "adoption_intent"],
+      "independence": "reposts, crossposts and event cascades are the dominant dependence modes",
+      "collection_automated": "not before governance and the semantic-extraction contract"
+    },
+    {
+      "id": "F-FEATURE-BOARD",
+      "name": "public feature-request boards with vote counts",
+      "registered_sources": [],
+      "governance_state": "unregistered; per-vendor terms",
+      "dimensions_strong": ["feature_demand"],
+      "dimensions_weak": ["pain", "unmet_need", "recurrence"],
+      "deterministic_observed_path": "votes on one request in one window",
+      "requires_semantic_extraction_for": ["pain"],
+      "independence": "one board is one vendor's corpus",
+      "collection_automated": "not established"
+    },
+    {
+      "id": "F-PRODUCT-LAUNCH",
+      "name": "product-launch and feedback surfaces",
+      "registered_sources": ["product-hunt"],
+      "governance_state": "RESTRICTED: API must not be used for commercial purposes without written permission",
+      "dimensions_strong": ["adoption_intent"],
+      "dimensions_weak": ["feature_demand", "frustration"],
+      "deterministic_observed_path": "vote counts",
+      "requires_semantic_extraction_for": ["frustration"],
+      "independence": "one platform",
+      "collection_automated": "no"
+    },
+    {
+      "id": "F-JOBS",
+      "name": "job postings",
+      "registered_sources": [],
+      "governance_state": "unregistered",
+      "dimensions_strong": ["buyer_existence"],
+      "dimensions_weak": ["existing_spend", "economic_cost_of_pain", "pain"],
+      "deterministic_observed_path": "posting counts carrying a source-native category",
+      "requires_semantic_extraction_for": ["pain"],
+      "independence": "aggregators republish employer postings",
+      "collection_automated": "not established"
+    },
+    {
+      "id": "F-PROCUREMENT",
+      "name": "public procurement",
+      "registered_sources": ["ted-eu", "usaspending"],
+      "governance_state": "ted-eu local APPROVED_WITH_CONDITIONS with a collector; usaspending REQUIRES_REVIEW",
+      "dimensions_strong": ["market_activity", "buyer_existence", "economic_value"],
+      "dimensions_weak": ["existing_spend"],
+      "deterministic_observed_path": "existing",
+      "requires_semantic_extraction_for": [],
+      "independence": "one publisher per jurisdiction",
+      "collection_automated": "yes for ted-eu"
+    },
+    {
+      "id": "F-STATISTICS-TRENDS",
+      "name": "statistical datasets and attention trends",
+      "registered_sources": ["world-bank", "eurostat", "fred", "openalex", "wikimedia-pageviews", "gdelt", "google-trends"],
+      "governance_state": "several local APPROVED_WITH_CONDITIONS; google-trends REQUIRES_REVIEW",
+      "dimensions_strong": [],
+      "dimensions_weak": ["market_activity", "adoption_intent", "frequency"],
+      "deterministic_observed_path": "existing",
+      "requires_semantic_extraction_for": [],
+      "independence": "international publishers republish national producers",
+      "collection_automated": "yes for held sources"
+    }
+  ],
+  "ontology_gaps": [
+    {"id": "G1", "gap": "no record kind for a product review, a discussion post or a tracker issue", "change": "registry INSERT migration, RECORD_KINDS entry, adapter", "blocks": ["F-REVIEW", "F-ISSUE", "F-DISCUSSION", "F-FEATURE-BOARD"]},
+    {"id": "G2", "gap": "no SignalQuantityFamily for counts of reviews, posts or issues (COMMUNITY_QUESTION_VOLUME would lose its meaning)", "change": "ADR on the ADR-034 test, CHECK-widening migration, contract enum, scope keys", "blocks": ["F-REVIEW", "F-ISSUE", "F-FEATURE-BOARD"]},
+    {"id": "G3", "gap": "no authorised contract for model-derived classification of first-person text into business dimensions", "change": "ADR resolving D-12 for classification, a model-derived Signal and INFERRED-claim contract, demand_signal_type rows by migration, per-source external_model_transmission reviews, human reference labels", "blocks": ["pain from text", "frustration from text", "switching_intent", "willingness_to_pay", "workaround", "unmet_need"]},
+    {"id": "G4", "gap": "a stated (hypothetical) willingness to pay has no dimension; WILLINGNESS_TO_PAY requires paid or committed", "change": "taxonomy opportunity-evidence-dimensions@1.1.0 with a stated-intent member and its never_means; no migration", "blocks": ["willingness_to_pay (stated)"]},
+    {"id": "G5", "gap": "scope admission is one-directional and has no product-to-product or narrower-into-broader edge", "change": "ADR plus scope-relation registry version bump; no DB change", "blocks": ["competitor_weakness into a category opportunity", "switching statements"]},
+    {"id": "G6", "gap": "a problem cannot be an Opportunity subject; same-problem identity is the PARKED relation", "change": "ADR gated on human reference labels", "blocks": ["recurrence across differently worded reports"]},
+    {"id": "G7", "gap": "a product named in free text cannot resolve to a canonical subject", "change": "ADR for reviewed alias entries or model-derived linking with provenance", "blocks": ["switching statements", "existing paid solution"]},
+    {"id": "G8", "gap": "a single quoted first-person statement has no lineage-preserving Evidence form", "change": "defer; only if quotes must be first-class evidence", "blocks": []},
+    {"id": "G9", "gap": "INTERPRETIVE_TOKENS lacks complaint, dissatisfaction, churn, cancel and switch vocabulary", "change": "extend the guard in the same change that adds the first review or issue record kind", "blocks": []}
+  ],
+  "independence_findings": [
+    {"id": "I-HAZARD", "finding": "levels.py counts every non-UNKNOWN group, including DECLARED_DEPENDENT groups, as a group of established independence; two dependent clusters would reach Level 2 with no proof that the clusters are independent of each other", "required_before": "any writer of KNOWN_DEPENDENT evidence"},
+    {"id": "I-NO-WRITER", "finding": "no code path writes an independence group or a non-UNKNOWN state; the only interpreter hard-codes UNKNOWN and create_independence_group has only test callers", "required_before": "dependence detection"},
+    {"id": "I-SCHEMA", "finding": "evidence_independence_groups is claim-scoped with free-text detection_method; there is no place for a KNOWN_INDEPENDENT proof, no rule version column, no cross-claim origin id, no supersession; raw_records.parent_record_id exists and is filled on 0 of 325 rows", "required_before": "dependence detection"},
+    {"id": "I-AUTHOR", "finding": "author identity is never acquired, so one user repeating a claim cannot be detected; a per-source keyed pseudonym would need a privacy review before collection", "required_before": "same-author dependence rule"},
+    {"id": "I-PLATFORM", "finding": "every held and candidate first-person source measures a platform-recorded quantity; a second route to the same platform is a copy, not corroboration", "required_before": "any KNOWN_INDEPENDENT state"}
+  ],
+  "dependence_rules_designed_not_active": [
+    {"id": "D-EXACT", "keys_on": "normalised text hash within one source", "yields": "KNOWN_DEPENDENT"},
+    {"id": "D-REPOST", "keys_on": "platform-native parent or crosspost field, or identical canonical link plus text hash", "yields": "KNOWN_DEPENDENT"},
+    {"id": "D-SYNDICATION", "keys_on": "publisher-declared canonical URL or identical body hash across outlets", "yields": "KNOWN_DEPENDENT"},
+    {"id": "D-REVIEW-COPY", "keys_on": "identical normalised review body hash above a minimum token length, across listings or platforms", "yields": "KNOWN_DEPENDENT"},
+    {"id": "D-THREAD", "keys_on": "shared root thread or issue id, or a publisher-declared duplicate link, for claims restating the root only", "yields": "KNOWN_DEPENDENT"},
+    {"id": "D-SAME-AUTHOR", "keys_on": "per-source pseudonymous author key plus the same proposition", "yields": "KNOWN_DEPENDENT"},
+    {"id": "D-EVENT", "keys_on": "explicit citation of one addressable event URL or native event id", "yields": "KNOWN_DEPENDENT"}
+  ],
+  "dependence_rule_invariants": [
+    "a rule may move a record from UNKNOWN to KNOWN_DEPENDENT only; no match never yields KNOWN_INDEPENDENT",
+    "different platform, URL, timestamp or author handle never implies independence",
+    "exact or normalised hashes and source-native fields only; no embeddings or similarity (D-12)",
+    "no rule is activated before I-HAZARD is resolved"
+  ],
+  "scoring_status_values": ["READY", "BLOCKED_BY_EVIDENCE", "BLOCKED_BY_INDEPENDENCE", "BLOCKED_BY_RELIABILITY", "BLOCKED_BY_IMPLEMENTATION"],
+  "scoring_components": [
+    {"component": "opportunity_score", "status": ["BLOCKED_BY_IMPLEMENTATION", "BLOCKED_BY_EVIDENCE"], "why": "no weights (A-01 open), no profile, no crosswalk from 12 scoring dimensions to 14 evidence dimensions"},
+    {"component": "evidence_score", "status": ["BLOCKED_BY_INDEPENDENCE", "BLOCKED_BY_RELIABILITY", "BLOCKED_BY_IMPLEMENTATION"], "why": "one group per claim makes the aggregator equal the pass-through baseline; profile UNCALIBRATED; claim-level only"},
+    {"component": "execution_score", "status": ["BLOCKED_BY_IMPLEMENTATION", "BLOCKED_BY_EVIDENCE"], "why": "no formula; FEASIBILITY_SIGNAL unmapped"},
+    {"component": "research_completeness", "status": ["BLOCKED_BY_IMPLEMENTATION"], "why": "no formula; research space undefined"},
+    {"component": "model_confidence", "status": ["BLOCKED_BY_IMPLEMENTATION"], "why": "no formula; model self-reported confidence is refused"},
+    {"component": "problem", "status": ["BLOCKED_BY_RELIABILITY", "BLOCKED_BY_INDEPENDENCE"], "why": "PROBLEM_OR_NEED held from stack-exchange; both scopes declined for reliability"},
+    {"component": "desire", "status": ["BLOCKED_BY_EVIDENCE"], "why": "no evidence dimension and no approving source"},
+    {"component": "utility", "status": ["BLOCKED_BY_EVIDENCE"], "why": "no evidence dimension"},
+    {"component": "engagement", "status": ["BLOCKED_BY_EVIDENCE", "BLOCKED_BY_INDEPENDENCE"], "why": "a content request is not a reader"},
+    {"component": "retention", "status": ["BLOCKED_BY_EVIDENCE"], "why": "needs the same actor observed twice"},
+    {"component": "virality", "status": ["BLOCKED_BY_EVIDENCE"], "why": "no evidence dimension"},
+    {"component": "market", "status": ["BLOCKED_BY_INDEPENDENCE", "BLOCKED_BY_EVIDENCE", "BLOCKED_BY_IMPLEMENTATION"], "why": "TED only, category scope, one publisher, every row UNCATEGORISED"},
+    {"component": "momentum", "status": ["BLOCKED_BY_IMPLEMENTATION", "BLOCKED_BY_EVIDENCE"], "why": "no half-life; TREND_OR_CHANGE does not count"},
+    {"component": "competition_gap", "status": ["BLOCKED_BY_EVIDENCE"], "why": "no COMPETITIVE_SUPPLY, SOLUTION_GAP or SOLUTION_DISSATISFACTION evidence"},
+    {"component": "monetization", "status": ["BLOCKED_BY_EVIDENCE"], "why": "no WILLINGNESS_TO_PAY source at any grain"},
+    {"component": "distribution", "status": ["BLOCKED_BY_EVIDENCE"], "why": "DISTRIBUTION_SIGNAL unmapped"},
+    {"component": "feasibility", "status": ["BLOCKED_BY_EVIDENCE"], "why": "FEASIBILITY_SIGNAL unmapped"},
+    {"component": "learning_value", "status": ["BLOCKED_BY_EVIDENCE"], "why": "no evidence dimension"},
+    {"component": "per_market_scores", "status": ["BLOCKED_BY_EVIDENCE"], "why": "needs an evidence set per MarketScope"}
+  ],
+  "nodes": [
+    {"id": "N01", "name": "first-person source qualification (F-REVIEW, F-ISSUE)", "kind": "GOVERNANCE", "depends_on": [], "mission": "1.85.1"},
+    {"id": "N02", "name": "record kind and quantity family ADR for the qualified family (G1, G2, G9)", "kind": "ONTOLOGY", "depends_on": ["N01"], "mission": "1.85.2"},
+    {"id": "N03", "name": "collector, normalizer, deterministic extractor and OBSERVED template for one qualified source", "kind": "IMPLEMENTATION", "depends_on": ["N02"], "mission": "1.85.3"},
+    {"id": "N04", "name": "acquisition lineage fields for dependence (text hash, native parent, root, duplicate-of, canonical URL)", "kind": "ONTOLOGY", "depends_on": ["N02"], "mission": "1.85.3"},
+    {"id": "N05", "name": "I-HAZARD decision and engine fix: dependent groups never count as established independence", "kind": "INDEPENDENCE", "depends_on": [], "mission": "1.85.4"},
+    {"id": "N06", "name": "deterministic dependence detection (D-EXACT, D-REPOST, D-THREAD first) with rule versions", "kind": "INDEPENDENCE", "depends_on": ["N04", "N05"], "mission": null},
+    {"id": "N07", "name": "human reliability review per new scope", "kind": "RELIABILITY", "depends_on": ["N03"], "mission": null},
+    {"id": "N08", "name": "semantic extraction contract for first-person text (G3): D-12 decision, egress reviews, reference labels", "kind": "ONTOLOGY", "depends_on": [], "mission": null},
+    {"id": "N09", "name": "second first-person family (F-DISCUSSION or F-FEATURE-BOARD)", "kind": "IMPLEMENTATION", "depends_on": ["N03", "N08"], "mission": null},
+    {"id": "N10", "name": "taxonomy v1.1 and scope-admission ADR (G4, G5, G7)", "kind": "ONTOLOGY", "depends_on": ["N03"], "mission": null},
+    {"id": "N11", "name": "INFERRED source-independent propositions reached by two apparatuses (ADR-036/037 path)", "kind": "INDEPENDENCE", "depends_on": ["N06", "N09"], "mission": null},
+    {"id": "N12", "name": "multiple formable opportunity hypothesis packets across at least two counting business dimensions", "kind": "OPPORTUNITY", "depends_on": ["N03", "N07", "N10"], "mission": null},
+    {"id": "N13", "name": "scoring crosswalk (12 scoring dimensions to 14 evidence dimensions), family formulas, A-01 weights, opportunity-level rollup, non-collapsing comparison procedure", "kind": "SCORING", "depends_on": ["N12"], "mission": null},
+    {"id": "N14", "name": "calibration reference set and CALIBRATED profile (D-03 blockers 2-5)", "kind": "SCORING", "depends_on": ["N11", "N12", "N13"], "mission": null},
+    {"id": "N15", "name": "ranking and selection of one opportunity", "kind": "SELECTION", "depends_on": ["N14"], "mission": null}
+  ],
+  "critical_path": ["N01", "N02", "N03", "N07", "N12", "N13", "N14", "N15"],
+  "critical_branches": [
+    {"name": "independence", "path": ["N02", "N04", "N06", "N11", "N14"], "why": "calibration needs claims with two or more groups of established independence; without them the aggregator equals the pass-through baseline"},
+    {"name": "second apparatus", "path": ["N08", "N09", "N11"], "why": "a source-independent proposition needs a second first-person apparatus, and every candidate second family needs the semantic-extraction contract"}
+  ],
+  "parallel_tracks": [
+    {"node": "N05", "why": "no source dependency; must land before N06 writes any KNOWN_DEPENDENT row"},
+    {"node": "N08", "why": "operator decisions and human labels, independent of any collector; gates every text-derived business dimension"}
+  ],
+  "first_source_recommendation": {
+    "families": ["F-REVIEW", "F-ISSUE"],
+    "unlocks_first": ["SOLUTION_DISSATISFACTION", "RECURRENCE_OR_FREQUENCY", "PROBLEM_OR_NEED (product-scoped feature demand)"],
+    "why": "the only families whose missing business dimensions are exposed as source-native structured fields (a reviewer's own rating, a tracker's own label and duplicate link), so they reach OBSERVED evidence deterministically without waiting on the semantic-extraction contract N08",
+    "not_first": [
+      {"family": "F-DISCUSSION", "why": "richest first-person evidence, but every business dimension needs N08 and governance is unretrieved"},
+      {"family": "F-QA", "why": "adds no new dimension; PROBLEM_OR_NEED is already held and both reliability scopes were declined"},
+      {"family": "F-PROCUREMENT", "why": "market and budget activity is the one area already covered"},
+      {"family": "F-STATISTICS-TRENDS", "why": "context and attention only"}
+    ]
+  },
+  "mission_1_85_1": {
+    "title": "First-Person Structured Evaluation Source Qualification V1",
+    "goal": "Establish, on retrieved first-party documents, whether at least one source in F-REVIEW or F-ISSUE can be approved under local-private-research-v1 for a documented official route that exposes a source-native rating, label or duplicate relation, and select exactly one or record a documented no-go.",
+    "in_scope": [
+      "freeze a bounded candidate list before any retrieval: the registered apple-app-store, google-play, steam and github, plus at most four unregistered candidates named in the brief as unverified",
+      "retrieve first-party terms, API documentation, robots directives and licences only (documentation requests, no research data)",
+      "for each candidate record the six activity assessments, route, field selection, rate limits and whether the rating, label or duplicate field is exposed by the official route",
+      "append a local-private-research-v1 review only where retrieved evidence supports a verdict; never infer from silence",
+      "register an unregistered candidate only if its review can be written on retrieved evidence",
+      "select exactly one qualified source and resource, or record the documented no-go with the next decision"
+    ],
+    "out_of_scope": [
+      "any collector, normalizer, extractor, record kind, migration or research-data request",
+      "semantic extraction, model calls, embeddings",
+      "reliability assessments, independence groups, scores, opportunities",
+      "reopening TED synthesis or gates v1.2.0-v1.6.0"
+    ],
+    "stop_rule": "if no candidate reaches an approving local verdict with all six activities granted, stop and hand the operator a two-way decision: the semantic-extraction contract track (N08) or a documented product decision that would satisfy GitHub's open-access publication condition",
+    "done_when": [
+      "every frozen candidate has a recorded outcome with first-party citations",
+      "one source and resource is selected with its exposed structured fields, or the no-go is recorded",
+      "the roadmap node N01 is marked done and N02's family is fixed"
+    ]
+  },
+  "recorded_debt_not_fixed": [
+    "cross-field intervention-vocabulary displacement (gate v1.6.0)",
+    "inherited assertion pronoun continuation (gates v1.4.0-v1.6.0)",
+    "lexical intervention-class grounding is not semantic validity",
+    "documentation drift: mapping.py and dimensions.py docstrings count empty mappings wrongly; demand-side-source-coverage-v1.md still calls TED a willingness-to-pay candidate; docs/CLAUDE.md Stack Exchange statements predate its approval",
+    "scoring documentation drift: D-03 blocker 5 and the calibration plan still cite outcome-resolution and a Brier score rejected by Mission 1.37; scoring README contradicts the aggregation framework on decay and levels",
+    "calibration-feasibility-audit-v1.json measured 57 evidence rows and is stale against 112"
+  ]
+}

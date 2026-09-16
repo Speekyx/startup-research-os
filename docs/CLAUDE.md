@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.162
-Last amended: 2026-09-16 (Sprint 1 / Mission 1.84.27)
+Version: 1.163
+Last amended: 2026-09-16 (Sprint 1 / Mission 1.85.0)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.163 | 2026-09-16 | **BUSINESS_EVIDENCE_ROADMAP_READY_FIRST_PERSON_STRUCTURED_SOURCES_NEXT: Mission 1.84 is closed for the current TED packet (D4), and the next phase is multi-source business evidence acquisition.** 0 provider calls, 0 model inferences, 0 external data persisted, no review appended, no V11, no Opportunity #2; five read-only agents, the main agent the only writer. **Coverage**: 3 of 20 business dimensions supported (all TED, category scope), 2 partial, 15 unsupported; 8 of 29 sources locally reviewed, 5 collected, every registered first-person source RESTRICTED, PROHIBITED or unreviewed. **Two blockers**: governance, and no authorised reading of first-person text. **First families**: product reviews and public issue trackers, whose ratings, labels and declared duplicates reach OBSERVED evidence without text reading. **Ontology**: no new claim type, direction or table; gaps G1 to G9 recorded with minimal changes. **Independence**: 0 groups because nothing writes one; `levels.py` counts DECLARED_DEPENDENT groups as established independence, a latent hazard to fix before any detector; seven dependence rules designed, not active. **Scoring**: no component READY. **Mission 1.85.1**: qualification of a frozen F-REVIEW and F-ISSUE candidate list, no collector, with a stop rule. Roadmap artifact checked by 26 tests. `mission-1.85.0-report.md`. |
 | 1.162 | 2026-09-16 | **INTERVENTION_CLASS_CONTRACT_IMPLEMENTED_OFFLINE_SENTINEL_AND_CITED_CLAIM_GROUNDING: D3 and D5 are resolved at the contract level, offline, as schema v1.3.0, gate v1.6.0 and prompt v1.7.0 beside the frozen contract, and nothing is bound to them.** 0 provider calls, 0 model inferences, 0 token counts, nothing persisted, no packet, no V11, no runner binding, D4 not authorised; four read-only agents, the main agent the only writer. **D3, design E**: schema v1.3.0 moves one leaf, the class field's description, stating the existing sentinel `UNKNOWN_NOT_SUPPORTED`; the strict projection code and profile are unchanged. Gate v1.6.0 calls v1.5.0 once, renames structure and appends class grounding: exactly the sentinel, or one plain-ASCII noun phrase of at most six words with no negator, predicating verb or capital code, whose content words occur in the cited claims' statements outside quoted literals; no vocabulary list, and no source name, dimension name, identifier or MARKET_ACTIVITY licenses a word. Sentinel alone, a structured object, per-packet enums, a closed enum and forced INSUFFICIENT_EVIDENCE rejected. **D5**: prompt v1.7.0 drops *name a more neutral class* and tags every contract rule GATE_ENFORCED, GUIDANCE_ONLY or INSTRUCTION_BEYOND_THE_GATE; nothing unstated. **Synthetic**: 61 class cases as intended, 44 newly refused, 0 opened, every divergence class grounding; gate 103's 131 sentences unchanged in `observed_need`; 8 cross-field displacement cases pass both gates, recorded as debt. **History**: every predecessor gate, schema v1.2.0, projection `87028f45...`, prompt v1.6.0 `a89960ce...` unchanged; V9 and V10 untouched and still refused diagnostically. **GATE 104.** Probe **18 caught, 0 escaped, 2 of 2 controls**, in one run: 17 by rule or pin, 1 by an exception in the contract renderer (six words is written as a word, and twelve has none). 3877 + 7012 tests, 104 gates, 72 new tests, 0 provider requests, 0 model calls, 0 TED bytes, 0 canonical mutation. `mission-1.84.27-report.md`. |
 | 1.161 | 2026-09-16 | **SEMANTIC_GATE_V1_5_0_D1_D2_IMPLEMENTED_DIVERGENCE_LIMITED_TO_AUTHORISED_REPAIRS: gate v1.5.0 sits beside v1.4.0 and repairs exactly the two assertion-scope defects the operator authorised.** 0 provider calls, 0 model inferences, 0 token counts, nothing persisted, no packet, no V11; four read-only agents, the main agent the only writer. **D1**: a noun list governed by one leading `whether` or denial keeps that scope when the predicate follows its last item; a coordinated-clause boundary is vetoed only on positive evidence of a list (scope anchor, bare-noun items, short noun-phrase conjunct, unsaturated head), so *No evidence establishes software demand, and buyers are willing to pay.* still splits and fails. **D2**: a gated modifier in the one modifier slot of a clause-initial subject followed at once by a denial of its existence is not asserted, bounded to that noun phrase and stopping where the answer predicates of the subject again. **Versioned, not edited**: three new modules; the audit's re-bound functions and the evaluator are v1.3.0's syntax trees with declared renames; the seam reproduces v1.3.0's `classify` on 842 readings; v1.4.0, v1.3.0, v1.2.0 and gate 102's diagnosis unchanged. **Differential**: 131 cases, 46 repaired and 7 reason-only changes all attributed (A 23, B 24, A+B 6), 0 unattributed, 0 assertions added, 0 policy refusals passed, 4 residual over-refusals; 148 frozen sweep sentences unchanged. **V10** keeps its record; under v1.5.0 it would be refused on `market` alone, no candidate. The report was checked against the code before commit and found one fail-open (*No staff bid or buyers are willing to pay.*), closed and pinned as N104. **GATE 103.** Probe **18 caught, 0 escaped, 2 of 2 controls**, 5 of them re-freezing the pin after breaking a rule. 3877 + 6940 tests, 103 gates, 198 new tests, 0 provider requests, 0 model calls, 0 TED bytes, 0 canonical mutation. `mission-1.84.26-report.md`. |
 | 1.160 | 2026-09-15 | **STAGE_6_ROOT_CAUSE_ESTABLISHED_OPERATOR_DECISION_REQUIRED: V10's two stage 6 refusals have two causes, one in the gate and one in the answer, and nothing was repaired.** A diagnostic mission: 0 provider calls, 0 model inferences, 0 retries, nothing persisted, no packet, no V11, V10's verdict and every frozen digest unchanged; four read-only agents, the main agent the only writer. **`software` (`observed_need`) is a GATE_DEFECT**: gate v1.4.0 reproduces both retained reasons, and its clause reader's `coord` pattern reads *..., or software gap is not established ...* as a coordinated clause with its own subject, cutting the last list item off from the leading *Whether*; in the detached clause the word pre-modifies the head noun of a trailing denial that clears only its subject, so it is ASSERTED, and the marker check, which runs on asserted occurrences only, refuses it. The documented policy refuses only asserted words, keeps a list under one scope, and a frozen test passes a denied gated word in an asserting field; the code records the split and corrects it for the disjunction rule only. **`market` (`candidate_intervention_class`) is a GENUINE_OUTPUT_DEFECT**: one clause, no scope, the hyphen splits the token, no statement carries it, and MARKET_ACTIVITY licenses its whole phrase only; prompt v1.6.0 states the class rule, and V9 used the word under v1.5.0; the prompt does not state the whole-phrase boundary, recorded as an observation. **Matrix**: 39 general cases, 9/9 asserted controls refused, 13/13 scoped controls passed, 10 divergences of one shape, 3 pre-modifier cases UNDETERMINED; smallest *Whether a need or software exists is unknown.* refused against *Whether software exists is unknown.* passed. Field-level wording in V10's note, the 1.84.24 report and 1.159 corrected in the report, left where written. **No V11 recommended**; five operator decisions D1 to D5. **GATE 102** re-derives the whole diagnosis and pins gate v1.4.0, the clause reader and the fixture. Probe **15 caught, 0 escaped, 2 of 2 controls**, after a first run stopped on the probe's own setup error and restored every file. 3877 + 6742 tests, 102 gates, 43 new tests, 0 provider requests, 0 model calls, 0 TED bytes, 0 canonical mutation. `mission-1.84.25-report.md`. |
@@ -2964,6 +2965,36 @@ no execution binds gate v1.6.0. Recorded, not decided: lexical grounding is not 
 other fields' tokenizer; the inherited pronoun case; census coverage of not-asserted items. **Do not
 re-execute V1 to V10, do not create a packet or V11, do not bind a runner to prompt v1.7.0, and do not
 persist Opportunity #2. Mission 1.84.28 was not started.**
+
+
+**SUPERSEDED IN 1.163 (Mission 1.85.0). The operator closed Mission 1.84 for the current TED packet
+(D4): no further synthesis on it, no V11, no Opportunity #2. SROS turns to business evidence.**
+
+    covered today    market activity, buyer existence, economic value (TED, category scope)
+    partial          pain (one Stack Exchange count), existing spend (TED proxy)
+    missing          15, including frustration, recurrence, WTP, switching, solution gap
+    first families   product reviews (F-REVIEW), public issue trackers (F-ISSUE)
+    next mission     1.85.1 source qualification; no collector
+    roadmap          docs/data/business-evidence-acquisition-roadmap-v1.json
+
+- **ACTIVITY IS NOT OPPORTUNITY.** Every supported dimension says money or bodies exist; none says anyone
+  is frustrated, would switch, or would pay. Another activity source cannot change that.
+- **PREFER WHAT THE SOURCE ALREADY STRUCTURED.** A reviewer's own rating, a tracker's own label and a
+  publisher's own duplicate link are first-person evidence a deterministic OBSERVED claim can restate; a
+  complaint in prose needs an authorised reading that does not exist.
+- **QUALIFY BEFORE YOU BUILD.** Every registered first-person source is RESTRICTED or unreviewed, so a
+  collector first would be a collector for a permission nobody has.
+- **A DEPENDENCE DETECTOR CAN INFLATE EVIDENCE.** `levels.py` counts every non-unknown group as
+  established independence, so two clusters of copies would read as two independent observations; the
+  engine is fixed before any detector writes a dependent state.
+- **SCORING WAITS ON INDEPENDENCE, NOT ON FORMULAS ALONE.** With one group per claim the aggregator is the
+  pass-through baseline, so calibration and ranking sit behind independence on the critical path.
+
+**Next is Mission 1.85.1, and nothing was started.** Freeze a candidate list in F-REVIEW and F-ISSUE,
+retrieve first-party documentation only, append a local review only on retrieved evidence, and select
+exactly one source and resource or record the no-go with the operator's two-way decision. **Do not build a
+collector, call a model, synthesise, create Opportunity #2, or reopen the TED packet. Mission 1.85.1 was
+not started.**
 
 
 
