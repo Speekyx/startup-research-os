@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.178
-Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.12)
+Version: 1.179
+Last amended: 2026-09-18 (Sprint 1 / Mission 1.85.13)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.179 | 2026-09-18 | **WAITING_FOR_PROMPT_1_1_BALANCED_OPERATOR_REVIEW: both directions of disagreement are prepared for review, and a count that looked right was wrong.** Roadmap N08-B-PILOT; 0 provider calls, 0 reruns. **Corrected**: 16 current false PRESENT = 7 previously reviewed and still disagreeing + **9 never reviewed**; subtracting the historical review count ignored the two records prompt 1.1.0 corrected. Mission 1.85.12 metrics unchanged, evaluation not rewritten, erratum appended, regression test added. **Prepared**: 9 false PRESENT + 6 false negatives = 15 records, two sides with their own choices, loopback only, no default, no bulk; the 7 prior judgements reused, never re-asked. **Recorded**: a structured-anchor extraction design option, not implemented. `mission-1.85.13-report.md`. |
 | 1.178 | 2026-09-17 | **PROMPT_1_1_DEVELOPMENT_PILOT_RESULTS_READY_FOR_OPERATOR_REVIEW: the revised prompt ran once in full, and it did not fix precision.** Roadmap N08-B-PILOT. **Approved** by operator-a for packet `6b27bccb...` only, one execution. **Rehearsed first**: resets, stalls and provider errors cost one record without a schema retry, the ceiling stops before crossing, spent approvals unlock nothing; no execution code changed; evaluation rules frozen before the approval. **Ran**: 46 calls, 45 accepted, 0 retries, $0.442141 of $9. **Read**: REPORTED_FAILED_ATTEMPT false PRESENT 16/25 upper 0.798 OUTSIDE; over-reads corrected 2/9; positives retained 9/15; valid overlap false PRESENT 9 -> 7, true PRESENT 9 -> 4; NEGATIVE_EVALUATION no regression, insufficient support. PILOT_NOT_CERTIFICATION. `mission-1.85.12-report.md`. |
 | 1.177 | 2026-09-17 | **READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL: the over-reads are corrected in the prompt, and the next packet waits for an approval.** Roadmap N08-B-PILOT; 0 provider calls, 0 text egress. **Revised**: prompt 1.1.0 `a4b96eb3...`, a three-anchor REPORTED_FAILED_ATTEMPT procedure; 1.0.0 frozen; label, schema, other label, thresholds and ceiling unchanged. **Analysed** aggregate-only: errors and code standing in for attempts. **Guarded**: offline regression spec, nothing of it in the prompt. **Packet** v5 `6b27bccb...` READY in new files, same 46 records, $9 kept; v4 and its spent approval frozen by digest. `mission-1.85.11-report.md`. |
 | 1.176 | 2026-09-17 | **WAITING_FOR_POST_MODEL_OPERATOR_REVIEW: the nine disagreements can be reviewed, and none has been.** Roadmap N08-B-PILOT; 0 provider calls, 0 reruns. **Tool**: loopback page with the blind reference untouched, model quotes rebuilt from frozen surfaces and offsets, the frozen definition quoted; four choices, no default, no bulk. **Provenance**: POST_MODEL_OPERATOR_REVIEW, never blind, never a replacement, refuses blind attestations, bound to every pilot digest, STALE on change. **Unchanged**: blind annotation `449ff10f...`, Mission 1.85.9 reading PILOT_OUTSIDE_PROPOSED_BOUND. Transport repair verified on loopback tests. `mission-1.85.10-report.md`. |
@@ -3272,6 +3273,27 @@ REPORTED_FAILED_ATTEMPT precision did not improve.**
 
 **Next is an operator decision on REPORTED_FAILED_ATTEMPT, not a run.** **Do not execute, rerun, revise the prompt
 to 1.2.0, open HOLDOUT, start N08-C or promote findings without it. Mission 1.85.13 was not started.**
+
+
+**ANSWERED IN 1.179 (Mission 1.85.13). N08-B-PILOT: the prompt 1.1.0 disagreements are prepared for a balanced
+review, and the Mission 1.85.12 report's 7-versus-9 count is corrected.**
+
+    corrected     16 current false PRESENT = 7 previously reviewed and still disagreeing + 9 never reviewed
+    unchanged     every Mission 1.85.12 metric, its evaluation, the blind reference, prompt 1.1.0, packet v5
+    review set    9 new false PRESENT + 6 false negatives = 15, each side with its own choices
+    reused        7 Mission 1.85.10 judgements, PRIOR_REVIEW_REUSED_RECORD_LEVEL_JUDGEMENT, not re-asked
+    recorded      a structured-anchor extraction design option; repeatability assessed, not run
+
+- **INTERSECT THE SETS, NEVER SUBTRACT THE COUNTS.** Historically reviewed records and historically reviewed
+  records that are STILL disagreements are two different sets, and two records had left the second one.
+- **REVIEW BOTH DIRECTIONS OR REVIEW HALF THE PROBLEM.** A precision-only review of a revision that also lost
+  recall would read as though the recall loss had not happened.
+- **A PRIOR RECORD-LEVEL JUDGEMENT IS REUSED, NOT REPLAYED.** Same surface, same reference, same definition; a
+  new timestamp would invent a decision nobody took.
+
+**Next is the operator's balanced review of the 15 records.** **Do not revise the prompt, change the extraction
+contract, create a packet or an approval, call the provider, measure repeatability, open HOLDOUT or start
+N08-C before it. Mission 1.85.14 was not started.**
 
 
 

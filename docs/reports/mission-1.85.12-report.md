@@ -336,7 +336,8 @@ These three answers are not combined into one accuracy score.
 - Nothing certified: no inter-human reliability, consensus gold, HOLDOUT generalisation, production readiness or
   calibrated semantic accuracy.
 - **Whether the 16 disagreements are model errors or reference errors.** A single blind human is the pilot
-  reference, not ground truth. The operator confirmed 9 of them in Mission 1.85.10; the other 7 are unreviewed.
+  reference, not ground truth. Seven of them were confirmed in Mission 1.85.10 and **nine have never been
+  reviewed** (see the erratum at the end of this report: the first version of this sentence said the reverse).
 - **How stable these calls are.** No repeatability run was authorised, so run-to-run variance is unmeasured. A
   change of a few records per label cannot be separated from sampling noise in the model.
 - Anything about `NEGATIVE_EVALUATION_OF_NAMED_SOLUTION` positives.
@@ -350,7 +351,7 @@ recall. So prompt wording alone may not be the lever, and the next step is not o
 revision.
 
 The results raise these questions for the operator (none acted on):
-- whether the 7 new unreviewed disagreements should get the same post-model review the first 9 received;
+- whether the 9 never-reviewed disagreements should get the same post-model review the first 9 received;
 - whether the label definition itself, rather than its prompt operationalisation, is where the model and the
   human diverge;
 - whether run-to-run variance should be measured before any further prompt change is judged.
@@ -421,6 +422,30 @@ Local gates before commit: see the PR description.
 
 **N08 is not DONE. N08-C was not started.** Any further execution needs a new packet digest and a new explicit
 approval.
+
+## Erratum (Mission 1.85.13, 2026-09-18)
+
+**One interpretation sentence in this report was arithmetically wrong. No metric changes.**
+
+- **What it said**: of the 16 current false PRESENT, "the operator confirmed 9 of them in Mission 1.85.10; the
+  other 7 are unreviewed".
+- **Why it is wrong**: it subtracted the count of historically reviewed records from the current false-PRESENT
+  count. Mission 1.85.10 reviewed 9 records, and prompt 1.1.0 **corrected two of them** (`ac423fe4`,
+  `d6bff833`), so only 7 of the 9 are still false PRESENT.
+- **What is true**, derived by intersecting the sets rather than subtracting counts:
+
+      CURRENT FALSE PRESENT                                16
+        previously reviewed and still false PRESENT         7
+        never reviewed                                      9
+      CURRENT FALSE NEGATIVE                                6
+
+- **Unchanged**: 16 false PRESENT, 9 true PRESENT, recall 0.60, the upper bound 0.798, the
+  `PILOT_OUTSIDE_PROPOSED_BOUND` reading, every other metric, and the packet, run and evaluation artifacts. The
+  Mission 1.85.12 evaluation was not rewritten.
+- **Where the correct sets live**: `infrastructure/scripts/balanced_disagreement_review.py accounting`, with a
+  regression test that refuses the subtraction shortcut
+  (`test_subtracting_the_historical_review_count_is_not_the_intersection`). Mission 1.85.13 reviews the 9
+  never-reviewed false PRESENT and the 6 false negatives.
 
 ## Decision summary for the operator
 

@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.177
+Version: 1.178
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.12)
+Last amended: 2026-09-18 (Sprint 1 / Mission 1.85.13)
 
 ---
 
@@ -13,6 +13,20 @@ Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.12)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.178 - 2026-09-18 (Sprint 1 / Mission 1.85.13)
+
+**Balanced post-model review of the prompt 1.1.0 disagreements (N08-B-PILOT), WAITING_FOR_PROMPT_1_1_BALANCED_OPERATOR_REVIEW.**
+A counting error in the Mission 1.85.12 report is corrected by erratum: of 16 current false PRESENT, 7 were
+already reviewed in Mission 1.85.10 and still disagree, so **9 have never been reviewed** (prompt 1.1.0 corrected
+two of the nine reviewed records, which left the set). Every Mission 1.85.12 metric is unchanged and its
+evaluation was not rewritten. A regression test refuses the subtraction shortcut. New loopback tooling prepares a
+review of both directions: 9 never-reviewed false PRESENT and 6 false negatives, 15 records, each side with its
+own choices, no default and no bulk; the 7 Mission 1.85.10 judgements are reused as
+PRIOR_REVIEW_REUSED_RECORD_LEVEL_JUDGEMENT and never re-asked. Decisions are POST_MODEL_OPERATOR_REVIEW,
+blind false, bound to every pilot digest, STALE on change. A structured-anchor extraction design option is
+recorded, not implemented. 0 provider calls, 0 reruns, 0 HOLDOUT, 0 canonical writes; no packet, approval, prompt
+or label change. `docs/reports/mission-1.85.13-report.md`.
 
 ## 1.177 - 2026-09-17 (Sprint 1 / Mission 1.85.12)
 
