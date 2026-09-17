@@ -2,75 +2,122 @@
  "$comment": "Egress eligibility for the DEVELOPMENT split, DERIVED from the scan and the human decision file. Never edited by hand. No record is approved without a recorded human decision; a machine may only exclude.",
  "policy": "REVIEW_OR_EXCLUDE_NO_REDACTION",
  "scan_sha256": "71d974f1c15df0807805c749ea506ced82984f917a71bd721a05e0732fd9d0b5",
- "decisions_sha256": "b1a4c5c4e551da54a9405d51b9f42e7a92d2b2c3343fa7073f5aef35891fb33d",
+ "decisions_sha256": "9725a0454c94212d1d66d8672ffe8e122ad672b41ac58f7a4a01db0af00a5970",
  "state_counts": {
-  "EGRESS_EXCLUDED": 1,
-  "EGRESS_REVIEW_REQUIRED": 49
+  "EGRESS_APPROVED": 46,
+  "EGRESS_EXCLUDED": 4
  },
- "approved_record_ids": [],
+ "approved_record_ids": [
+  "02dd341e-30e8-538b-986a-5d4c26a5791f",
+  "03dc37e7-8e12-5d4b-87f4-2bb7461b1510",
+  "17064c93-71cf-5474-ba7f-39ccd516782f",
+  "19c64e71-5844-520d-844c-97c1f0aaa750",
+  "1a659352-390f-5c53-97de-0f725d017f46",
+  "1d65b04f-4da6-5d67-bb0a-d74ae98ad048",
+  "203268d4-baf6-5410-a001-cf77843e96e3",
+  "2c9e95be-2262-52d0-947f-e6a268020b71",
+  "3194f76d-a845-54c5-9a14-bd0520da6cbb",
+  "37bf2146-b9fc-5e5a-b35b-d59f5f6bfc57",
+  "3d0568c4-5876-5863-921b-2c0fc3d3e27a",
+  "3d224ece-4791-550e-8a47-352f9c568b92",
+  "42642469-23b7-5a7a-b897-5052012d9fd3",
+  "47b3c6ea-dff4-50c4-b9fd-15874b743288",
+  "4a3fc738-bb4a-5992-bb2e-2e422b9f4a00",
+  "58966c7e-425d-59de-85ce-116ae98309ab",
+  "5d0a1e34-7eeb-5820-89f2-7cf9706a8fb8",
+  "6bd78806-211b-5d3b-b10a-d60f4fe2bca3",
+  "6dfbef0a-3a64-5fd1-9433-21f7cdb01402",
+  "71928de8-fd31-5c35-8f80-187d2bb7ed05",
+  "7c8a2ac5-1fdd-5c72-bdb5-4422a11e4084",
+  "7eed79ff-81d0-50c1-94c2-3a1b6fa3b4a8",
+  "88376fa5-5cd3-58f9-b099-bad69077b0f7",
+  "96054702-3d78-55b0-b5b9-ed63e611c6d7",
+  "99bdc4b0-959d-541e-bc59-7aa5706cf282",
+  "9f91eeea-25e6-5a9e-89e6-54d4490ecd7c",
+  "a561974f-fc12-564d-9cb5-51c5bd59c40e",
+  "ac423fe4-a4b4-589d-ac49-96932ed51d54",
+  "b7996f9d-72fe-5544-a30a-ce9270edfe09",
+  "bf04af60-1364-5fd0-8f4f-a8104d131aff",
+  "c1180149-42cd-5088-ab01-b3ff8694d73d",
+  "c128f807-cbdf-512b-bbde-30a00a9fdb39",
+  "c4d96f4e-c766-5c79-a8c9-1f023647618b",
+  "c98a64a0-0940-5835-a617-c26220a5d9a2",
+  "d6bff833-780d-55d3-a5ad-1effebb8a328",
+  "db663e12-3ffd-59e5-b31f-1de31f41acbb",
+  "dbf8a356-e318-566d-8ce4-327ac6b45166",
+  "e2162aae-f496-58d4-b905-73e4b0164a66",
+  "e35f990d-117a-59d1-b54e-5165632378bf",
+  "e3d79e11-9064-5f15-ac93-929e08114601",
+  "e9edbbaa-5331-5584-8d3e-847c8f759551",
+  "f269e805-7ccf-5a79-a765-e68f31e7b1bd",
+  "f53c6872-b340-5e5b-845c-e8b2bd3147d8",
+  "f876b0be-fa18-5b60-9fdd-b505e7529413",
+  "f98ff185-01b0-5612-9c36-07b1fe5dea5f",
+  "fa1a8536-4624-5386-b814-c829932cb1ab"
+ ],
  "records": [
   {
    "normalized_record_id": "02dd341e-30e8-538b-986a-5d4c26a5791f",
    "surface_sha256": "5a4706b9be78428bdb66eda744b6ce205ee6d67d674c1d34a4a5f9bdd3dafb3a",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "03dc37e7-8e12-5d4b-87f4-2bb7461b1510",
    "surface_sha256": "9917a1e8ac8dab289c86883ca96796e471ab874375dd8fea8e2d0c035644498e",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "17064c93-71cf-5474-ba7f-39ccd516782f",
    "surface_sha256": "70486f6802b1ca84a63e8c38d12b820d504210e5e0c96b6f7ac41822120a25c2",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "19c64e71-5844-520d-844c-97c1f0aaa750",
    "surface_sha256": "3fbdc56d7059242d0214958d1ede1f0149faf42c4b4767e2b4c63b47e139880f",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "1a659352-390f-5c53-97de-0f725d017f46",
    "surface_sha256": "dea3bf3d40f89c91348db8609ddf28c105024c2ffa46d0d542fc17a398626760",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "1d65b04f-4da6-5d67-bb0a-d74ae98ad048",
    "surface_sha256": "737a75ba473b167da74bc2bd7ea4f0256c805033e8df34f433cead07e37e8ae9",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "203268d4-baf6-5410-a001-cf77843e96e3",
    "surface_sha256": "fdb6b5cfa87fc4d2a4ff4411e577e7c8525a0a0c8a72fea580966c71d428256a",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "2c9e95be-2262-52d0-947f-e6a268020b71",
@@ -78,10 +125,10 @@
    "triggers": {
     "url": 1
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_PUBLIC_REFERENCE",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "3194f76d-a845-54c5-9a14-bd0520da6cbb",
@@ -89,19 +136,19 @@
    "triggers": {
     "ipv4_like": 1
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_PUBLIC_REFERENCE",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "37bf2146-b9fc-5e5a-b35b-d59f5f6bfc57",
    "surface_sha256": "f56c63774966be50841cb31ef919535ea659f2851eb3b0622fd374466549b120",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "3d0568c4-5876-5863-921b-2c0fc3d3e27a",
@@ -109,10 +156,10 @@
    "triggers": {
     "user_home_path": 2
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_PUBLIC_REFERENCE",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "3d224ece-4791-550e-8a47-352f9c568b92",
@@ -122,10 +169,10 @@
     "at_handle": 12,
     "long_token_like": 5
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_PUBLIC_REFERENCE",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "42642469-23b7-5a7a-b897-5052012d9fd3",
@@ -134,10 +181,10 @@
     "url": 3,
     "long_token_like": 1
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_PUBLIC_REFERENCE",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "47b3c6ea-dff4-50c4-b9fd-15874b743288",
@@ -146,10 +193,10 @@
     "url": 1,
     "ipv4_like": 1
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_PUBLIC_REFERENCE",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "4a3fc738-bb4a-5992-bb2e-2e422b9f4a00",
@@ -157,10 +204,10 @@
    "triggers": {
     "ipv4_like": 1
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_PUBLIC_REFERENCE",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "58966c7e-425d-59de-85ce-116ae98309ab",
@@ -168,10 +215,10 @@
    "triggers": {
     "url": 1
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_PUBLIC_REFERENCE",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "5d0a1e34-7eeb-5820-89f2-7cf9706a8fb8",
@@ -180,55 +227,55 @@
     "user_home_path": 1,
     "long_token_like": 1
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_PUBLIC_REFERENCE",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "6bd78806-211b-5d3b-b10a-d60f4fe2bca3",
    "surface_sha256": "aad5998d4119d07de229709c51f0576091cc51d6a6f6a5a60f8e5b88aff1a2ad",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "6dfbef0a-3a64-5fd1-9433-21f7cdb01402",
    "surface_sha256": "d9d115c55d066b08190b197771a77c3b457eb126b7ca280ed089ebd2b7c8e93b",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "71928de8-fd31-5c35-8f80-187d2bb7ed05",
    "surface_sha256": "f62226684ace5e5974c3cac56b716a8864213a002fe13633d0d328468e46630c",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "7c8a2ac5-1fdd-5c72-bdb5-4422a11e4084",
    "surface_sha256": "f6bb50bc692e787e206bf74e97174eec940c6e323c152d2fe4ed910932d0ca05",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "7eed79ff-81d0-50c1-94c2-3a1b6fa3b4a8",
    "surface_sha256": "055d126455b6543d93e34ebca213942a301488fe6cb177bf7822dcc9f489c9cb",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "8835615b-0b08-59fa-83ca-24201bf7be05",
@@ -239,28 +286,28 @@
     "long_token_like": 1,
     "secret_like": 2
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_EXCLUDED",
+   "basis": "CONTAINS_SECRET_LIKE_VALUE",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "88376fa5-5cd3-58f9-b099-bad69077b0f7",
    "surface_sha256": "a6bd410f4e0bcaf3d9a04c028a8d17570965f4dd7b4c7ad8a7962c664a6d6d91",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "96054702-3d78-55b0-b5b9-ed63e611c6d7",
    "surface_sha256": "70ab4463876798f80a4620ddb0e873e735dc39d9221e6ffaffaeb4bf37e49e56",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "99bdc4b0-959d-541e-bc59-7aa5706cf282",
@@ -268,10 +315,10 @@
    "triggers": {
     "ipv4_like": 3
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_PUBLIC_REFERENCE",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "9f91eeea-25e6-5a9e-89e6-54d4490ecd7c",
@@ -279,37 +326,37 @@
    "triggers": {
     "url": 1
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_PUBLIC_REFERENCE",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "a561974f-fc12-564d-9cb5-51c5bd59c40e",
    "surface_sha256": "12b0b01e55ac520507a4af70550eaa117adff9606db8096b87e34d526a29dd5e",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "ac423fe4-a4b4-589d-ac49-96932ed51d54",
    "surface_sha256": "1865020f0cba48dbed4f3d7533ae4ec3633b4f69364bea9a5397cbd9efae5bfa",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "b7996f9d-72fe-5544-a30a-ce9270edfe09",
    "surface_sha256": "db96588f1b73824f99547c706dbea2ef416f5e5d7e90ebe8e40279958bbbaefe",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "bf04af60-1364-5fd0-8f4f-a8104d131aff",
@@ -318,19 +365,19 @@
     "url": 2,
     "ipv4_like": 1
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_PUBLIC_REFERENCE",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "c1180149-42cd-5088-ab01-b3ff8694d73d",
    "surface_sha256": "1883df68d59d70f0441f875a9071ce81a4606ce9b48e278d52c38a20e64795ec",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "c128f807-cbdf-512b-bbde-30a00a9fdb39",
@@ -338,19 +385,19 @@
    "triggers": {
     "ipv4_like": 2
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_PUBLIC_REFERENCE",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "c4d96f4e-c766-5c79-a8c9-1f023647618b",
    "surface_sha256": "2f4248c77fa6c60108f00039a2b713972af97c358e2c9d86dd811c7c4e91833e",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "c796dfdb-9223-57b2-9e11-38742ff72621",
@@ -358,19 +405,19 @@
    "triggers": {
     "secret_like": 1
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_EXCLUDED",
+   "basis": "CONTAINS_PERSONAL_IDENTIFIER",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "c98a64a0-0940-5835-a617-c26220a5d9a2",
    "surface_sha256": "04eaf997346f5c52a5e5078ea6e6904f369e95a2e44cdfe7e35ea16476513be7",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "d6bff833-780d-55d3-a5ad-1effebb8a328",
@@ -380,10 +427,10 @@
     "email_like": 1,
     "ipv4_like": 2
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_PUBLIC_REFERENCE",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "db663e12-3ffd-59e5-b31f-1de31f41acbb",
@@ -392,10 +439,10 @@
     "user_home_path": 14,
     "at_handle": 1
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_PUBLIC_REFERENCE",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "dbda0b0e-73b6-565a-aacb-72759332d1cb",
@@ -412,10 +459,10 @@
    "normalized_record_id": "dbf8a356-e318-566d-8ce4-327ac6b45166",
    "surface_sha256": "a488d47c54f1c5a9623980a89b22fc3fcdc995909d1cd6a8ee6f7815f1872b5e",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "e1a9ce7c-6997-5601-b0a9-d47ddcdba051",
@@ -424,19 +471,19 @@
     "url_with_userinfo": 1,
     "secret_like": 2
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_EXCLUDED",
+   "basis": "CONTAINS_PERSONAL_IDENTIFIER",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "e2162aae-f496-58d4-b905-73e4b0164a66",
    "surface_sha256": "ebd146372d4dda73d58f59306b2feb1f0adf0937be21cdfcf7a7b2b26cb3f5b9",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "e35f990d-117a-59d1-b54e-5165632378bf",
@@ -444,19 +491,19 @@
    "triggers": {
     "at_handle": 1
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_PUBLIC_REFERENCE",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "e3d79e11-9064-5f15-ac93-929e08114601",
    "surface_sha256": "1ce7a105b16a9e5d28b64d0e937d10ed785d4910ce4a1fb360b5173ffd3e9888",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "e9edbbaa-5331-5584-8d3e-847c8f759551",
@@ -464,46 +511,46 @@
    "triggers": {
     "url": 1
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_PUBLIC_REFERENCE",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "f269e805-7ccf-5a79-a765-e68f31e7b1bd",
    "surface_sha256": "dcef1665ff17fbff260e8604e4a3cae0387a755fc608d53505b1101cd1eb157c",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "f53c6872-b340-5e5b-845c-e8b2bd3147d8",
    "surface_sha256": "ee4ce6bcde0f4491d12363d1628136344a9f98b2180d70496aa134d94808ae25",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "f876b0be-fa18-5b60-9fdd-b505e7529413",
    "surface_sha256": "37c3125a495d0264df8c4d12fc21cecd500d86b39bb88eb96823807c98180577",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "f98ff185-01b0-5612-9c36-07b1fe5dea5f",
    "surface_sha256": "39264eb4993ee2f0c951aa867b0e606744180a4ab3880c270655f09ac2372bab",
    "triggers": {},
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_NOT_PERSONAL",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   },
   {
    "normalized_record_id": "fa1a8536-4624-5386-b814-c829932cb1ab",
@@ -511,10 +558,10 @@
    "triggers": {
     "url": 2
    },
-   "state": "EGRESS_REVIEW_REQUIRED",
-   "basis": "NO_HUMAN_DECISION",
-   "decision_origin": null,
-   "decided_by": null
+   "state": "EGRESS_APPROVED",
+   "basis": "TRIGGER_REVIEWED_PUBLIC_REFERENCE",
+   "decision_origin": "HUMAN_OPERATOR",
+   "decided_by": "operator-a"
   }
  ]
 }

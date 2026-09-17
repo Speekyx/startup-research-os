@@ -1,6 +1,6 @@
 # Mission 1.85.6 report: local egress review interface and human decision import (N08-B-PILOT)
 
-**Outcome: `WAITING_FOR_HUMAN_EGRESS_REVIEW`.**
+**Outcome: `WAITING_FOR_HUMAN_EGRESS_REVIEW` at merge of the tooling (#180), then `EGRESS_REVIEW_COMPLETE_OPERATOR_DECISIONS_REMAIN` after the operator's review was imported (§7).**
 
 The operator can now review every DEVELOPMENT record that needs an egress decision in a local page, and import
 the result through a strict validator. The tooling is complete. No egress decision has been made: the operator
@@ -231,16 +231,49 @@ loopback server on synthetic material):
   inferred-claim-evaluator 2470, evidence-reliability 352, opportunity-engine roadmap 31, acquisition 134, all
   passing.
 
-## 7. Next
+## 7. Operator review completed and imported
 
-The operator reviews the 49 records in the local page, then runs `lint` and `import`. A follow-up commit
-carries:
-- the imported decision file;
-- the rebuilt eligibility and packet;
-- the runner pin.
+After the tooling merged (#180), the operator reviewed all 49 records in the local page. The assistant did not
+view the review material, the surfaces or the working file content. It ran:
+- `lint`: `ok the working file is valid; complete`;
+- `import`: 49 individual decisions and 0 bulk decisions, all `decision_origin = HUMAN_OPERATOR` and
+  `decided_by = operator-a`, each bound to its surface digest.
 
-The remaining operator decisions stay separate: pilot thresholds, retry ratification, cost ceiling, then a
-packet-scoped approval.
+**Eligibility, rebuilt deterministically:**
 
-**Do not make egress decisions for the operator, call a provider, open holdout, or treat the pilot as
+```
+EGRESS_APPROVED        = 46   (28 TRIGGER_REVIEWED_NOT_PERSONAL, 18 TRIGGER_REVIEWED_PUBLIC_REFERENCE)
+EGRESS_EXCLUDED        = 4    (2 CONTAINS_PERSONAL_IDENTIFIER, 1 CONTAINS_SECRET_LIKE_VALUE, both human;
+                               1 SURFACE_CONTAINS_TRANSPORT_DELIMITER, deterministic)
+EGRESS_REVIEW_REQUIRED = 0
+```
+
+The mechanically excluded record stays excluded. Every approved record carries a human origin, and every
+approved record with a `secret_like` trigger has basis `TRIGGER_REVIEWED_NOT_PERSONAL`, as asserted by
+`TestCommittedDevelopmentDecisions`. The committed decision file holds ids, digests, states, reasons, origin,
+operator and time, and no surface text.
+
+**Packet.** It was re-rendered to `packet_sha256` `9040fd62...` and the runner pin was updated.
+- The `EGRESS_REVIEW_PENDING` blocker is gone.
+- The status stays `BLOCKED_OPERATOR_DECISIONS`, with three blockers:
+  1. `THRESHOLDS_NOT_AUTHORISED` (single-human pilot thresholds);
+  2. `RETRY_INTERPRETATION_NOT_RATIFIED`;
+  3. `COST_CEILING_NOT_ACCEPTED`.
+- The execution bounds now reflect 46 approved records:
+  - `max_calls` 92, one call plus at most one schema retry per record;
+  - planning estimate $2.5435;
+  - hard ceiling $206.5452, every call at the full context window.
+- No approval or attempt file exists.
+
+**Outcome after import: `EGRESS_REVIEW_COMPLETE_OPERATOR_DECISIONS_REMAIN`.** Roadmap N08 moves to that status
+and is not DONE.
+
+Still 0 provider calls and 0 egress: approval to transmit is a precondition for a future run, not a run.
+
+## 8. Next
+
+The remaining operator decisions are the single-human pilot thresholds, the retry ratification and the hard
+ceiling acceptance. Then comes a separate packet-scoped approval of exactly one run.
+
+**Do not call a provider, change an egress decision without a new review, open holdout, or treat the pilot as
 certification.**
