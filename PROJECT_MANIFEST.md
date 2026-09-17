@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.174
+Version: 1.175
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.9)
+Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.10)
 
 ---
 
@@ -13,6 +13,19 @@ Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.9)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.175 - 2026-09-17 (Sprint 1 / Mission 1.85.10)
+
+**Post-model review tooling for the 9 REPORTED_FAILED_ATTEMPT disagreements (N08-B-PILOT),
+WAITING_FOR_POST_MODEL_OPERATOR_REVIEW.** A loopback page (`semantic_disagreement_review.py`) shows each
+model-PRESENT / blind-ABSENT record with the untouched blind reference, the model quotes rebuilt from the frozen
+surface and committed offsets (13 of 13 digests matched), and the frozen label definition. Four operator choices
+with no default and no bulk path; notes required for revision and ambiguity. A new POST_MODEL_OPERATOR_REVIEW class
+is never blind, never replaces the reference, refuses blind attestations, binds packet, approval, run summary,
+evaluation, annotation, label definition, surface and findings digests, and goes STALE on any change.
+Recommendation rule frozen before any choice. Blind annotation and Mission 1.85.9 evaluation byte-for-byte
+unchanged; PR #185 transport repair verified on loopback tests. 0 provider calls, 0 reruns, no choice recorded.
+`docs/reports/mission-1.85.10-report.md`.
 
 ## 1.174 - 2026-09-17 (Sprint 1 / Mission 1.85.9)
 
