@@ -1,13 +1,13 @@
 {
  "$comment": "FROZEN FUTURE EVALUATION PACKET (N08-B). NOT EXECUTABLE. Its status is computed from committed facts; the runner refuses any status but READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL before reading an approval, and an approval is a separate operator file named by this packet's digest. Merging this packet authorises nothing. The reference block states what a result could claim: a SINGLE_HUMAN_REFERENCE result is a DEVELOPMENT_PILOT and PILOT_NOT_CERTIFICATION.",
  "packet_id": "semantic-extraction-evaluation-packet-development",
- "packet_version": 2,
- "mission": "1.85.5",
+ "packet_version": 3,
+ "mission": "1.85.7",
  "status": "BLOCKED_OPERATOR_DECISIONS",
  "blockers": [
-  "THRESHOLDS_NOT_AUTHORISED: the single-human pilot thresholds are PROPOSED_NOT_AUTHORISED",
-  "RETRY_INTERPRETATION_NOT_RATIFIED: the operator has not ratified the schema-failure retry reading",
-  "COST_CEILING_NOT_ACCEPTED: the hard ceiling rests on the context window and needs operator acceptance"
+  "THRESHOLDS_NOT_AUTHORISED: 10 of 10 single-human pilot threshold decisions unmade",
+  "RETRY_INTERPRETATION_NOT_RATIFIED: the retry decision is blank",
+  "COST_CEILING_NOT_ACCEPTED: the ceiling decision is blank"
  ],
  "reference": {
   "model": "semantic-reference-strength@1.0.0",
@@ -100,7 +100,22 @@
    "retrieved_on": "2026-09-16",
    "review_interval_days": 180
   },
-  "retention_bound": "30 days, except longer-retention services, a separate agreement, Usage Policy enforcement (flagged content up to 2 years, classifier scores up to 7 years) and legal compliance; ZDR not assumed"
+  "retention_bound": "30 days, except longer-retention services, a separate agreement, Usage Policy enforcement (flagged content up to 2 years, classifier scores up to 7 years) and legal compliance; ZDR not assumed",
+  "verification": {
+   "file": "docs/data/anthropic-claude-sonnet-5-pilot-verification-v1.json",
+   "sha256": "342d9a537ba49465f412b6686f9e03dcef4a0f39617972dd2738d472e6d717ce",
+   "status": "VERIFIED",
+   "model_state": "ACTIVE",
+   "retrieved_on": "2026-09-17",
+   "review_interval_days": 180,
+   "zero_data_retention_for_this_account": "NOT_ESTABLISHED"
+  }
+ },
+ "operator_decisions": {
+  "package": "docs/data/semantic-extraction-operator-decision-package-development-v1.json",
+  "package_sha256": "91375c3adf259266637f6cf0261b6352007e6487df07abcfaec654116176e9cc",
+  "decisions": "docs/data/semantic-extraction-operator-decisions-development-v1.json",
+  "decisions_sha256": "395f77b307a9fd85f92c9ed6cf45936d1f85dd1a4789a49636464bc0e09ac4b5"
  },
  "source": {
   "source_id": "stack-exchange",
@@ -500,19 +515,78 @@
   "validator_refusal_retries": 0,
   "timeout_seconds": 240.0,
   "max_calls": 92,
-  "max_input_tokens_per_call": 1000000,
+  "EXPECTED_CALLS": 46,
+  "MAX_CALLS_WITH_RETRY": 92,
+  "context_window_tokens": 1000000,
   "max_output_tokens_per_call": 4096,
   "price_usd_per_mtok": {
-   "input": 2,
-   "output": 10
+   "input": "2",
+   "output": "10"
   },
-  "price_source": "docs/data/second-opportunity-execution-cost-ceiling-v1.json PROVIDER_FACTS (retrieved 2026-09-14); to be re-verified when the operator approves",
-  "residency_multiplier_assumed": 1.1,
-  "planning_cost_estimate_usd_approved": 2.5435,
-  "planning_cost_estimate_usd_if_every_reviewable_record_were_approved": 2.5435,
-  "planning_basis": "characters / 1.3373 (the measured Mission 1.84.5 ratio), one call per record, full output bound; an estimate, never a bound",
-  "hard_ceiling_usd_approved": 206.5452,
-  "hard_ceiling_basis": "every call at the full 1,000,000-token context window and the output bound, at the stated prices and multiplier; tokens per character are not established, so no smaller input bound is claimed"
+  "price_multiplier": "1.1",
+  "price_source": "docs/data/anthropic-claude-sonnet-5-pilot-verification-v1.json (retrieved 2026-09-17)",
+  "cost_model": "semantic-extraction-pilot-cost-model@1.0.0",
+  "planning_estimate_usd": "0.838035",
+  "conservative_bound_usd": "3.032986",
+  "retry_worst_case_usd": "6.065972",
+  "per_call_documented_maximum_usd": "2.245056",
+  "per_record_conservative_input_tokens": {
+   "fa1a8536-4624-5386-b814-c829932cb1ab": 9656,
+   "1a659352-390f-5c53-97de-0f725d017f46": 9690,
+   "17064c93-71cf-5474-ba7f-39ccd516782f": 13221,
+   "ac423fe4-a4b4-589d-ac49-96932ed51d54": 7973,
+   "203268d4-baf6-5410-a001-cf77843e96e3": 8727,
+   "9f91eeea-25e6-5a9e-89e6-54d4490ecd7c": 10705,
+   "37bf2146-b9fc-5e5a-b35b-d59f5f6bfc57": 7943,
+   "99bdc4b0-959d-541e-bc59-7aa5706cf282": 7714,
+   "bf04af60-1364-5fd0-8f4f-a8104d131aff": 8972,
+   "e9edbbaa-5331-5584-8d3e-847c8f759551": 9548,
+   "d6bff833-780d-55d3-a5ad-1effebb8a328": 10167,
+   "7c8a2ac5-1fdd-5c72-bdb5-4422a11e4084": 7522,
+   "c4d96f4e-c766-5c79-a8c9-1f023647618b": 7798,
+   "3d224ece-4791-550e-8a47-352f9c568b92": 14941,
+   "96054702-3d78-55b0-b5b9-ed63e611c6d7": 9457,
+   "f876b0be-fa18-5b60-9fdd-b505e7529413": 7877,
+   "f98ff185-01b0-5612-9c36-07b1fe5dea5f": 8696,
+   "b7996f9d-72fe-5544-a30a-ce9270edfe09": 7619,
+   "c98a64a0-0940-5835-a617-c26220a5d9a2": 7903,
+   "47b3c6ea-dff4-50c4-b9fd-15874b743288": 8575,
+   "e3d79e11-9064-5f15-ac93-929e08114601": 7395,
+   "4a3fc738-bb4a-5992-bb2e-2e422b9f4a00": 8050,
+   "e35f990d-117a-59d1-b54e-5165632378bf": 7891,
+   "3d0568c4-5876-5863-921b-2c0fc3d3e27a": 9088,
+   "f269e805-7ccf-5a79-a765-e68f31e7b1bd": 9583,
+   "db663e12-3ffd-59e5-b31f-1de31f41acbb": 11545,
+   "2c9e95be-2262-52d0-947f-e6a268020b71": 8165,
+   "42642469-23b7-5a7a-b897-5052012d9fd3": 12210,
+   "3194f76d-a845-54c5-9a14-bd0520da6cbb": 8627,
+   "6dfbef0a-3a64-5fd1-9433-21f7cdb01402": 11823,
+   "e2162aae-f496-58d4-b905-73e4b0164a66": 8353,
+   "dbf8a356-e318-566d-8ce4-327ac6b45166": 8380,
+   "71928de8-fd31-5c35-8f80-187d2bb7ed05": 10301,
+   "5d0a1e34-7eeb-5820-89f2-7cf9706a8fb8": 23006,
+   "6bd78806-211b-5d3b-b10a-d60f4fe2bca3": 8117,
+   "a561974f-fc12-564d-9cb5-51c5bd59c40e": 9032,
+   "1d65b04f-4da6-5d67-bb0a-d74ae98ad048": 7707,
+   "c1180149-42cd-5088-ab01-b3ff8694d73d": 8187,
+   "c128f807-cbdf-512b-bbde-30a00a9fdb39": 10461,
+   "58966c7e-425d-59de-85ce-116ae98309ab": 11410,
+   "19c64e71-5844-520d-844c-97c1f0aaa750": 9437,
+   "f53c6872-b340-5e5b-845c-e8b2bd3147d8": 9235,
+   "88376fa5-5cd3-58f9-b099-bad69077b0f7": 8621,
+   "03dc37e7-8e12-5d4b-87f4-2bb7461b1510": 7491,
+   "7eed79ff-81d0-50c1-94c2-3a1b6fa3b4a8": 10192,
+   "02dd341e-30e8-538b-986a-5d4c26a5791f": 7539
+  },
+  "proposed_hard_ceiling_usd": "9.000000",
+  "hard_ceiling_usd_approved": null,
+  "hard_ceiling_basis": "retry worst case + one call at the documented maximum (full context window and the runner's output bound), rounded up to a whole dollar",
+  "enforcement": {
+   "preflight": "the runner refuses before any transport if the accepted ceiling is below retry worst case + one documented-maximum call",
+   "before_each_call": "including a retry: refused if spent + one documented-maximum call would exceed the accepted ceiling",
+   "accumulation": "each HTTP 200 adds its reported usage at the verified prices and multiplier; any call without reported usage is charged at the documented maximum",
+   "estimate_check": "a call whose reported input tokens exceed that record's conservative bound stops the run, fail-closed"
+  }
  },
  "logging_policy": {
   "provider_error_bodies": "never logged or stored; record HTTP status, error type, request-id header and sha256 of the body only",
@@ -555,5 +629,5 @@
   "runtime": "--execute --approval-sha256 <sha256 of the approval file>",
   "merge_is_not_approval": true
  },
- "packet_sha256": "9040fd62126332cc60c0603d0beb0f2d38a44c4cccde9a2f7e3b907699aa478a"
+ "packet_sha256": "63c7302d64d52aa49e56060de1a2d92ffdb8e2030e9c19ba550acba0cc357993"
 }

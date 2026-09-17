@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.172
-Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.6, egress decisions imported)
+Version: 1.173
+Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.7)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.173 | 2026-09-17 | **FINAL_OPERATOR_DECISIONS_PREPARED: the three remaining decisions have their facts, and none is made.** Roadmap N08-B-PILOT; 0 provider calls, 0 token counts, 0 egress, 0 approvals. **Measured** offline: 46 approved requests, 322,746 body bytes. **Verified** from first-party docs: `claude-sonnet-5` ACTIVE, $2/$10 per MTok, ZDR NOT_ESTABLISHED, no substitution. **Cost**: planning $0.838, retry worst case $6.066 over 92 calls, proposed ceiling $9 (not $206.55). **Enforcement**: the ceiling was an approval field only; the runner now refuses any call that could cross the accepted ceiling, charges reported usage, and stops above the conservative input bound. **Packet** v3 `63c7302d...` BLOCKED_OPERATOR_DECISIONS on 10 thresholds, the retry reading and the ceiling. `mission-1.85.7-report.md`. |
 | 1.172 | 2026-09-17 | **EGRESS_REVIEW_COMPLETE_OPERATOR_DECISIONS_REMAIN: the operator decided egress for every reviewable development record.** 49 HUMAN_OPERATOR decisions imported (no bulk): 46 approved, 3 excluded by the operator, 1 excluded by the transport-delimiter rule, 0 review required. Packet `9040fd62...` BLOCKED_OPERATOR_DECISIONS on pilot thresholds, retry ratification and cost ceiling; runner re-pinned. 0 provider calls, 0 egress. `mission-1.85.6-report.md` §7. |
 | 1.171 | 2026-09-17 | **WAITING_FOR_HUMAN_EGRESS_REVIEW: the operator can review egress in a local page, and no decision was made for them.** Roadmap N08-B-PILOT; 0 provider calls, 0 egress, 0 decisions imported. **Recomputed**: 50 DEVELOPMENT, 1 mechanically excluded, 49 review required (21 triggered, 28 zero-trigger, 3 secret-like). **Tool** `semantic_egress_review.py` prepare/serve/lint/import: loopback-only stdlib page, exact surface with local trigger highlights, clicks saved as HUMAN_OPERATOR decisions bound to the digest, resume; bulk only for the exact zero-trigger set after a typed confirmation; secret-like only individual NOT_PERSONAL. **Import** refuses, never repairs. Packet unchanged `894d8532...`. `mission-1.85.6-report.md`. |
 | 1.170 | 2026-09-17 | **SINGLE_HUMAN_REFERENCE_RECORDED_OPERATOR_DECISIONS_PENDING: one genuine human annotation is a named pilot reference, not gold, and no second human was invented.** Roadmap N08-B-PILOT; 0 provider calls, 0 AI annotations, 0 egress, 0 findings. **Strengths**: SINGLE_HUMAN_REFERENCE (DEVELOPMENT_PILOT, PILOT_NOT_CERTIFICATION), MULTI_HUMAN_REFERENCE unchanged, AI_ASSISTED_PROVISIONAL diagnostic only and stored apart. **Metrics** for one annotator NOT_APPLICABLE_SINGLE_ANNOTATOR, never 0. **Thresholds** partitioned, unchanged, unauthorised. **Packet** v2 `894d8532...` BLOCKED_OPERATOR_DECISIONS; runner refuses a non-human or overclaiming reference. **Holdout** needs multi-human or a new operator decision. `mission-1.85.5-report.md`. |
@@ -3143,6 +3144,26 @@ operator, call a provider, open holdout, or treat the pilot as certification. Mi
 **UPDATED IN 1.172.** The operator completed the review: 46 approved, 4 excluded, 0 review required; outcome
 `EGRESS_REVIEW_COMPLETE_OPERATOR_DECISIONS_REMAIN`. **Next is the operator's decisions on the pilot thresholds, the retry reading and the ceiling, then
 a packet-scoped approval.** **Do not call a provider before that approval exists.**
+
+
+**ANSWERED IN 1.173 (Mission 1.85.7). N08-B-PILOT: the operator's last three decisions are prepared, with a
+ceiling the runner actually enforces.**
+
+    measured      46 approved requests, 322,746 UTF-8 body bytes, built offline, nothing sent
+    provider      claude-sonnet-5 ACTIVE, $2 / $10 per MTok, x1.1 applied, ZDR NOT_ESTABLISHED
+    cost          EXPECTED_CALLS 46, MAX_CALLS_WITH_RETRY 92, retry worst case $6.065972
+    ceiling       proposed $9.000000; old full-context $206.5452 not reused; blank
+    packet        v3 63c7302d... BLOCKED_OPERATOR_DECISIONS: thresholds, retry, ceiling
+
+- **A CEILING NOBODY ACCUMULATES AGAINST IS NOT A CEILING.** An accepted number is enforced before every call, or
+  it is a formality.
+- **THE FULL WINDOW GUARDS ONE CALL, IT DOES NOT MULTIPLY THE RUN.** The only documented per-call maximum decides
+  whether the next call may start.
+- **NO TOKENIZER, NO FABRICATED COUNT.** Bytes bound tokens conservatively; the counting endpoint would send the
+  text.
+
+**Next is the operator filling the decisions file, then a separate packet-scoped approval.** **Do not fill a
+decision on the operator's behalf, call a provider, or create an approval. Mission 1.85.8 was not started.**
 
 
 

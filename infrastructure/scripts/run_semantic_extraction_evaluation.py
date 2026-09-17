@@ -12,7 +12,15 @@ nothing. With `--execute` it refuses, in this order and before any transport exi
     5. an approval that does not name this packet id, version and digest, or does not accept the ceiling,
        the retention bound, the retry interpretation and the packet's reference strength
     6. an existing attempt record (an approval is spent by the attempt, whatever the outcome)
-    7. a failed ADR-033 four-gate authorization
+    7. (Mission 1.85.7) no operator-accepted hard ceiling, provider documentation that is not verified or
+       is past its review interval, or an accepted ceiling below the retry worst case plus one call at the
+       documented maximum
+    8. a failed ADR-033 four-gate authorization
+
+During the run (Mission 1.85.7) a call, including a retry, starts only if what has been spent plus one call
+at the documented maximum stays within the accepted ceiling. Each HTTP 200 is charged its reported usage;
+a call without reported usage is charged the documented maximum; a reported input above the record's
+conservative bound stops the run. Every stop writes the partial run record first.
 
 Then it writes an ATTEMPT_STARTED record exclusively BEFORE the first request, and calls the model at most
 `max_calls` times through one call site. Provider error bodies and exception text are never written:
@@ -30,7 +38,8 @@ import json
 import pathlib
 import sys
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime, timedelta
+from decimal import Decimal
 from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
@@ -50,7 +59,7 @@ READY = "READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL"
 APPROVAL_DECISION = "APPROVE_EXACTLY_ONE_EVALUATION_RUN"
 # Pinned, not read from the packet: a runner that took its expectation from the file it checks would
 # check nothing. Re-pinned only when a mission deliberately re-renders the packet.
-EXPECTED_PACKET_SHA256 = "9040fd62126332cc60c0603d0beb0f2d38a44c4cccde9a2f7e3b907699aa478a"
+EXPECTED_PACKET_SHA256 = "63c7302d64d52aa49e56060de1a2d92ffdb8e2030e9c19ba550acba0cc357993"
 HUMAN_REFERENCE_STRENGTHS = ("SINGLE_HUMAN_REFERENCE", "MULTI_HUMAN_REFERENCE")
 
 
@@ -130,6 +139,8 @@ def check_approval(
     ):
         if approval.get(accepted) is not True:
             raise Refused("OPERATOR_APPROVAL_INCOMPLETE", accepted)
+    if packet["execution_bounds"].get("hard_ceiling_usd_approved") in (None, ""):
+        raise Refused("COST_CEILING_NOT_ACCEPTED")
     if (
         approval.get("accepted_hard_ceiling_usd")
         != packet["execution_bounds"]["hard_ceiling_usd_approved"]
@@ -186,9 +197,22 @@ class RecordingTransport:
         }
         if response.status == 200:
             try:
-                entry["stop_reason"] = json.loads(response.body.decode("utf-8")).get("stop_reason")
+                parsed = json.loads(response.body.decode("utf-8"))
             except (ValueError, UnicodeDecodeError):
-                entry["stop_reason"] = None
+                parsed = {}
+            entry["stop_reason"] = parsed.get("stop_reason") if isinstance(parsed, dict) else None
+            usage = parsed.get("usage") if isinstance(parsed, dict) else None
+            if isinstance(usage, dict) and all(
+                isinstance(usage.get(k), int) for k in ("input_tokens", "output_tokens")
+            ):
+                # Numbers only. Cache fields are charged as input: the request sends no cache_control,
+                # and a cache token that did appear is still a billed token.
+                entry["usage"] = {
+                    "input_tokens": usage["input_tokens"]
+                    + int(usage.get("cache_creation_input_tokens") or 0)
+                    + int(usage.get("cache_read_input_tokens") or 0),
+                    "output_tokens": usage["output_tokens"],
+                }
         self.responses.append(entry)
         return response
 
@@ -220,6 +244,7 @@ def execute(
         interpret_payload,
         may_retry,
     )
+    from sros_semantic_extraction.cost import CeilingRefusalError
     from sros_semantic_extraction_contract import ExtractionContext, surface_sha256
 
     if packet.get("status") != READY:
@@ -227,6 +252,12 @@ def execute(
     if out_dir.resolve().is_relative_to(ROOT.resolve()):
         raise Refused("OUTPUT_DIRECTORY_INSIDE_THE_REPOSITORY")
     bounds = packet["execution_bounds"]
+    ledger = cost_ledger(packet)
+    try:
+        ledger.preflight(Decimal(bounds["retry_worst_case_usd"]))
+    except CeilingRefusalError as exc:
+        raise Refused(exc.code, str(exc)) from None
+    input_bounds = bounds["per_record_conservative_input_tokens"]
     binding = ExecutionBinding(
         packet["packet_id"], workspace_id, LlmTier.STRONG_MODEL, bounds["timeout_seconds"]
     )
@@ -236,11 +267,43 @@ def execute(
         if r["normalized_record_id"] in set(packet["selection"]["egress_approved_record_ids"])
     ]
     calls = 0
-    results = []
+    results: list[dict[str, Any]] = []
+    reference = packet.get("reference") or {}
+
+    def write_run(stopped: str | None) -> dict[str, Any]:
+        out_dir.mkdir(parents=True, exist_ok=True)
+        run = {
+            "packet_sha256": packet["packet_sha256"],
+            "REFERENCE_STRENGTH": reference.get("REFERENCE_STRENGTH"),
+            "RESULT_SCOPE": reference.get("RESULT_SCOPE"),
+            "result_label": reference.get("result_label"),
+            "calls": calls,
+            "stopped": stopped,
+            "cost": {
+                "accepted_hard_ceiling_usd": bounds["hard_ceiling_usd_approved"],
+                "spent_usd": str(ledger.spent_usd),
+                "charges": ledger.charges,
+            },
+            "records": results,
+            "finished_at": datetime.now(UTC).isoformat(timespec="seconds"),
+            "canonical_writes": 0,
+        }
+        (out_dir / f"run-{packet['packet_sha256'][:12]}.json").write_text(
+            json.dumps(run, indent=1, ensure_ascii=False) + "\n", encoding="utf-8"
+        )
+        return run
+
+    def halt(code: str, detail: str) -> Refused:
+        write_run(code)
+        return Refused(code, detail)
+
     for index, record in enumerate(records):
         surface = surfaces[record["normalized_record_id"]]
         if surface_sha256(surface) != record["surface_sha256"]:
-            raise Refused("SURFACE_CHANGED_SINCE_THE_PACKET", record["normalized_record_id"])
+            raise halt("SURFACE_CHANGED_SINCE_THE_PACKET", record["normalized_record_id"])
+        input_bound = input_bounds.get(record["normalized_record_id"])
+        if not isinstance(input_bound, int):
+            raise halt("RECORD_WITHOUT_A_COST_BOUND", record["normalized_record_id"])
         context = ExtractionContext(
             workspace_id=workspace_id,
             normalized_record_id=record["normalized_record_id"],
@@ -260,7 +323,11 @@ def execute(
         schema_retries = 0
         while True:
             if calls >= bounds["max_calls"]:
-                raise Refused("MAX_CALLS_REACHED", str(calls))
+                raise halt("MAX_CALLS_REACHED", str(calls))
+            try:
+                ledger.authorise_next_call()
+            except CeilingRefusalError as exc:
+                raise halt(exc.code, str(exc)) from None
             request = build_extraction_request(surface, index, binding)
             calls += 1
             seen = len(recorder.responses)
@@ -296,6 +363,23 @@ def execute(
             attempts.append(
                 {"outcome": outcome.value, "error": error, "transport": recorder.responses[seen:]}
             )
+            usages = [e["usage"] for e in recorder.responses[seen:] if "usage" in e]
+            if usages:
+                for usage in usages:
+                    ledger.charge_usage(usage["input_tokens"], usage["output_tokens"])
+                if any(u["input_tokens"] > input_bound for u in usages):
+                    results.append(
+                        {
+                            "normalized_record_id": record["normalized_record_id"],
+                            "attempts": attempts,
+                        }
+                    )
+                    raise halt(
+                        "CONSERVATIVE_INPUT_BOUND_EXCEEDED",
+                        f"reported input exceeded {input_bound} tokens; the cost model is wrong",
+                    )
+            else:
+                ledger.charge_unknown()
             if may_retry(outcome, schema_retries):
                 schema_retries += 1
                 continue
@@ -309,22 +393,43 @@ def execute(
                 "accepted": bool(report and report.accepted),
             }
         )
-    out_dir.mkdir(parents=True, exist_ok=True)
-    reference = packet.get("reference") or {}
-    run = {
-        "packet_sha256": packet["packet_sha256"],
-        "REFERENCE_STRENGTH": reference.get("REFERENCE_STRENGTH"),
-        "RESULT_SCOPE": reference.get("RESULT_SCOPE"),
-        "result_label": reference.get("result_label"),
-        "calls": calls,
-        "records": results,
-        "finished_at": datetime.now(UTC).isoformat(timespec="seconds"),
-        "canonical_writes": 0,
-    }
-    (out_dir / f"run-{packet['packet_sha256'][:12]}.json").write_text(
-        json.dumps(run, indent=1, ensure_ascii=False) + "\n", encoding="utf-8"
-    )
-    return run
+    return write_run(None)
+
+
+def cost_ledger(packet: dict[str, Any]) -> Any:
+    """The ledger for this packet, or a refusal. The accepted ceiling is the operator's; nothing defaults it."""
+    from sros_semantic_extraction.cost import CostLedger, Prices
+
+    bounds = packet["execution_bounds"]
+    accepted = bounds.get("hard_ceiling_usd_approved")
+    if accepted in (None, ""):
+        raise Refused("COST_CEILING_NOT_ACCEPTED")
+    try:
+        prices = Prices(
+            Decimal(str(bounds["price_usd_per_mtok"]["input"])),
+            Decimal(str(bounds["price_usd_per_mtok"]["output"])),
+            Decimal(str(bounds["price_multiplier"])),
+        )
+        return CostLedger(
+            prices=prices,
+            ceiling_usd=Decimal(str(accepted)),
+            per_call_maximum_usd=Decimal(str(bounds["per_call_documented_maximum_usd"])),
+        )
+    except (KeyError, TypeError, ValueError, ArithmeticError):
+        raise Refused("PROVIDER_PRICING_NOT_ESTABLISHED") from None
+
+
+def check_provider_verification(packet: dict[str, Any], today: date) -> None:
+    verification = (packet.get("provider") or {}).get("verification") or {}
+    if verification.get("status") != "VERIFIED" or verification.get("model_state") != "ACTIVE":
+        raise Refused("PROVIDER_VERIFICATION_NOT_ESTABLISHED")
+    try:
+        retrieved = date.fromisoformat(str(verification["retrieved_on"]))
+        interval = int(verification["review_interval_days"])
+    except (KeyError, TypeError, ValueError):
+        raise Refused("PROVIDER_VERIFICATION_NOT_ESTABLISHED") from None
+    if today > retrieved + timedelta(days=interval):
+        raise Refused("PROVIDER_VERIFICATION_EXPIRED", str(retrieved))
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -344,6 +449,8 @@ def main(argv: list[str] | None = None) -> int:
         print("dry run: no transport was built and nothing was sent")
         return 0
     check_approval(packet, APPROVAL, args.approval_sha256)
+    check_provider_verification(packet, datetime.now(UTC).date())
+    cost_ledger(packet).preflight(Decimal(packet["execution_bounds"]["retry_worst_case_usd"]))
     refuse_if_attempted(ATTEMPT)
     if not args.output_dir:
         raise Refused("OUTPUT_DIRECTORY_NOT_SUPPLIED")

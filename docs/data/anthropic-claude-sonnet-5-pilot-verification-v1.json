@@ -1,0 +1,189 @@
+{
+ "$comment": "PROVIDER AND MODEL VERIFICATION (Mission 1.85.7). Documentation retrieval only: no inference endpoint, no models endpoint and no token-counting endpoint was called, and no Stack Overflow text was sent. First-party Anthropic documents only. Retrieved page bytes are not committed; their SHA-256 digests are.",
+ "verification_id": "anthropic-claude-sonnet-5-pilot-verification",
+ "version": "1.0.0",
+ "mission": "1.85.7",
+ "retrieved_on": "2026-09-17",
+ "review_interval_days": 180,
+ "provider_calls": 0,
+ "stack_overflow_text_sent": 0,
+ "status": "VERIFIED",
+ "provider_id": "anthropic",
+ "route": "Claude API, synchronous POST https://api.anthropic.com/v1/messages",
+ "model": {
+  "bound_by_packet": "claude-sonnet-5",
+  "documented_api_id": "claude-sonnet-5",
+  "documented_state": "ACTIVE",
+  "retirement": "Not sooner than June 30, 2027",
+  "covered_model": false,
+  "api_availability_probe": "NOT_PERFORMED: a models or messages call is a provider call, which this mission forbids; availability rests on the documentation",
+  "substitution": "NONE: a model change is a separate operator decision because it changes the packet",
+  "evidence": [
+   "sonnet5_overview",
+   "models_overview",
+   "deprecations"
+  ]
+ },
+ "pricing": {
+  "input_usd_per_mtok": "2",
+  "output_usd_per_mtok": "10",
+  "basis": "standard price (the introductory price is now the standard price)",
+  "us_only_inference_multiplier": "1.1",
+  "multiplier_applied": true,
+  "multiplier_reason": "the request sends no inference_geo, so a workspace default applies that this repository cannot observe; the dearer documented reading is applied",
+  "prompt_caching": "NOT_USED: the request sends no cache_control, so cache pricing does not apply",
+  "batch": "NOT_USED",
+  "evidence": [
+   "pricing"
+  ]
+ },
+ "limits": {
+  "context_window_tokens": 1000000,
+  "max_output_tokens_documented": 128000,
+  "max_output_tokens_permitted_by_runner": 4096,
+  "tool_use_system_prompt_tokens_tool_choice_tool": 474,
+  "strict_mode_injected_prompt_tokens": "NOT_ESTABLISHED: documented to exist and to be billed, size not documented",
+  "local_tokenizer": "NOT_PUBLISHED: token counts come from the token-counting endpoint, which would transmit the text, and are documented as estimates",
+  "evidence": [
+   "sonnet5_overview",
+   "pricing",
+   "structured_outputs",
+   "token_counting"
+  ]
+ },
+ "data_use": {
+  "training": "Customer Content from the API is not used for training (Commercial Terms); retained data is never used for training without express permission",
+  "retention": "API inputs and outputs deleted within 30 days of receipt or generation, except longer-retention services under the customer's control, a separate agreement such as ZDR, Usage Policy enforcement (flagged content up to 2 years, classification scores up to 7 years) and legal compliance",
+  "retention_reading": "the stricter of the two first-party statements is bound: 30 days plus the exceptions",
+  "zero_data_retention_for_this_account": "NOT_ESTABLISHED",
+  "evidence": [
+   "commercial_terms",
+   "api_data_retention",
+   "retention_article"
+  ]
+ },
+ "evidence": [
+  {
+   "requested_url": "https://platform.claude.com/docs/en/models/sonnet-5/overview.md",
+   "final_url": "https://platform.claude.com/docs/en/models/sonnet-5/overview.md",
+   "status": 200,
+   "bytes": 13348,
+   "sha256": "6ca17e3121ec558ce10f405145ed9df26ba18bc7ac4cee5d42cc16feefe2bd38",
+   "retrieved_at": "2026-09-17T10:37:06+00:00",
+   "evidence_id": "sonnet5_overview",
+   "retrieval": "raw bytes via HTTP GET; quotes checked verbatim against those bytes (whitespace-collapsed for HTML); bytes not committed",
+   "verified_quotes": [
+    "Model ID: `claude-sonnet-5`",
+    "Context window: 1M tokens · Max output: 128K tokens · Input pricing: $2 / MTok · Output pricing: $10 / MTok"
+   ]
+  },
+  {
+   "requested_url": "https://platform.claude.com/docs/en/about-claude/pricing.md",
+   "final_url": "https://platform.claude.com/docs/en/about-claude/pricing.md",
+   "status": 200,
+   "bytes": 45062,
+   "sha256": "a24307b29df318ab8dae2878df958421527716fda65de9c178969e8d946b20f2",
+   "retrieved_at": "2026-09-17T10:37:05+00:00",
+   "evidence_id": "pricing",
+   "retrieval": "raw bytes via HTTP GET; quotes checked verbatim against those bytes (whitespace-collapsed for HTML); bytes not committed",
+   "verified_quotes": [
+    "The $2/$10 per million input/output token pricing for Claude Sonnet 5, announced at launch as introductory pricing through August 31, 2026, is now the standard price.",
+    "specifying US-only inference through the `inference_geo` parameter incurs a 1.1x multiplier on all token pricing categories",
+    "When you use `tools`, the API also automatically includes a special system prompt for the model that enables tool use."
+   ]
+  },
+  {
+   "requested_url": "https://platform.claude.com/docs/en/about-claude/model-deprecations.md",
+   "final_url": "https://platform.claude.com/docs/en/about-claude/model-deprecations.md",
+   "status": 200,
+   "bytes": 13514,
+   "sha256": "0230d571767d0ef6a3f76db87a2e4c9edff9faad8baab36abf69ee0581bd9922",
+   "retrieved_at": "2026-09-17T10:37:06+00:00",
+   "evidence_id": "deprecations",
+   "retrieval": "raw bytes via HTTP GET; quotes checked verbatim against those bytes (whitespace-collapsed for HTML); bytes not committed",
+   "verified_quotes": [
+    "| claude-sonnet-5            | Active        | N/A               | Not sooner than June 30, 2027      |"
+   ]
+  },
+  {
+   "requested_url": "https://platform.claude.com/docs/en/models/overview.md",
+   "final_url": "https://platform.claude.com/docs/en/models/overview.md",
+   "status": 200,
+   "bytes": 16851,
+   "sha256": "b2ae292320b5d068b20c426e6e4e0333d1a11e25c8457748ca39de25de283c27",
+   "retrieved_at": "2026-09-17T10:37:05+00:00",
+   "evidence_id": "models_overview",
+   "retrieval": "raw bytes via HTTP GET; quotes checked verbatim against those bytes (whitespace-collapsed for HTML); bytes not committed",
+   "verified_quotes": [
+    "`claude-sonnet-5`"
+   ]
+  },
+  {
+   "requested_url": "https://platform.claude.com/docs/en/build-with-claude/structured-outputs.md",
+   "final_url": "https://platform.claude.com/docs/en/build-with-claude/structured-outputs.md",
+   "status": 200,
+   "bytes": 110492,
+   "sha256": "4e500fed30c759764ba06bcd96b9df7160ecb8e5e7611aae9bc229086e0b9204",
+   "retrieved_at": "2026-09-17T10:37:08+00:00",
+   "evidence_id": "structured_outputs",
+   "retrieval": "raw bytes via HTTP GET; quotes checked verbatim against those bytes (whitespace-collapsed for HTML); bytes not committed",
+   "verified_quotes": [
+    "When using structured outputs, Claude automatically receives an additional system prompt explaining the expected output format.",
+    "The injected prompt costs you tokens like any other system prompt"
+   ]
+  },
+  {
+   "requested_url": "https://platform.claude.com/docs/en/build-with-claude/token-counting.md",
+   "final_url": "https://platform.claude.com/docs/en/build-with-claude/token-counting.md",
+   "status": 200,
+   "bytes": 43398,
+   "sha256": "05c17f1ab73c1b6e24afe1480b6fe03fdee276444b90b22c1915740793265c06",
+   "retrieved_at": "2026-09-17T10:37:09+00:00",
+   "evidence_id": "token_counting",
+   "retrieval": "raw bytes via HTTP GET; quotes checked verbatim against those bytes (whitespace-collapsed for HTML); bytes not committed",
+   "verified_quotes": [
+    "The token count is an **estimate**."
+   ]
+  },
+  {
+   "requested_url": "https://platform.claude.com/docs/en/manage-claude/api-and-data-retention.md",
+   "final_url": "https://platform.claude.com/docs/en/manage-claude/api-and-data-retention.md",
+   "status": 200,
+   "bytes": 57524,
+   "sha256": "6cbbdaede3f8ed4b83e77651ecbeebe51420758b212029946970edcf6ffed0c7",
+   "retrieved_at": "2026-09-17T10:37:10+00:00",
+   "evidence_id": "api_data_retention",
+   "retrieval": "raw bytes via HTTP GET; quotes checked verbatim against those bytes (whitespace-collapsed for HTML); bytes not committed",
+   "verified_quotes": [
+    "Retained data is never used for model training without your express permission.",
+    "Claude Fable 5.1, Claude Mythos 5.1, Claude Fable 5, and Claude Mythos 5 are designated Covered Models"
+   ]
+  },
+  {
+   "requested_url": "https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data",
+   "final_url": "https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data",
+   "status": 200,
+   "bytes": 102615,
+   "sha256": "4ae4e1749abe8f49211d6ffbeb827e71e767d69f1dd5a199dd03f03e3e3e4327",
+   "retrieved_at": "2026-09-17T10:37:19+00:00",
+   "evidence_id": "retention_article",
+   "retrieval": "raw bytes via HTTP GET; quotes checked verbatim against those bytes (whitespace-collapsed for HTML); bytes not committed",
+   "verified_quotes": [
+    "we automatically delete inputs and outputs on our backend within 30 days of receipt or generation, except:"
+   ]
+  },
+  {
+   "requested_url": "https://www.anthropic.com/legal/commercial-terms",
+   "final_url": "https://www.anthropic.com/legal/commercial-terms",
+   "status": 200,
+   "bytes": 208975,
+   "sha256": "3d698b8334d90411191cfa230f4a73aa46e56ef9466060c11c8fa8369ad3aa83",
+   "retrieved_at": "2026-09-17T10:37:24+00:00",
+   "evidence_id": "commercial_terms",
+   "retrieval": "raw bytes via HTTP GET; quotes checked verbatim against those bytes (whitespace-collapsed for HTML); bytes not committed",
+   "verified_quotes": [
+    "Anthropic may not train models on Customer Content from Services"
+   ]
+  }
+ ]
+}

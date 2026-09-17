@@ -244,6 +244,10 @@ jobs:
       # committed artifacts only. A stale packet would let a later approval name bytes nobody rendered.
       - name: Semantic extraction evaluation packet is current
         run: uv run python infrastructure/scripts/render_semantic_extraction_packet.py --check
+      # Mission 1.85.7. The operator decision package is rendered from committed artifacts, and its
+      # cost facts feed the packet; a stale package would put an unmeasured ceiling in front of the operator.
+      - name: Semantic extraction operator decision package is current
+        run: uv run python infrastructure/scripts/render_semantic_extraction_decision_package.py --check
 
       # Mission 1.39 §34. The convergence registry rendered into its artifact.
       # It reads repository code and no database, so unlike the calibration

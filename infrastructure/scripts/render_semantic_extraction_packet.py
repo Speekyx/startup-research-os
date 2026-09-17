@@ -1,5 +1,5 @@
-"""Mission 1.85.4 (N08-B), reference strength added in Mission 1.85.5. The frozen evaluation packet for a
-FUTURE development-split extraction run.
+"""Mission 1.85.4 (N08-B), reference strength added in Mission 1.85.5, operator decisions and the measured
+cost model in Mission 1.85.7. The frozen evaluation packet for a FUTURE development-split extraction run.
 
 The packet binds everything a run would depend on, and it cannot be executed:
 
@@ -48,7 +48,11 @@ from sros_semantic_extraction import (  # noqa: E402
     prompt_sha256,
     schema_sha256,
 )
-from sros_semantic_extraction.prompt import SYSTEM_INSTRUCTIONS, TASK_INSTRUCTIONS  # noqa: E402
+from sros_semantic_extraction.decisions import (  # noqa: E402
+    accepted_ceiling,
+    operator_decision_blockers,
+    provider_blockers,
+)
 from sros_semantic_extraction_contract import (  # noqa: E402
     CONTRACT_ID,
     CONTRACT_VERSION,
@@ -75,13 +79,15 @@ REQUALIFICATION = DATA / "anthropic-api-route-requalification-v1.json"
 CONTRACT = DATA / "first-person-semantic-extraction-contract-v1.json"
 CATALOG = DATA / "source-catalog-v1.json"
 PROVIDER_POLICY = DATA / "model-provider-policy-v1.json"
-COST_CEILING_RECORD = DATA / "second-opportunity-execution-cost-ceiling-v1.json"
+VERIFICATION = DATA / "anthropic-claude-sonnet-5-pilot-verification-v1.json"
+DECISION_PACKAGE = DATA / "semantic-extraction-operator-decision-package-development-v1.json"
+DECISIONS = DATA / "semantic-extraction-operator-decisions-development-v1.json"
 ANNOTATION_GLOB = "stack-overflow-semantic-annotations-development-*-v1.json"
 ADJUDICATION = DATA / "stack-overflow-semantic-adjudication-development-v1.json"
 THRESHOLD_PARTITION = DATA / "semantic-extraction-threshold-partition-v1.json"
 
 PACKET_ID = "semantic-extraction-evaluation-packet-development"
-PACKET_VERSION = 2
+PACKET_VERSION = 3
 READY = "READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL"
 BLOCKED = "BLOCKED_HUMAN_LABELS"
 BLOCKED_DECISIONS = "BLOCKED_OPERATOR_DECISIONS"
@@ -89,8 +95,6 @@ MODEL = "claude-sonnet-5"
 MAX_OUTPUT_TOKENS = 4096
 TIMEOUT_SECONDS = 240.0
 CONTEXT_WINDOW_TOKENS = 1_000_000
-MEASURED_CHARACTERS_PER_TOKEN = 1.3373
-US_ONLY_RESIDENCY_MULTIPLIER = 1.1
 # Fields excluded from the digest: the digest itself, commentary and derived presentation.
 UNBOUND = {"$comment", "packet_sha256", "status_note"}
 
@@ -111,8 +115,10 @@ def build() -> dict[str, Any]:
     eligibility = json.loads(ELIGIBILITY.read_text("utf-8"))
     requal = json.loads(REQUALIFICATION.read_text("utf-8"))
     contract = json.loads(CONTRACT.read_text("utf-8"))
-    ceiling = json.loads(COST_CEILING_RECORD.read_text("utf-8"))
-    prices = ceiling["PROVIDER_FACTS"]["PRICE_USD_PER_MTOK"]["value"]
+    verification = json.loads(VERIFICATION.read_text("utf-8"))
+    package = json.loads(DECISION_PACKAGE.read_text("utf-8"))
+    decisions = json.loads(DECISIONS.read_text("utf-8"))
+    cost = package["C_hard_ceiling"]
     catalog = json.loads(CATALOG.read_text("utf-8"))
     source = next(s for s in catalog["sources"] if s["source_id"] == "stack-exchange")
     local_reviews = [
@@ -127,35 +133,12 @@ def build() -> dict[str, Any]:
     approved = [
         r for r in development if states[r["normalized_record_id"]]["state"] == "EGRESS_APPROVED"
     ]
-    candidates = [
-        r for r in development if states[r["normalized_record_id"]]["state"] != "EGRESS_EXCLUDED"
-    ]
-
-    fixed_chars = (
-        len(SYSTEM_INSTRUCTIONS) + len(TASK_INSTRUCTIONS) + len(json.dumps(STRICT_SCHEMA)) + 200
-    )
-
-    def planning_usd(records: list[dict[str, Any]]) -> float:
-        tokens_in = sum(
-            (fixed_chars + r["surface_length"]) / MEASURED_CHARACTERS_PER_TOKEN for r in records
-        )
-        tokens_out = len(records) * MAX_OUTPUT_TOKENS
-        return round(
-            (tokens_in * prices["input"] + tokens_out * prices["output"])
-            / 1_000_000
-            * US_ONLY_RESIDENCY_MULTIPLIER,
-            4,
-        )
-
     calls_per_record = 1 + MAX_SCHEMA_RETRIES_PER_RECORD
-    hard_per_call = (
-        (CONTEXT_WINDOW_TOKENS * prices["input"] + MAX_OUTPUT_TOKENS * prices["output"])
-        / 1_000_000
-        * US_ONLY_RESIDENCY_MULTIPLIER
-    )
+    cost_facts_current = cost["approved_record_count"] == len(approved) and set(
+        cost["per_record_conservative_input_tokens"]
+    ) == {r["normalized_record_id"] for r in approved}
 
     annotation_files = sorted(DATA.glob(ANNOTATION_GLOB))
-    partition = json.loads(THRESHOLD_PARTITION.read_text("utf-8"))
     reference = assess_reference(
         [(p.name, json.loads(p.read_text("utf-8"))) for p in annotation_files],
         split_record_ids={r["normalized_record_id"] for r in development},
@@ -163,15 +146,6 @@ def build() -> dict[str, Any]:
         adjudication_present=ADJUDICATION.exists(),
     )
     single = reference.strength is ReferenceStrength.SINGLE_HUMAN_REFERENCE
-    if single:
-        # The pilot reads only the thresholds that need neither a second human nor holdout.
-        thresholds_authorised = all(
-            i["status"] == "AUTHORISED" for i in partition["buckets"]["SINGLE_HUMAN_PILOT_VALID"]
-        )
-    else:
-        thresholds_authorised = all(
-            i["status"] == "AUTHORISED" for i in contract["proposed_thresholds"]["items"]
-        )
     blockers = []
     for name, problems in reference.refused_files:
         blockers.append(f"HUMAN_ANNOTATION_FILE_REFUSED: {name} ({', '.join(problems[:5])})")
@@ -192,18 +166,25 @@ def build() -> dict[str, Any]:
         blockers.append(
             f"EGRESS_REVIEW_PENDING: 0 EGRESS_APPROVED records ({eligibility['state_counts']})"
         )
-    if not thresholds_authorised:
+    if approved and not cost_facts_current:
         blockers.append(
-            "THRESHOLDS_NOT_AUTHORISED: the single-human pilot thresholds are PROPOSED_NOT_AUTHORISED"
-            if single
-            else "THRESHOLDS_NOT_AUTHORISED: every evaluation threshold is PROPOSED_NOT_AUTHORISED"
+            "COST_FACTS_STALE: the decision package does not cover exactly the approved records; re-measure and re-render"
         )
-    blockers.append(
-        "RETRY_INTERPRETATION_NOT_RATIFIED: the operator has not ratified the schema-failure retry reading"
-    )
-    blockers.append(
-        "COST_CEILING_NOT_ACCEPTED: the hard ceiling rests on the context window and needs operator acceptance"
-    )
+    blockers.extend(provider_blockers(verification, MODEL))
+    if single:
+        # The pilot reads only the thresholds that need neither a second human nor holdout, and each is
+        # the operator's decision in the decisions file; the partition statuses are never edited.
+        blockers.extend(operator_decision_blockers(package, decisions))
+    else:
+        if not all(i["status"] == "AUTHORISED" for i in contract["proposed_thresholds"]["items"]):
+            blockers.append(
+                "THRESHOLDS_NOT_AUTHORISED: every evaluation threshold is PROPOSED_NOT_AUTHORISED"
+            )
+        blockers.append(
+            "RETRY_INTERPRETATION_NOT_RATIFIED: the operator has not ratified the schema-failure retry reading"
+        )
+        blockers.append("COST_CEILING_NOT_ACCEPTED: the multi-human path has no accepted ceiling")
+    accepted = accepted_ceiling(package, decisions) if single else None
 
     if reference.strength is ReferenceStrength.NO_HUMAN_REFERENCE:
         status = BLOCKED
@@ -213,7 +194,7 @@ def build() -> dict[str, Any]:
         "$comment": "FROZEN FUTURE EVALUATION PACKET (N08-B). NOT EXECUTABLE. Its status is computed from committed facts; the runner refuses any status but READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL before reading an approval, and an approval is a separate operator file named by this packet's digest. Merging this packet authorises nothing. The reference block states what a result could claim: a SINGLE_HUMAN_REFERENCE result is a DEVELOPMENT_PILOT and PILOT_NOT_CERTIFICATION.",
         "packet_id": PACKET_ID,
         "packet_version": PACKET_VERSION,
-        "mission": "1.85.5",
+        "mission": "1.85.7",
         "status": status,
         "blockers": blockers,
         "reference": {
@@ -289,6 +270,23 @@ def build() -> dict[str, Any]:
                 "review_interval_days": requal["review_interval_days"],
             },
             "retention_bound": "30 days, except longer-retention services, a separate agreement, Usage Policy enforcement (flagged content up to 2 years, classifier scores up to 7 years) and legal compliance; ZDR not assumed",
+            "verification": {
+                "file": "docs/data/anthropic-claude-sonnet-5-pilot-verification-v1.json",
+                "sha256": sha(VERIFICATION),
+                "status": verification.get("status"),
+                "model_state": (verification.get("model") or {}).get("documented_state"),
+                "retrieved_on": verification.get("retrieved_on"),
+                "review_interval_days": verification.get("review_interval_days"),
+                "zero_data_retention_for_this_account": (verification.get("data_use") or {}).get(
+                    "zero_data_retention_for_this_account"
+                ),
+            },
+        },
+        "operator_decisions": {
+            "package": "docs/data/semantic-extraction-operator-decision-package-development-v1.json",
+            "package_sha256": sha(DECISION_PACKAGE),
+            "decisions": "docs/data/semantic-extraction-operator-decisions-development-v1.json",
+            "decisions_sha256": sha(DECISIONS),
         },
         "source": {
             "source_id": "stack-exchange",
@@ -348,18 +346,26 @@ def build() -> dict[str, Any]:
             "validator_refusal_retries": 0,
             "timeout_seconds": TIMEOUT_SECONDS,
             "max_calls": len(approved) * calls_per_record,
-            "max_input_tokens_per_call": CONTEXT_WINDOW_TOKENS,
+            "EXPECTED_CALLS": cost["EXPECTED_CALLS"],
+            "MAX_CALLS_WITH_RETRY": cost["MAX_CALLS_WITH_RETRY"],
+            "context_window_tokens": CONTEXT_WINDOW_TOKENS,
             "max_output_tokens_per_call": MAX_OUTPUT_TOKENS,
-            "price_usd_per_mtok": prices,
-            "price_source": "docs/data/second-opportunity-execution-cost-ceiling-v1.json PROVIDER_FACTS (retrieved 2026-09-14); to be re-verified when the operator approves",
-            "residency_multiplier_assumed": US_ONLY_RESIDENCY_MULTIPLIER,
-            "planning_cost_estimate_usd_approved": planning_usd(approved),
-            "planning_cost_estimate_usd_if_every_reviewable_record_were_approved": planning_usd(
-                candidates
-            ),
-            "planning_basis": f"characters / {MEASURED_CHARACTERS_PER_TOKEN} (the measured Mission 1.84.5 ratio), one call per record, full output bound; an estimate, never a bound",
-            "hard_ceiling_usd_approved": round(len(approved) * calls_per_record * hard_per_call, 4),
-            "hard_ceiling_basis": "every call at the full 1,000,000-token context window and the output bound, at the stated prices and multiplier; tokens per character are not established, so no smaller input bound is claimed",
+            "price_usd_per_mtok": {
+                "input": cost["pricing"]["input_usd_per_mtok"],
+                "output": cost["pricing"]["output_usd_per_mtok"],
+            },
+            "price_multiplier": cost["pricing"]["multiplier_applied"],
+            "price_source": f"{cost['pricing']['source']} (retrieved {cost['pricing']['retrieved_on']})",
+            "cost_model": cost["token_estimation_methodology"]["cost_model"],
+            "planning_estimate_usd": cost["planning_estimate_usd"],
+            "conservative_bound_usd": cost["conservative_bound_usd"],
+            "retry_worst_case_usd": cost["retry_worst_case_usd"],
+            "per_call_documented_maximum_usd": cost["per_call_documented_maximum_usd"],
+            "per_record_conservative_input_tokens": cost["per_record_conservative_input_tokens"],
+            "proposed_hard_ceiling_usd": cost["proposed_hard_ceiling_usd"],
+            "hard_ceiling_usd_approved": accepted,
+            "hard_ceiling_basis": cost["token_estimation_methodology"]["ceiling_rule"],
+            "enforcement": cost["enforcement"],
         },
         "logging_policy": {
             "provider_error_bodies": "never logged or stored; record HTTP status, error type, request-id header and sha256 of the body only",
