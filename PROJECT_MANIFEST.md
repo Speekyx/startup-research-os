@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.171
+Version: 1.172
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.6, egress decisions imported)
+Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.7)
 
 ---
 
@@ -13,6 +13,22 @@ Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.6, egress decisions imported)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.172 - 2026-09-17 (Sprint 1 / Mission 1.85.7)
+
+**Final operator decision package and tight cost bound (N08-B-PILOT), FINAL_OPERATOR_DECISIONS_PREPARED.** The
+46 EGRESS_APPROVED DEVELOPMENT requests were measured offline with the runner's own prompt, strict tool and body
+builder (322,746 request bytes; nothing sent, no token counting). `claude-sonnet-5` re-verified from 16
+first-party documents: ACTIVE, $2 / $10 per MTok, 1M context, 474-token forced-tool prompt, strict prompt size
+NOT_ESTABLISHED, ZDR NOT_ESTABLISHED; no substitution. Cost model: planning $0.838035, conservative one pass
+$3.032986, retry worst case $6.065972 (92 calls), one documented-maximum call $2.245056, proposed hard ceiling
+$9.000000; the old $206.5452 full-context bound is not reused. Enforcement audit found the ceiling was an
+approval field only; the runner now refuses a READY run without an accepted ceiling, preflights retry worst case
+plus one documented-maximum call, refuses any call (including a retry) that could cross the ceiling, charges
+reported usage, and stops when reported input exceeds the conservative bound. Decision package and a blank
+operator-owned decisions file: 10 pilot thresholds, the retry reading, the ceiling. Packet v3 `63c7302d...`
+BLOCKED_OPERATOR_DECISIONS on exactly those three; runner re-pinned. 0 provider calls, 0 decisions, 0 approvals.
+`docs/reports/mission-1.85.7-report.md`.
 
 ## 1.171 - 2026-09-17 (Sprint 1 / Mission 1.85.6 follow-up)
 

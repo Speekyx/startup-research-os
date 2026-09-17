@@ -299,6 +299,9 @@ class TestRunnerGovernance:
     def test_the_approval_matrix(self, runner, tmp_path) -> None:
         ready = json.loads(runner.PACKET.read_text("utf-8"))
         ready["status"] = runner.READY
+        ready["execution_bounds"]["hard_ceiling_usd_approved"] = ready["execution_bounds"][
+            "proposed_hard_ceiling_usd"
+        ]
         good = {
             "packet_id": ready["packet_id"],
             "packet_version": ready["packet_version"],
@@ -454,6 +457,12 @@ class TestExecuteLoop:
         ]
         packet["selection"]["egress_approved_record_ids"] = [rid]
         packet["execution_bounds"]["max_calls"] = 2
+        # A synthetic READY packet: the operator-accepted ceiling and the record's bound are set here,
+        # never in the committed packet.
+        packet["execution_bounds"]["hard_ceiling_usd_approved"] = packet["execution_bounds"][
+            "proposed_hard_ceiling_usd"
+        ]
+        packet["execution_bounds"]["per_record_conservative_input_tokens"] = {rid: 100_000}
         return packet, rid
 
     def test_schema_failure_retries_once_validator_refusal_never_and_errors_leave_no_text(

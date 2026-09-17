@@ -1,0 +1,81 @@
+{
+ "$comment": "OPERATOR DECISIONS for the DEVELOPMENT pilot. Filled only by the operator. Every field is blank until the operator supplies it; no script, model or mission writes a decision here. REVISE carries a revised value and a reason, and a revision needs the package re-rendered before it can count.",
+ "decisions_id": "semantic-extraction-operator-decisions-development",
+ "version": "1.0.0",
+ "decided_by": null,
+ "decided_at": null,
+ "A_pilot_thresholds": [
+  {
+   "item_id": "false_present_rate_upper_95::NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "operator_decision": null,
+   "revised_value": null,
+   "operator_note": null
+  },
+  {
+   "item_id": "false_present_rate_upper_95::REPORTED_FAILED_ATTEMPT",
+   "operator_decision": null,
+   "revised_value": null,
+   "operator_note": null
+  },
+  {
+   "item_id": "min_true_present_and_min_true_absent::each extractable label",
+   "operator_decision": null,
+   "revised_value": null,
+   "operator_note": null
+  },
+  {
+   "item_id": "mechanical_unsupported_assertions_accepted::all",
+   "operator_decision": null,
+   "revised_value": null,
+   "operator_note": null
+  },
+  {
+   "item_id": "validator_acceptance_rate::all",
+   "operator_decision": null,
+   "revised_value": null,
+   "operator_note": null
+  },
+  {
+   "item_id": "unnecessary_abstention_rate_on_gold_decided::all",
+   "operator_decision": null,
+   "revised_value": null,
+   "operator_note": null
+  },
+  {
+   "item_id": "run_to_run_label_flip_rate::each extractable label",
+   "operator_decision": null,
+   "revised_value": null,
+   "operator_note": null,
+   "repeatability_disposition": null
+  },
+  {
+   "item_id": "composition_gate::each extractable label, each split",
+   "operator_decision": null,
+   "revised_value": null,
+   "operator_note": null
+  },
+  {
+   "item_id": "recall::each extractable label",
+   "operator_decision": null,
+   "revised_value": null,
+   "operator_note": null
+  },
+  {
+   "item_id": "cost_and_latency::all",
+   "operator_decision": null,
+   "revised_value": null,
+   "operator_note": null
+  }
+ ],
+ "B_retry": {
+  "operator_decision": null,
+  "revised_reading": null,
+  "operator_note": null
+ },
+ "C_hard_ceiling": {
+  "operator_decision": null,
+  "accepted_hard_ceiling_usd": null,
+  "revised_hard_ceiling_usd": null,
+  "operator_note": null
+ }
+}
