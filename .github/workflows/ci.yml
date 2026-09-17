@@ -264,6 +264,11 @@ jobs:
       - name: Semantic extraction RFA regression specification is current
         run: uv run python infrastructure/scripts/render_rfa_regression_spec.py --check
 
+      # Mission 1.85.12. Prompt 1.1.0 development diagnostics (known over-reads, positive sensitivity, and the
+      # prompt comparison on the valid overlap only), from committed run summaries. Artifacts only; no provider.
+      - name: Semantic extraction prompt revision diagnostics are current
+        run: uv run python infrastructure/scripts/evaluate_prompt_revision_diagnostics.py --check
+
       # Mission 1.39 §34. The convergence registry rendered into its artifact.
       # It reads repository code and no database, so unlike the calibration
       # feasibility audit it can live here: an empty deployment changes nothing

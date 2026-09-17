@@ -1,0 +1,341 @@
+{
+ "$comment": "DEVELOPMENT PILOT EVALUATION of packet v5, prompt 1.1.0 (Mission 1.85.12). PILOT_NOT_CERTIFICATION. Against the same blind SINGLE_HUMAN_REFERENCE, which is the pilot reference and not absolute truth. Rendered from committed artifacts with the rules frozen in Mission 1.85.9; evaluation artifact only, never a Signal, Claim, Evidence or production finding.",
+ "evaluation_id": "semantic-extraction-pilot-evaluation-development",
+ "evaluator": "semantic-extraction-development-pilot-evaluator@1.0.0",
+ "REFERENCE_STRENGTH": "SINGLE_HUMAN_REFERENCE",
+ "RESULT_SCOPE": "DEVELOPMENT_PILOT",
+ "result_label": "PILOT_NOT_CERTIFICATION",
+ "prohibited_claims": [
+  "INTER_HUMAN_RELIABILITY",
+  "VALIDATED_HUMAN_CONSENSUS",
+  "GENERALISATION_TO_HOLDOUT",
+  "PRODUCTION_READINESS",
+  "CALIBRATED_SEMANTIC_ACCURACY"
+ ],
+ "inputs": {
+  "packet_sha256": "6b27bccbc22c7051be9d8f1df4dd22a4635d0f664d4b4fa05ede820e90a72a7e",
+  "run_summary_sha256": "e321901eebf43ffb2083518d36ee2e5f6e13f02488f500f861d34d3746b5d4c9",
+  "reference_sha256": "449ff10f8a60217bbf4b7887254cf81b492fdba962b39283f39d2acdf1a9fa3c",
+  "decisions_sha256": "ac2bb1d977f0f7fb9ffaa133aa9564f93b7c499b15956f4b06ad1bef2ba94994"
+ },
+ "summary_names_this_packet": true,
+ "run_execution": {
+  "records_approved": 46,
+  "records_attempted": 46,
+  "records_accepted": 45,
+  "records_not_attempted": 0,
+  "provider_calls": 46,
+  "schema_retries": 0,
+  "final_outcomes": {
+   "ACCEPTED": 45,
+   "VALIDATOR_REFUSED": 1
+  },
+  "attempt_outcomes": {
+   "ACCEPTED": 45,
+   "VALIDATOR_REFUSED": 1
+  },
+  "http_statuses": {
+   "200": 46
+  },
+  "bounded_stop": null,
+  "run_elapsed_seconds": 142.614,
+  "call_latency_seconds": {
+   "total": 142.581,
+   "median": 2.844,
+   "p95_nearest_rank": 4.177,
+   "max": 18.033
+  },
+  "input_tokens_reported": 165633,
+  "output_tokens_reported": 7068,
+  "calls_without_reported_usage": 0,
+  "cost_usd": "0.4421406",
+  "accepted_hard_ceiling_usd": "9.000000",
+  "ceiling_consumed_percent": "4.91",
+  "cost_within_ceiling": true,
+  "canonical_writes": 0
+ },
+ "readings": [
+  {
+   "item_id": "false_present_rate_upper_95::REPORTED_FAILED_ATTEMPT",
+   "reading": "PILOT_OUTSIDE_PROPOSED_BOUND",
+   "proposed_bound": 0.2,
+   "support": {
+    "present_calls_on_decided_records": 25,
+    "required": 15
+   },
+   "false_present": 16,
+   "point_estimate": 0.64,
+   "clopper_pearson_upper_95_one_sided": 0.797622,
+   "clopper_pearson_upper_95_descriptive": 0.797622
+  },
+  {
+   "item_id": "min_true_present_and_min_true_absent::REPORTED_FAILED_ATTEMPT",
+   "reading": "PILOT_WITHIN_PROPOSED_BOUND",
+   "proposed_bound": 1,
+   "true_present": 9,
+   "true_absent": 13
+  },
+  {
+   "item_id": "composition_gate::REPORTED_FAILED_ATTEMPT, DEVELOPMENT",
+   "reading": "PILOT_WITHIN_PROPOSED_BOUND",
+   "proposed_bound": {
+    "min_present": 4,
+    "min_absent": 4
+   },
+   "reference_present": 15,
+   "reference_absent": 29,
+   "reference_set_insufficient": false
+  },
+  {
+   "item_id": "recall::REPORTED_FAILED_ATTEMPT",
+   "reading": null,
+   "proposed_bound": null,
+   "descriptive_only": true,
+   "recall": 0.6,
+   "recall_state": "DEFINED",
+   "true_present": 9,
+   "reference_present": 15
+  },
+  {
+   "item_id": "false_present_rate_upper_95::NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "reading": "PILOT_INSUFFICIENT_SUPPORT",
+   "proposed_bound": 0.1,
+   "support": {
+    "present_calls_on_decided_records": 0,
+    "required": 30
+   },
+   "false_present": 0,
+   "point_estimate": null,
+   "clopper_pearson_upper_95_one_sided": null,
+   "clopper_pearson_upper_95_descriptive": null
+  },
+  {
+   "item_id": "min_true_present_and_min_true_absent::NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "reading": "PILOT_INSUFFICIENT_SUPPORT",
+   "proposed_bound": 1,
+   "true_present": 0,
+   "true_absent": 45
+  },
+  {
+   "item_id": "composition_gate::NEGATIVE_EVALUATION_OF_NAMED_SOLUTION, DEVELOPMENT",
+   "reading": "PILOT_INSUFFICIENT_SUPPORT",
+   "proposed_bound": {
+    "min_present": 4,
+    "min_absent": 4
+   },
+   "reference_present": 0,
+   "reference_absent": 45,
+   "reference_set_insufficient": true
+  },
+  {
+   "item_id": "recall::NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "reading": "PILOT_INSUFFICIENT_SUPPORT",
+   "proposed_bound": null,
+   "descriptive_only": true,
+   "recall": null,
+   "recall_state": "UNDEFINED_NO_REFERENCE_PRESENT",
+   "true_present": 0,
+   "reference_present": 0
+  },
+  {
+   "item_id": "mechanical_unsupported_assertions_accepted::all",
+   "reading": "PILOT_WITHIN_PROPOSED_BOUND",
+   "proposed_bound": 0,
+   "accepted_findings_checked": 32,
+   "unsupported_accepted": 0
+  },
+  {
+   "item_id": "validator_acceptance_rate::all",
+   "reading": "PILOT_WITHIN_PROPOSED_BOUND",
+   "proposed_bound": 0.95,
+   "accepted": 45,
+   "attempted": 46,
+   "rate": 0.978261
+  },
+  {
+   "item_id": "unnecessary_abstention_rate_on_gold_decided::all",
+   "reading": "PILOT_WITHIN_PROPOSED_BOUND",
+   "proposed_bound": 0.1,
+   "gold_reads": "the single-human decided reference, as preregistered",
+   "abstained_cells": 0,
+   "decided_cells_with_valid_output": 89,
+   "rate": 0.0
+  },
+  {
+   "item_id": "cost_and_latency::all",
+   "reading": null,
+   "proposed_bound": null,
+   "descriptive_only": true,
+   "cost_usd": "0.4421406",
+   "ceiling_consumed_percent": "4.91",
+   "call_latency_seconds": {
+    "total": 142.581,
+    "median": 2.844,
+    "p95_nearest_rank": 4.177,
+    "max": 18.033
+   }
+  }
+ ],
+ "not_evaluated": [
+  {
+   "item_id": "run_to_run_label_flip_rate::each extractable label",
+   "operator_decision": "REJECT_FOR_THE_PILOT",
+   "repeatability_disposition": "REJECT_FOR_THIS_FIRST_PILOT",
+   "why": "rejected for this first pilot; no additional model run is authorised"
+  }
+ ],
+ "authorised_items_read": [
+  "composition_gate::each extractable label, each split",
+  "cost_and_latency::all",
+  "false_present_rate_upper_95::NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+  "false_present_rate_upper_95::REPORTED_FAILED_ATTEMPT",
+  "mechanical_unsupported_assertions_accepted::all",
+  "min_true_present_and_min_true_absent::each extractable label",
+  "recall::each extractable label",
+  "unnecessary_abstention_rate_on_gold_decided::all",
+  "validator_acceptance_rate::all"
+ ],
+ "labels": {
+  "REPORTED_FAILED_ATTEMPT": {
+   "reference": {
+    "PRESENT": 15,
+    "ABSENT": 29,
+    "UNCERTAIN": 2
+   },
+   "model": {
+    "PRESENT": 26,
+    "ABSENT": 19,
+    "ABSTAIN": 0,
+    "NO_VALID_OUTPUT": 1,
+    "NOT_ATTEMPTED": 0
+   },
+   "confusion": {
+    "reference_PRESENT__model_PRESENT": 9,
+    "reference_PRESENT__model_ABSENT": 6,
+    "reference_PRESENT__model_ABSTAIN": 0,
+    "reference_PRESENT__model_NO_VALID_OUTPUT": 0,
+    "reference_PRESENT__model_NOT_ATTEMPTED": 0,
+    "reference_ABSENT__model_PRESENT": 16,
+    "reference_ABSENT__model_ABSENT": 13,
+    "reference_ABSENT__model_ABSTAIN": 0,
+    "reference_ABSENT__model_NO_VALID_OUTPUT": 0,
+    "reference_ABSENT__model_NOT_ATTEMPTED": 0,
+    "reference_UNCERTAIN__model_PRESENT": 1,
+    "reference_UNCERTAIN__model_ABSENT": 0,
+    "reference_UNCERTAIN__model_ABSTAIN": 0,
+    "reference_UNCERTAIN__model_NO_VALID_OUTPUT": 1,
+    "reference_UNCERTAIN__model_NOT_ATTEMPTED": 0
+   },
+   "true_present": 9,
+   "false_present": 16,
+   "missed_reference_present": 6,
+   "true_absent": 13,
+   "recall": 0.6,
+   "false_present_point_estimate": 0.64,
+   "abstention_on_decided_cells": {
+    "abstained": 0,
+    "decided_cells_with_valid_output": 44
+   },
+   "disagreements": {
+    "model_PRESENT_reference_ABSENT": [
+     "17064c93-71cf-5474-ba7f-39ccd516782f",
+     "1a659352-390f-5c53-97de-0f725d017f46",
+     "203268d4-baf6-5410-a001-cf77843e96e3",
+     "3194f76d-a845-54c5-9a14-bd0520da6cbb",
+     "37bf2146-b9fc-5e5a-b35b-d59f5f6bfc57",
+     "3d0568c4-5876-5863-921b-2c0fc3d3e27a",
+     "42642469-23b7-5a7a-b897-5052012d9fd3",
+     "58966c7e-425d-59de-85ce-116ae98309ab",
+     "6dfbef0a-3a64-5fd1-9433-21f7cdb01402",
+     "7eed79ff-81d0-50c1-94c2-3a1b6fa3b4a8",
+     "88376fa5-5cd3-58f9-b099-bad69077b0f7",
+     "9f91eeea-25e6-5a9e-89e6-54d4490ecd7c",
+     "bf04af60-1364-5fd0-8f4f-a8104d131aff",
+     "c128f807-cbdf-512b-bbde-30a00a9fdb39",
+     "e35f990d-117a-59d1-b54e-5165632378bf",
+     "f53c6872-b340-5e5b-845c-e8b2bd3147d8"
+    ],
+    "model_ABSENT_reference_PRESENT": [
+     "4a3fc738-bb4a-5992-bb2e-2e422b9f4a00",
+     "96054702-3d78-55b0-b5b9-ed63e611c6d7",
+     "b7996f9d-72fe-5544-a30a-ce9270edfe09",
+     "e2162aae-f496-58d4-b905-73e4b0164a66",
+     "e9edbbaa-5331-5584-8d3e-847c8f759551",
+     "f876b0be-fa18-5b60-9fdd-b505e7529413"
+    ],
+    "model_ABSTAIN_reference_decided": [],
+    "reference_UNCERTAIN": [
+     "5d0a1e34-7eeb-5820-89f2-7cf9706a8fb8 (model PRESENT)",
+     "db663e12-3ffd-59e5-b31f-1de31f41acbb (model NO_VALID_OUTPUT)"
+    ]
+   }
+  },
+  "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+   "reference": {
+    "PRESENT": 0,
+    "ABSENT": 45,
+    "UNCERTAIN": 1
+   },
+   "model": {
+    "PRESENT": 0,
+    "ABSENT": 45,
+    "ABSTAIN": 0,
+    "NO_VALID_OUTPUT": 1,
+    "NOT_ATTEMPTED": 0
+   },
+   "confusion": {
+    "reference_PRESENT__model_PRESENT": 0,
+    "reference_PRESENT__model_ABSENT": 0,
+    "reference_PRESENT__model_ABSTAIN": 0,
+    "reference_PRESENT__model_NO_VALID_OUTPUT": 0,
+    "reference_PRESENT__model_NOT_ATTEMPTED": 0,
+    "reference_ABSENT__model_PRESENT": 0,
+    "reference_ABSENT__model_ABSENT": 45,
+    "reference_ABSENT__model_ABSTAIN": 0,
+    "reference_ABSENT__model_NO_VALID_OUTPUT": 0,
+    "reference_ABSENT__model_NOT_ATTEMPTED": 0,
+    "reference_UNCERTAIN__model_PRESENT": 0,
+    "reference_UNCERTAIN__model_ABSENT": 0,
+    "reference_UNCERTAIN__model_ABSTAIN": 0,
+    "reference_UNCERTAIN__model_NO_VALID_OUTPUT": 1,
+    "reference_UNCERTAIN__model_NOT_ATTEMPTED": 0
+   },
+   "true_present": 0,
+   "false_present": 0,
+   "missed_reference_present": 0,
+   "true_absent": 45,
+   "recall": null,
+   "false_present_point_estimate": null,
+   "abstention_on_decided_cells": {
+    "abstained": 0,
+    "decided_cells_with_valid_output": 45
+   },
+   "disagreements": {
+    "model_PRESENT_reference_ABSENT": [],
+    "model_ABSENT_reference_PRESENT": [],
+    "model_ABSTAIN_reference_decided": [],
+    "reference_UNCERTAIN": [
+     "db663e12-3ffd-59e5-b31f-1de31f41acbb (model NO_VALID_OUTPUT)"
+    ]
+   }
+  }
+ },
+ "validator": {
+  "acceptance_rate": 0.978261,
+  "unsupported_accepted": 0,
+  "refusal_codes": {
+   "QUOTE_NOT_IN_SURFACE": 1
+  }
+ },
+ "record_failures": {
+  "validator_refused": [
+   "db663e12-3ffd-59e5-b31f-1de31f41acbb"
+  ],
+  "schema_failure": [],
+  "provider_error": [],
+  "output_limit_reached": [],
+  "model_refused": [],
+  "unexpected_error": [],
+  "not_attempted": []
+ }
+}

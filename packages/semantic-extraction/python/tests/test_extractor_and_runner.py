@@ -277,9 +277,16 @@ class TestRunnerGovernance:
         attempt = json.loads(runner.HISTORICAL_ATTEMPT.read_text("utf-8"))
         assert approval["packet_sha256"] == attempt["packet_sha256"] == historical
         assert historical != runner.EXPECTED_PACKET_SHA256
-        assert not runner.APPROVAL.exists() and not runner.ATTEMPT.exists()
         with pytest.raises(runner.Refused) as refused:
             runner.refuse_if_attempted(runner.HISTORICAL_ATTEMPT)
+        assert refused.value.refusal == "EVALUATION_APPROVAL_ALREADY_SPENT"
+        # Mission 1.85.12: the current packet's one approval names it, and its attempt spends it too.
+        current = json.loads(runner.APPROVAL.read_text("utf-8"))
+        current_attempt = json.loads(runner.ATTEMPT.read_text("utf-8"))
+        assert current["packet_sha256"] == current_attempt["packet_sha256"]
+        assert current["packet_sha256"] == runner.EXPECTED_PACKET_SHA256
+        with pytest.raises(runner.Refused) as refused:
+            runner.refuse_if_attempted(runner.ATTEMPT)
         assert refused.value.refusal == "EVALUATION_APPROVAL_ALREADY_SPENT"
 
     def test_a_dry_run_builds_no_transport(self, runner, monkeypatch, capsys) -> None:

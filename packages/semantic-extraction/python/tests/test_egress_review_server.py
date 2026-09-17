@@ -271,7 +271,11 @@ class TestPacketStillCannotExecute:
         assert packet["status"] == runner.READY
         # Mission 1.85.11: the Mission 1.85.9 approval and attempt are history; the current packet has none.
         assert runner.HISTORICAL_APPROVAL.exists() and runner.HISTORICAL_ATTEMPT.exists()
-        assert not runner.APPROVAL.exists() and not runner.ATTEMPT.exists()
+        # Mission 1.85.12: the v5 approval exists and its attempt spends it; a wrong digest unlocks nothing.
+        assert runner.APPROVAL.exists() and runner.ATTEMPT.exists()
         with pytest.raises(runner.Refused) as refused:
             runner.main(["--execute", "--approval-sha256", "0" * 64])
-        assert refused.value.refusal == "OPERATOR_APPROVAL_NOT_RECORDED"
+        assert refused.value.refusal == "APPROVAL_FILE_DIGEST_MISMATCH"
+        with pytest.raises(runner.Refused) as refused:
+            runner.refuse_if_attempted(runner.ATTEMPT)
+        assert refused.value.refusal == "EVALUATION_APPROVAL_ALREADY_SPENT"

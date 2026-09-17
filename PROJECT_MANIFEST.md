@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.176
+Version: 1.177
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.11)
+Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.12)
 
 ---
 
@@ -13,6 +13,19 @@ Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.11)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.177 - 2026-09-17 (Sprint 1 / Mission 1.85.12)
+
+**Prompt 1.1.0 full DEVELOPMENT pilot (N08-B-PILOT), PROMPT_1_1_DEVELOPMENT_PILOT_RESULTS_READY_FOR_OPERATOR_REVIEW.**
+Operator-a approved packet v5 `6b27bccbc22c7051be9d8f1df4dd22a4635d0f664d4b4fa05ede820e90a72a7e` for exactly one
+execution (approval `9fc8fac7...`). A preflight and an offline rehearsal (reset, stall and HTTP 529 each cost one
+record without a schema retry; the ceiling stops before crossing; spent approvals refused) found no execution
+defect; evaluation rules were frozen and pushed before the approval. One clean full run: 46 calls, 45 accepted, 1
+validator refusal, 0 retries, 0 provider errors, $0.442141 of $9.000000. REPORTED_FAILED_ATTEMPT false PRESENT
+16 of 25, upper 0.798, PILOT_OUTSIDE_PROPOSED_BOUND; recall 9/15; known over-reads corrected 2/9; on the 23-record
+valid overlap false PRESENT 9 -> 7 and true PRESENT 9 -> 4. NEGATIVE_EVALUATION insufficient support, 0 PRESENT on
+45. Prompt 1.1.0 did not improve precision; no next development decision taken. Approval spent, no rerun, 0 HOLDOUT,
+0 canonical writes. `docs/reports/mission-1.85.12-report.md`.
 
 ## 1.176 - 2026-09-17 (Sprint 1 / Mission 1.85.11)
 

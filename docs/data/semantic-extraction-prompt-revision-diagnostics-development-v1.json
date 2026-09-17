@@ -1,0 +1,419 @@
+{
+ "$comment": "PROMPT 1.1.0 DEVELOPMENT DIAGNOSTICS (Mission 1.85.12). Ids and counts only, from committed artifacts. A and B are POST_MODEL_DEVELOPMENT_REGRESSION_DIAGNOSTIC, not thresholds and not certification; C compares prompts only on the valid overlap and is not an independent test set. Mission 1.85.9 stays PILOT_OUTSIDE_PROPOSED_BOUND. Evaluation artifact only.",
+ "diagnostics_id": "semantic-extraction-prompt-revision-diagnostics",
+ "version": "1.0.0",
+ "RESULT_SCOPE": "DEVELOPMENT_PILOT",
+ "result_label": "PILOT_NOT_CERTIFICATION",
+ "REFERENCE_STRENGTH": "SINGLE_HUMAN_REFERENCE",
+ "inputs": {
+  "regression_spec_sha256": "20e6da82b2110b758bfaa22af87e93cada7f55f6cbf37b767e71b8508584ad9e",
+  "reference_sha256": "449ff10f8a60217bbf4b7887254cf81b492fdba962b39283f39d2acdf1a9fa3c",
+  "prompt_1_0_0_run_summary_sha256": "d9c9a0c02bcd2e4b1698914a3e628e63bee1c1492bc37790fc4fad1f9465851d",
+  "prompt_1_0_0_packet_sha256": "5f96b418e75374b098b44b7fe3ba756a5155af94f92cd607ea251fa131d18c0e",
+  "prompt_1_1_0_run_summary_sha256": "e321901eebf43ffb2083518d36ee2e5f6e13f02488f500f861d34d3746b5d4c9",
+  "prompt_1_1_0_packet_sha256": "6b27bccbc22c7051be9d8f1df4dd22a4635d0f664d4b4fa05ede820e90a72a7e"
+ },
+ "A_known_overread": {
+  "diagnostic_type": "POST_MODEL_DEVELOPMENT_REGRESSION_DIAGNOSTIC",
+  "is_threshold": false,
+  "is_certification": false,
+  "prior_overreads": 9,
+  "corrected_rfa_absent": 2,
+  "persistent_rfa_present": 7,
+  "abstained": 0,
+  "unavailable_unscored": 0,
+  "records": [
+   {
+    "normalized_record_id": "17064c93-71cf-5474-ba7f-39ccd516782f",
+    "prompt_1_0_0_call": "PRESENT",
+    "prompt_1_1_0_call": "PRESENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED",
+    "status": "PERSISTENT_OVERREAD"
+   },
+   {
+    "normalized_record_id": "1a659352-390f-5c53-97de-0f725d017f46",
+    "prompt_1_0_0_call": "PRESENT",
+    "prompt_1_1_0_call": "PRESENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED",
+    "status": "PERSISTENT_OVERREAD"
+   },
+   {
+    "normalized_record_id": "203268d4-baf6-5410-a001-cf77843e96e3",
+    "prompt_1_0_0_call": "PRESENT",
+    "prompt_1_1_0_call": "PRESENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED",
+    "status": "PERSISTENT_OVERREAD"
+   },
+   {
+    "normalized_record_id": "37bf2146-b9fc-5e5a-b35b-d59f5f6bfc57",
+    "prompt_1_0_0_call": "PRESENT",
+    "prompt_1_1_0_call": "PRESENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED",
+    "status": "PERSISTENT_OVERREAD"
+   },
+   {
+    "normalized_record_id": "9f91eeea-25e6-5a9e-89e6-54d4490ecd7c",
+    "prompt_1_0_0_call": "PRESENT",
+    "prompt_1_1_0_call": "PRESENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED",
+    "status": "PERSISTENT_OVERREAD"
+   },
+   {
+    "normalized_record_id": "ac423fe4-a4b4-589d-ac49-96932ed51d54",
+    "prompt_1_0_0_call": "PRESENT",
+    "prompt_1_1_0_call": "ABSENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED",
+    "status": "CORRECTED"
+   },
+   {
+    "normalized_record_id": "bf04af60-1364-5fd0-8f4f-a8104d131aff",
+    "prompt_1_0_0_call": "PRESENT",
+    "prompt_1_1_0_call": "PRESENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED",
+    "status": "PERSISTENT_OVERREAD"
+   },
+   {
+    "normalized_record_id": "d6bff833-780d-55d3-a5ad-1effebb8a328",
+    "prompt_1_0_0_call": "PRESENT",
+    "prompt_1_1_0_call": "ABSENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED",
+    "status": "CORRECTED"
+   },
+   {
+    "normalized_record_id": "e35f990d-117a-59d1-b54e-5165632378bf",
+    "prompt_1_0_0_call": "PRESENT",
+    "prompt_1_1_0_call": "PRESENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED",
+    "status": "PERSISTENT_OVERREAD"
+   }
+  ]
+ },
+ "B_positive_sensitivity": {
+  "diagnostic_type": "POST_MODEL_DEVELOPMENT_REGRESSION_DIAGNOSTIC",
+  "is_threshold": false,
+  "is_certification": false,
+  "reference_positives": 15,
+  "evaluated_with_valid_output": 15,
+  "true_present_retained": 9,
+  "missed_present_as_absent": 6,
+  "abstentions": 0,
+  "unavailable": 0,
+  "descriptive_recall_over_all_positives": 0.6,
+  "descriptive_recall_over_evaluated_positives": 0.6,
+  "records": [
+   {
+    "normalized_record_id": "19c64e71-5844-520d-844c-97c1f0aaa750",
+    "prompt_1_1_0_call": "PRESENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED"
+   },
+   {
+    "normalized_record_id": "2c9e95be-2262-52d0-947f-e6a268020b71",
+    "prompt_1_1_0_call": "PRESENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED"
+   },
+   {
+    "normalized_record_id": "47b3c6ea-dff4-50c4-b9fd-15874b743288",
+    "prompt_1_1_0_call": "PRESENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED"
+   },
+   {
+    "normalized_record_id": "4a3fc738-bb4a-5992-bb2e-2e422b9f4a00",
+    "prompt_1_1_0_call": "ABSENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED"
+   },
+   {
+    "normalized_record_id": "6bd78806-211b-5d3b-b10a-d60f4fe2bca3",
+    "prompt_1_1_0_call": "PRESENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED"
+   },
+   {
+    "normalized_record_id": "7c8a2ac5-1fdd-5c72-bdb5-4422a11e4084",
+    "prompt_1_1_0_call": "PRESENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED"
+   },
+   {
+    "normalized_record_id": "96054702-3d78-55b0-b5b9-ed63e611c6d7",
+    "prompt_1_1_0_call": "ABSENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED"
+   },
+   {
+    "normalized_record_id": "a561974f-fc12-564d-9cb5-51c5bd59c40e",
+    "prompt_1_1_0_call": "PRESENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED"
+   },
+   {
+    "normalized_record_id": "b7996f9d-72fe-5544-a30a-ce9270edfe09",
+    "prompt_1_1_0_call": "ABSENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED"
+   },
+   {
+    "normalized_record_id": "e2162aae-f496-58d4-b905-73e4b0164a66",
+    "prompt_1_1_0_call": "ABSENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED"
+   },
+   {
+    "normalized_record_id": "e9edbbaa-5331-5584-8d3e-847c8f759551",
+    "prompt_1_1_0_call": "ABSENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED"
+   },
+   {
+    "normalized_record_id": "f269e805-7ccf-5a79-a765-e68f31e7b1bd",
+    "prompt_1_1_0_call": "PRESENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED"
+   },
+   {
+    "normalized_record_id": "f876b0be-fa18-5b60-9fdd-b505e7529413",
+    "prompt_1_1_0_call": "ABSENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED"
+   },
+   {
+    "normalized_record_id": "f98ff185-01b0-5612-9c36-07b1fe5dea5f",
+    "prompt_1_1_0_call": "PRESENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED"
+   },
+   {
+    "normalized_record_id": "fa1a8536-4624-5386-b814-c829932cb1ab",
+    "prompt_1_1_0_call": "PRESENT",
+    "prompt_1_1_0_final_outcome": "ACCEPTED"
+   }
+  ]
+ },
+ "C_valid_overlap_comparison": {
+  "is_independent_test_set": false,
+  "why_not_independent": "prompt 1.1.0 was revised after the operator reviewed the nine Mission 1.85.9 over-reads, which lie inside this overlap; an improvement on them is developmental regression evidence, not unbiased generalisation evidence",
+  "overlap_rule": "records where the Mission 1.85.9 run (prompt 1.0.0) and the Mission 1.85.12 run (prompt 1.1.0) both have an accepted extraction",
+  "prompt_1_0_0_run_records_accepted": 23,
+  "prompt_1_1_0_run_records_accepted": 45,
+  "overlap_records": 23,
+  "overlap_record_ids": [
+   "17064c93-71cf-5474-ba7f-39ccd516782f",
+   "1a659352-390f-5c53-97de-0f725d017f46",
+   "203268d4-baf6-5410-a001-cf77843e96e3",
+   "37bf2146-b9fc-5e5a-b35b-d59f5f6bfc57",
+   "3d224ece-4791-550e-8a47-352f9c568b92",
+   "47b3c6ea-dff4-50c4-b9fd-15874b743288",
+   "4a3fc738-bb4a-5992-bb2e-2e422b9f4a00",
+   "7c8a2ac5-1fdd-5c72-bdb5-4422a11e4084",
+   "96054702-3d78-55b0-b5b9-ed63e611c6d7",
+   "99bdc4b0-959d-541e-bc59-7aa5706cf282",
+   "9f91eeea-25e6-5a9e-89e6-54d4490ecd7c",
+   "ac423fe4-a4b4-589d-ac49-96932ed51d54",
+   "b7996f9d-72fe-5544-a30a-ce9270edfe09",
+   "bf04af60-1364-5fd0-8f4f-a8104d131aff",
+   "c4d96f4e-c766-5c79-a8c9-1f023647618b",
+   "c98a64a0-0940-5835-a617-c26220a5d9a2",
+   "d6bff833-780d-55d3-a5ad-1effebb8a328",
+   "e35f990d-117a-59d1-b54e-5165632378bf",
+   "e3d79e11-9064-5f15-ac93-929e08114601",
+   "e9edbbaa-5331-5584-8d3e-847c8f759551",
+   "f876b0be-fa18-5b60-9fdd-b505e7529413",
+   "f98ff185-01b0-5612-9c36-07b1fe5dea5f",
+   "fa1a8536-4624-5386-b814-c829932cb1ab"
+  ],
+  "labels": {
+   "REPORTED_FAILED_ATTEMPT": {
+    "prompt_1_0_0": {
+     "records": 23,
+     "reference": {
+      "PRESENT": 9,
+      "ABSENT": 14,
+      "UNCERTAIN": 0
+     },
+     "model": {
+      "PRESENT": 18,
+      "ABSENT": 5,
+      "ABSTAIN": 0,
+      "NO_VALID_OUTPUT": 0,
+      "NOT_ATTEMPTED": 0
+     },
+     "model_present_on_decided_records": 18,
+     "true_present": 9,
+     "false_present": 9,
+     "true_absent": 5,
+     "missed_reference_present_as_absent": 0,
+     "reference_present_recovered": "9/9",
+     "recall_on_reference_present": 1.0,
+     "precision": 0.5,
+     "false_present_rate": 0.5,
+     "false_present_rate_upper_95_descriptive": 0.708799
+    },
+    "prompt_1_1_0": {
+     "records": 23,
+     "reference": {
+      "PRESENT": 9,
+      "ABSENT": 14,
+      "UNCERTAIN": 0
+     },
+     "model": {
+      "PRESENT": 11,
+      "ABSENT": 12,
+      "ABSTAIN": 0,
+      "NO_VALID_OUTPUT": 0,
+      "NOT_ATTEMPTED": 0
+     },
+     "model_present_on_decided_records": 11,
+     "true_present": 4,
+     "false_present": 7,
+     "true_absent": 7,
+     "missed_reference_present_as_absent": 5,
+     "reference_present_recovered": "4/9",
+     "recall_on_reference_present": 0.444444,
+     "precision": 0.363636,
+     "false_present_rate": 0.636364,
+     "false_present_rate_upper_95_descriptive": 0.864925
+    },
+    "delta": {
+     "false_present": -2,
+     "true_present": -5,
+     "model_present_on_decided_records": -7,
+     "precision": -0.136364,
+     "false_present_rate": 0.136364,
+     "recall_on_reference_present": -0.555556
+    },
+    "changed_classifications": {
+     "PRESENT_to_ABSENT": 7,
+     "PRESENT_to_ABSTAIN": 0,
+     "ABSENT_to_PRESENT": 0,
+     "ABSENT_to_ABSTAIN": 0,
+     "PRESENT_to_PRESENT": 11,
+     "ABSENT_to_ABSENT": 5
+    },
+    "changed_classification_records": {
+     "PRESENT_to_ABSENT": [
+      "4a3fc738-bb4a-5992-bb2e-2e422b9f4a00",
+      "96054702-3d78-55b0-b5b9-ed63e611c6d7",
+      "ac423fe4-a4b4-589d-ac49-96932ed51d54",
+      "b7996f9d-72fe-5544-a30a-ce9270edfe09",
+      "d6bff833-780d-55d3-a5ad-1effebb8a328",
+      "e9edbbaa-5331-5584-8d3e-847c8f759551",
+      "f876b0be-fa18-5b60-9fdd-b505e7529413"
+     ],
+     "PRESENT_to_ABSTAIN": [],
+     "ABSENT_to_PRESENT": [],
+     "ABSENT_to_ABSTAIN": [],
+     "PRESENT_to_PRESENT": [
+      "17064c93-71cf-5474-ba7f-39ccd516782f",
+      "1a659352-390f-5c53-97de-0f725d017f46",
+      "203268d4-baf6-5410-a001-cf77843e96e3",
+      "37bf2146-b9fc-5e5a-b35b-d59f5f6bfc57",
+      "47b3c6ea-dff4-50c4-b9fd-15874b743288",
+      "7c8a2ac5-1fdd-5c72-bdb5-4422a11e4084",
+      "9f91eeea-25e6-5a9e-89e6-54d4490ecd7c",
+      "bf04af60-1364-5fd0-8f4f-a8104d131aff",
+      "e35f990d-117a-59d1-b54e-5165632378bf",
+      "f98ff185-01b0-5612-9c36-07b1fe5dea5f",
+      "fa1a8536-4624-5386-b814-c829932cb1ab"
+     ],
+     "ABSENT_to_ABSENT": [
+      "3d224ece-4791-550e-8a47-352f9c568b92",
+      "99bdc4b0-959d-541e-bc59-7aa5706cf282",
+      "c4d96f4e-c766-5c79-a8c9-1f023647618b",
+      "c98a64a0-0940-5835-a617-c26220a5d9a2",
+      "e3d79e11-9064-5f15-ac93-929e08114601"
+     ]
+    }
+   },
+   "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+    "prompt_1_0_0": {
+     "records": 23,
+     "reference": {
+      "PRESENT": 0,
+      "ABSENT": 23,
+      "UNCERTAIN": 0
+     },
+     "model": {
+      "PRESENT": 0,
+      "ABSENT": 23,
+      "ABSTAIN": 0,
+      "NO_VALID_OUTPUT": 0,
+      "NOT_ATTEMPTED": 0
+     },
+     "model_present_on_decided_records": 0,
+     "true_present": 0,
+     "false_present": 0,
+     "true_absent": 23,
+     "missed_reference_present_as_absent": 0,
+     "reference_present_recovered": "0/0",
+     "recall_on_reference_present": null,
+     "precision": null,
+     "false_present_rate": null,
+     "false_present_rate_upper_95_descriptive": null
+    },
+    "prompt_1_1_0": {
+     "records": 23,
+     "reference": {
+      "PRESENT": 0,
+      "ABSENT": 23,
+      "UNCERTAIN": 0
+     },
+     "model": {
+      "PRESENT": 0,
+      "ABSENT": 23,
+      "ABSTAIN": 0,
+      "NO_VALID_OUTPUT": 0,
+      "NOT_ATTEMPTED": 0
+     },
+     "model_present_on_decided_records": 0,
+     "true_present": 0,
+     "false_present": 0,
+     "true_absent": 23,
+     "missed_reference_present_as_absent": 0,
+     "reference_present_recovered": "0/0",
+     "recall_on_reference_present": null,
+     "precision": null,
+     "false_present_rate": null,
+     "false_present_rate_upper_95_descriptive": null
+    },
+    "delta": {
+     "false_present": 0,
+     "true_present": 0,
+     "model_present_on_decided_records": 0,
+     "precision": null,
+     "false_present_rate": null,
+     "recall_on_reference_present": null
+    },
+    "changed_classifications": {
+     "PRESENT_to_ABSENT": 0,
+     "PRESENT_to_ABSTAIN": 0,
+     "ABSENT_to_PRESENT": 0,
+     "ABSENT_to_ABSTAIN": 0,
+     "PRESENT_to_PRESENT": 0,
+     "ABSENT_to_ABSENT": 23
+    },
+    "changed_classification_records": {
+     "PRESENT_to_ABSENT": [],
+     "PRESENT_to_ABSTAIN": [],
+     "ABSENT_to_PRESENT": [],
+     "ABSENT_to_ABSTAIN": [],
+     "PRESENT_to_PRESENT": [],
+     "ABSENT_to_ABSENT": [
+      "17064c93-71cf-5474-ba7f-39ccd516782f",
+      "1a659352-390f-5c53-97de-0f725d017f46",
+      "203268d4-baf6-5410-a001-cf77843e96e3",
+      "37bf2146-b9fc-5e5a-b35b-d59f5f6bfc57",
+      "3d224ece-4791-550e-8a47-352f9c568b92",
+      "47b3c6ea-dff4-50c4-b9fd-15874b743288",
+      "4a3fc738-bb4a-5992-bb2e-2e422b9f4a00",
+      "7c8a2ac5-1fdd-5c72-bdb5-4422a11e4084",
+      "96054702-3d78-55b0-b5b9-ed63e611c6d7",
+      "99bdc4b0-959d-541e-bc59-7aa5706cf282",
+      "9f91eeea-25e6-5a9e-89e6-54d4490ecd7c",
+      "ac423fe4-a4b4-589d-ac49-96932ed51d54",
+      "b7996f9d-72fe-5544-a30a-ce9270edfe09",
+      "bf04af60-1364-5fd0-8f4f-a8104d131aff",
+      "c4d96f4e-c766-5c79-a8c9-1f023647618b",
+      "c98a64a0-0940-5835-a617-c26220a5d9a2",
+      "d6bff833-780d-55d3-a5ad-1effebb8a328",
+      "e35f990d-117a-59d1-b54e-5165632378bf",
+      "e3d79e11-9064-5f15-ac93-929e08114601",
+      "e9edbbaa-5331-5584-8d3e-847c8f759551",
+      "f876b0be-fa18-5b60-9fdd-b505e7529413",
+      "f98ff185-01b0-5612-9c36-07b1fe5dea5f",
+      "fa1a8536-4624-5386-b814-c829932cb1ab"
+     ]
+    }
+   }
+  }
+ },
+ "mission_1_85_9_reading_unchanged": "PILOT_OUTSIDE_PROPOSED_BOUND"
+}

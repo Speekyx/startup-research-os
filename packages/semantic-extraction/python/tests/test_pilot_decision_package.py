@@ -491,10 +491,10 @@ class TestRunnerEnforcement:
         with pytest.raises(runner.Refused) as refused:
             runner.main(["--execute"])
         assert refused.value.refusal == "APPROVAL_SHA256_NOT_SUPPLIED"
-        # Mission 1.85.11: the current packet (version 5) has no approval; refused before the key.
+        # Mission 1.85.12: the v5 approval exists and is spent; a wrong digest is refused before the key.
         with pytest.raises(runner.Refused) as refused:
             runner.main(["--execute", "--approval-sha256", "0" * 64])
-        assert refused.value.refusal == "OPERATOR_APPROVAL_NOT_RECORDED"
+        assert refused.value.refusal == "APPROVAL_FILE_DIGEST_MISMATCH"
 
 
 class TestNoProviderCallAndNoApproval:
@@ -723,9 +723,11 @@ class TestRecordedDecisionsAndFrozenPacket:
         assert "packet_sha256" in packet["approval_requirements"]["must_name"]
         # Mission 1.85.9: the one approval was the operator's, not a merge, and its attempt spends it.
         # Mission 1.85.11: that approval is the spent Mission 1.85.9 one; the current packet has none.
-        approvals = list(DATA.glob("semantic-extraction-evaluation-approval*"))
-        assert approvals == [runner.HISTORICAL_APPROVAL] and runner.HISTORICAL_ATTEMPT.exists()
-        assert not runner.APPROVAL.exists() and not runner.ATTEMPT.exists()
+        # Mission 1.85.12: the v5 approval was also the operator's, and its attempt spends it.
+        approvals = sorted(DATA.glob("semantic-extraction-evaluation-approval*"))
+        assert approvals == [runner.HISTORICAL_APPROVAL, runner.APPROVAL]
+        assert runner.HISTORICAL_ATTEMPT.exists() and runner.ATTEMPT.exists()
+        assert json.loads(runner.APPROVAL.read_text("utf-8"))["approved_by"] == "operator-a"
         assert (
             json.loads(runner.HISTORICAL_APPROVAL.read_text("utf-8"))["approved_by"] == "operator-a"
         )
