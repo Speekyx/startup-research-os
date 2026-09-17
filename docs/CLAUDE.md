@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.175
-Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.9)
+Version: 1.176
+Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.10)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.176 | 2026-09-17 | **WAITING_FOR_POST_MODEL_OPERATOR_REVIEW: the nine disagreements can be reviewed, and none has been.** Roadmap N08-B-PILOT; 0 provider calls, 0 reruns. **Tool**: loopback page with the blind reference untouched, model quotes rebuilt from frozen surfaces and offsets, the frozen definition quoted; four choices, no default, no bulk. **Provenance**: POST_MODEL_OPERATOR_REVIEW, never blind, never a replacement, refuses blind attestations, bound to every pilot digest, STALE on change. **Unchanged**: blind annotation `449ff10f...`, Mission 1.85.9 reading PILOT_OUTSIDE_PROPOSED_BOUND. Transport repair verified on loopback tests. `mission-1.85.10-report.md`. |
 | 1.175 | 2026-09-17 | **DEVELOPMENT_PILOT_EXECUTED_PARTIAL_RESULTS_READY_FOR_OPERATOR_REVIEW: the first real semantic extraction ran once, stopped on a network reset, and was not rerun.** Roadmap N08-B-PILOT. **Approved** by operator-a for packet `5f96b418...` only, one execution. **Audited first**: the runner could not have reached its credential, could have retried a max_tokens cut, and would have lost the run on an unclassified error; all fixed before the approval, evaluation rules frozen in code. **Ran**: 24 calls, 23 accepted, 22 unattempted after a 763 s stall and reset; $2.440713 of $9. **Read**: REPORTED_FAILED_ATTEMPT false PRESENT 9/18 OUTSIDE bound, 9/9 human PRESENT found; NEGATIVE_EVALUATION insufficient support; validator 23/24, 0 unsupported. PILOT_NOT_CERTIFICATION. `mission-1.85.9-report.md`. |
 | 1.174 | 2026-09-17 | **READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL: the operator's decisions are recorded, and the packet is frozen for an approval nobody has given.** Roadmap N08-B-PILOT; 0 provider calls, 0 key reads, 0 approvals, 0 attempts. **Recorded** by operator-a at 2026-09-17T15:37:35+04:00: 9 thresholds authorised, flip rate rejected for this first pilot, retry ratified, ceiling $9.000000 accepted. **Validated** strictly: a malformed record is refused, never repaired; 0 problems. **Packet** v4 `5f96b418...` binds the retry policy, the threshold decisions and the decisions file by digest; READY with no blockers; an approval naming the previous digest is refused. **Fixed** a Windows reset race in the egress review server. NO EXECUTION HAS BEEN AUTHORISED. `mission-1.85.8-report.md`. |
 | 1.173 | 2026-09-17 | **FINAL_OPERATOR_DECISIONS_PREPARED: the three remaining decisions have their facts, and none is made.** Roadmap N08-B-PILOT; 0 provider calls, 0 token counts, 0 egress, 0 approvals. **Measured** offline: 46 approved requests, 322,746 body bytes. **Verified** from first-party docs: `claude-sonnet-5` ACTIVE, $2/$10 per MTok, ZDR NOT_ESTABLISHED, no substitution. **Cost**: planning $0.838, retry worst case $6.066 over 92 calls, proposed ceiling $9 (not $206.55). **Enforcement**: the ceiling was an approval field only; the runner now refuses any call that could cross the accepted ceiling, charges reported usage, and stops above the conservative input bound. **Packet** v3 `63c7302d...` BLOCKED_OPERATOR_DECISIONS on 10 thresholds, the retry reading and the ceiling. `mission-1.85.7-report.md`. |
@@ -3208,6 +3209,26 @@ the operator.**
 **Next is the operator's review of the 9 REPORTED_FAILED_ATTEMPT disagreements and of the partial run.** **Do not
 rerun, open HOLDOUT, modify the annotation, promote any finding, or start N08-C. Any further execution needs a new
 packet digest and a new explicit approval. Mission 1.85.10 was not started.**
+
+
+**ANSWERED IN 1.176 (Mission 1.85.10). N08-B-PILOT: the nine disagreements are ready for the operator, who has
+not reviewed them yet.**
+
+    set           9 exact ids, derived from the run summary and the blind annotation, checked against the evaluation
+    page          loopback only; blind reference shown, never editable; 13 model quotes rebuilt and digest-verified
+    choices       OVERREAD / POST_MODEL_HUMAN_REVISION / LABEL_DEFINITION_AMBIGUOUS / UNRESOLVED; no default
+    provenance    POST_MODEL_OPERATOR_REVIEW, blind false, bound to every pilot digest
+    unchanged     blind annotation 449ff10f...; Mission 1.85.9 reading PILOT_OUTSIDE_PROPOSED_BOUND
+
+- **A LABEL SEEN AFTER THE MODEL IS A DIFFERENT KIND OF RECORD.** It sits beside the blind reference and never
+  rewrites it or its attestation.
+- **REBUILD, DO NOT COPY.** Offsets and digests already committed recover every quote from the frozen surface.
+- **FREEZE THE RECOMMENDATION RULE BEFORE THE CHOICES.** Counts map to recommendations mechanically, and nothing
+  is revised by the rule.
+
+**Next is the operator reviewing the nine records in the local page, then `import`.** **Do not choose for the
+operator, edit the blind annotation, rerun, change the prompt, create a packet or call a provider. Mission 1.85.11
+was not started.**
 
 
 

@@ -254,6 +254,11 @@ jobs:
       - name: Semantic extraction pilot evaluation is current
         run: uv run python infrastructure/scripts/evaluate_semantic_extraction_pilot.py --check
 
+      # Mission 1.85.10. The post-model operator review, if recorded, still binds the exact pilot inputs
+      # and reproduces. Reads committed artifacts only; no database, no provider.
+      - name: Semantic extraction post-model review is current
+        run: uv run python infrastructure/scripts/semantic_disagreement_review.py check
+
       # Mission 1.39 §34. The convergence registry rendered into its artifact.
       # It reads repository code and no database, so unlike the calibration
       # feasibility audit it can live here: an empty deployment changes nothing
