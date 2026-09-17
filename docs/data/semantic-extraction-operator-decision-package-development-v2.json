@@ -1,0 +1,446 @@
+{
+ "$comment": "FINAL OPERATOR DECISION PACKAGE v2 (prepared in Mission 1.85.7, cost facts re-measured for prompt 1.1.0 in Mission 1.85.11). Facts behind the operator's three decisions, rendered from committed artifacts. The decisions live in the operator-owned decisions file; decision_state only mirrors it. Rendering decides nothing, and neither recording a decision nor merging authorises a provider call.",
+ "package_id": "semantic-extraction-operator-decision-package-development",
+ "version": "2.0.0",
+ "mission": "1.85.11",
+ "reference_strength": "SINGLE_HUMAN_REFERENCE",
+ "result_scope": "DEVELOPMENT_PILOT",
+ "result_label": "PILOT_NOT_CERTIFICATION",
+ "inputs": {
+  "threshold_partition_sha256": "6b6ff60fa238c9b890dd881fc81f641241ec8bdc3b3e7f186cd32f4652029ccf",
+  "reference_sha256": "449ff10f8a60217bbf4b7887254cf81b492fdba962b39283f39d2acdf1a9fa3c",
+  "eligibility_sha256": "299ebc0bbdc115d1d7250cb53e5426541ac195879e35658ac317d6efe1258640",
+  "request_sizes_sha256": "55fdbe781a1b5d2c361c264d3d28dcac9ae701a052cbde26660e8836367620c3",
+  "provider_verification_sha256": "342d9a537ba49465f412b6686f9e03dcef4a0f39617972dd2738d472e6d717ce"
+ },
+ "reference_composition_on_approved_records": {
+  "approved_records": 46,
+  "REPORTED_FAILED_ATTEMPT": {
+   "PRESENT": 15,
+   "ABSENT": 29,
+   "UNCERTAIN": 2
+  },
+  "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+   "PRESENT": 0,
+   "ABSENT": 45,
+   "UNCERTAIN": 1
+  }
+ },
+ "composition_consequence": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION has no PRESENT cell in the single-human reference, so it cannot satisfy a minimum-PRESENT composition requirement and cannot provide meaningful positive-class recall in this pilot. That is not a model failure; PILOT_INSUFFICIENT_SUPPORT is a valid outcome, and no threshold is weakened to avoid it.",
+ "A_pilot_thresholds": [
+  {
+   "item_id": "false_present_rate_upper_95::NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "metric": "false_present_rate_upper_95",
+   "label": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "proposed_value": 0.1,
+   "status": "PROPOSED_NOT_AUTHORISED",
+   "reference_needed": "SINGLE_HUMAN_REFERENCE",
+   "why": "a false PRESENT writes a dissatisfaction nobody expressed into a counting dimension",
+   "can_measure": "how many of the model's PRESENT calls on this label the one human did not mark PRESENT, and the Clopper-Pearson upper bound on that rate",
+   "cannot_establish": "a certified false-PRESENT rate, which needs adjudicated gold and holdout",
+   "current_support": "reference PRESENT 0, ABSENT 45, UNCERTAIN 1 over 46 approved records; the bound needs at least 30 PRESENT predictions, and with 0 reference PRESENT every PRESENT prediction would count as a false PRESENT",
+   "expected_result": "PILOT_INSUFFICIENT_SUPPORT is the likely outcome unless the model makes at least 30 PRESENT calls",
+   "result_vocabulary": [
+    "PILOT_WITHIN_PROPOSED_BOUND",
+    "PILOT_OUTSIDE_PROPOSED_BOUND",
+    "PILOT_INSUFFICIENT_SUPPORT"
+   ],
+   "operator_choices": [
+    "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
+    "REVISE_BEFORE_THE_PILOT_RUN",
+    "REJECT_FOR_THE_PILOT"
+   ]
+  },
+  {
+   "item_id": "false_present_rate_upper_95::REPORTED_FAILED_ATTEMPT",
+   "metric": "false_present_rate_upper_95",
+   "label": "REPORTED_FAILED_ATTEMPT",
+   "proposed_value": 0.2,
+   "status": "PROPOSED_NOT_AUTHORISED",
+   "reference_needed": "SINGLE_HUMAN_REFERENCE",
+   "why": "a false PRESENT asserts a failure the asker did not report",
+   "can_measure": "the false-PRESENT rate among the model's PRESENT calls against the one human's cells, with its upper bound",
+   "cannot_establish": "a certified rate against adjudicated gold or on holdout",
+   "current_support": "reference PRESENT 15, ABSENT 29, UNCERTAIN 2 over 46 approved records; the bound needs at least 15 PRESENT predictions",
+   "expected_result": "any of the three pilot readings; depends on how many PRESENT calls the model makes",
+   "result_vocabulary": [
+    "PILOT_WITHIN_PROPOSED_BOUND",
+    "PILOT_OUTSIDE_PROPOSED_BOUND",
+    "PILOT_INSUFFICIENT_SUPPORT"
+   ],
+   "operator_choices": [
+    "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
+    "REVISE_BEFORE_THE_PILOT_RUN",
+    "REJECT_FOR_THE_PILOT"
+   ]
+  },
+  {
+   "item_id": "min_true_present_and_min_true_absent::each extractable label",
+   "metric": "min_true_present_and_min_true_absent",
+   "label": "each extractable label",
+   "proposed_value": 1,
+   "status": "PROPOSED_NOT_AUTHORISED",
+   "reference_needed": "SINGLE_HUMAN_REFERENCE",
+   "why": "a classifier that always answers ABSENT, always PRESENT or always abstains must not pass",
+   "can_measure": "whether the model finds at least one PRESENT and one ABSENT the human also marked, per label",
+   "cannot_establish": "anything about labels the reference has no PRESENT for",
+   "current_support": "REPORTED_FAILED_ATTEMPT has 15 PRESENT and 29 ABSENT; NEGATIVE_EVALUATION_OF_NAMED_SOLUTION has 0 PRESENT, so its true-PRESENT half cannot be satisfied in this pilot",
+   "expected_result": "PILOT_INSUFFICIENT_SUPPORT for NEGATIVE_EVALUATION_OF_NAMED_SOLUTION by construction; either reading for REPORTED_FAILED_ATTEMPT",
+   "result_vocabulary": [
+    "PILOT_WITHIN_PROPOSED_BOUND",
+    "PILOT_OUTSIDE_PROPOSED_BOUND",
+    "PILOT_INSUFFICIENT_SUPPORT"
+   ],
+   "operator_choices": [
+    "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
+    "REVISE_BEFORE_THE_PILOT_RUN",
+    "REJECT_FOR_THE_PILOT"
+   ]
+  },
+  {
+   "item_id": "mechanical_unsupported_assertions_accepted::all",
+   "metric": "mechanical_unsupported_assertions_accepted",
+   "label": "all",
+   "proposed_value": 0,
+   "status": "PROPOSED_NOT_AUTHORISED",
+   "reference_needed": "NONE",
+   "why": "an accepted quote that is not in the surface would be a validator defect",
+   "can_measure": "accepted findings whose quote is not the surface text at the computed offsets",
+   "cannot_establish": "semantic support, which needs a human reading",
+   "current_support": "needs no reference; 46 records would be attempted",
+   "expected_result": "PILOT_WITHIN_PROPOSED_BOUND or PILOT_OUTSIDE_PROPOSED_BOUND; never insufficient",
+   "result_vocabulary": [
+    "PILOT_WITHIN_PROPOSED_BOUND",
+    "PILOT_OUTSIDE_PROPOSED_BOUND",
+    "PILOT_INSUFFICIENT_SUPPORT"
+   ],
+   "operator_choices": [
+    "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
+    "REVISE_BEFORE_THE_PILOT_RUN",
+    "REJECT_FOR_THE_PILOT"
+   ]
+  },
+  {
+   "item_id": "validator_acceptance_rate::all",
+   "metric": "validator_acceptance_rate",
+   "label": "all",
+   "proposed_value": 0.95,
+   "status": "PROPOSED_NOT_AUTHORISED",
+   "reference_needed": "NONE",
+   "why": "a refusal is a failure, never an abstention",
+   "can_measure": "accepted extractions over records attempted",
+   "cannot_establish": "that accepted extractions are correct",
+   "current_support": "needs no reference; 46 records attempted against a minimum of 20",
+   "expected_result": "PILOT_WITHIN_PROPOSED_BOUND or PILOT_OUTSIDE_PROPOSED_BOUND",
+   "result_vocabulary": [
+    "PILOT_WITHIN_PROPOSED_BOUND",
+    "PILOT_OUTSIDE_PROPOSED_BOUND",
+    "PILOT_INSUFFICIENT_SUPPORT"
+   ],
+   "operator_choices": [
+    "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
+    "REVISE_BEFORE_THE_PILOT_RUN",
+    "REJECT_FOR_THE_PILOT"
+   ]
+  },
+  {
+   "item_id": "unnecessary_abstention_rate_on_gold_decided::all",
+   "metric": "unnecessary_abstention_rate_on_gold_decided",
+   "label": "all",
+   "proposed_value": 0.1,
+   "status": "PROPOSED_NOT_AUTHORISED",
+   "reference_needed": "SINGLE_HUMAN_REFERENCE",
+   "why": "abstention is benign but must not replace answering",
+   "can_measure": "how often the model abstains on records the one human decided",
+   "cannot_establish": "that the human's decided records are decidable for another reader",
+   "current_support": "records the human decided (not UNCERTAIN): REPORTED_FAILED_ATTEMPT 44, NEGATIVE_EVALUATION_OF_NAMED_SOLUTION 45; minimum 20",
+   "expected_result": "PILOT_WITHIN_PROPOSED_BOUND or PILOT_OUTSIDE_PROPOSED_BOUND",
+   "result_vocabulary": [
+    "PILOT_WITHIN_PROPOSED_BOUND",
+    "PILOT_OUTSIDE_PROPOSED_BOUND",
+    "PILOT_INSUFFICIENT_SUPPORT"
+   ],
+   "operator_choices": [
+    "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
+    "REVISE_BEFORE_THE_PILOT_RUN",
+    "REJECT_FOR_THE_PILOT"
+   ]
+  },
+  {
+   "item_id": "run_to_run_label_flip_rate::each extractable label",
+   "metric": "run_to_run_label_flip_rate",
+   "label": "each extractable label",
+   "proposed_value": 0.1,
+   "status": "PROPOSED_NOT_AUTHORISED",
+   "reference_needed": "NONE",
+   "why": "a result that changes on re-run cannot be audited",
+   "can_measure": "nothing in one run: it compares repeated runs",
+   "cannot_establish": "repeatability, from a single run",
+   "current_support": "requires 3 pinned runs; the current packet and ceiling cover one run with at most one schema retry per record, and the budget is NOT doubled automatically",
+   "expected_result": "PILOT_INSUFFICIENT_SUPPORT for a single run; see repeatability_disposition",
+   "repeatability_choices": [
+    "DEFER_TO_A_LATER_REPEATABILITY_RUN",
+    "AUTHORISE_A_SEPARATELY_APPROVED_SECOND_RUN_LATER",
+    "REJECT_FOR_THIS_FIRST_PILOT"
+   ],
+   "result_vocabulary": [
+    "PILOT_WITHIN_PROPOSED_BOUND",
+    "PILOT_OUTSIDE_PROPOSED_BOUND",
+    "PILOT_INSUFFICIENT_SUPPORT"
+   ],
+   "operator_choices": [
+    "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
+    "REVISE_BEFORE_THE_PILOT_RUN",
+    "REJECT_FOR_THE_PILOT"
+   ]
+  },
+  {
+   "item_id": "composition_gate::each extractable label, each split",
+   "metric": "composition_gate",
+   "label": "each extractable label, each split",
+   "proposed_value": {
+    "min_present": 4,
+    "min_absent": 4
+   },
+   "status": "PROPOSED_NOT_AUTHORISED",
+   "reference_needed": "SINGLE_HUMAN_REFERENCE",
+   "why": "a split without enough of both states cannot test anything",
+   "can_measure": "whether the one human's cells hold at least 4 PRESENT and 4 ABSENT per label",
+   "cannot_establish": "a gold composition, which needs adjudication",
+   "current_support": "REPORTED_FAILED_ATTEMPT 15 PRESENT / 29 ABSENT (met); NEGATIVE_EVALUATION_OF_NAMED_SOLUTION 0 PRESENT / 45 ABSENT (not met)",
+   "expected_result": "REFERENCE_SET_INSUFFICIENT for NEGATIVE_EVALUATION_OF_NAMED_SOLUTION in this pilot",
+   "result_vocabulary": [
+    "PILOT_WITHIN_PROPOSED_BOUND",
+    "PILOT_OUTSIDE_PROPOSED_BOUND",
+    "PILOT_INSUFFICIENT_SUPPORT"
+   ],
+   "operator_choices": [
+    "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
+    "REVISE_BEFORE_THE_PILOT_RUN",
+    "REJECT_FOR_THE_PILOT"
+   ]
+  },
+  {
+   "item_id": "recall::each extractable label",
+   "metric": "recall",
+   "label": "each extractable label",
+   "proposed_value": null,
+   "status": "PROPOSED_NOT_AUTHORISED",
+   "reference_needed": "SINGLE_HUMAN_REFERENCE",
+   "why": "descriptive only; conservative misses are tolerated",
+   "can_measure": "the share of the one human's PRESENT cells the model also marks PRESENT",
+   "cannot_establish": "recall against gold; for a label with no reference PRESENT, anything at all",
+   "current_support": "REPORTED_FAILED_ATTEMPT 15 reference PRESENT; NEGATIVE_EVALUATION_OF_NAMED_SOLUTION 0, so positive-class recall is UNDEFINED there",
+   "expected_result": "descriptive; UNDEFINED for NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "result_vocabulary": [
+    "PILOT_WITHIN_PROPOSED_BOUND",
+    "PILOT_OUTSIDE_PROPOSED_BOUND",
+    "PILOT_INSUFFICIENT_SUPPORT"
+   ],
+   "operator_choices": [
+    "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
+    "REVISE_BEFORE_THE_PILOT_RUN",
+    "REJECT_FOR_THE_PILOT"
+   ]
+  },
+  {
+   "item_id": "cost_and_latency::all",
+   "metric": "cost_and_latency",
+   "label": "all",
+   "proposed_value": null,
+   "status": "PROPOSED_NOT_AUTHORISED",
+   "reference_needed": "NONE",
+   "why": "cost is bounded by the accepted ceiling; latency is recorded, never quality",
+   "can_measure": "actual usage and elapsed time",
+   "cannot_establish": "quality",
+   "current_support": "needs no reference",
+   "expected_result": "recorded; not a quality criterion",
+   "result_vocabulary": [
+    "PILOT_WITHIN_PROPOSED_BOUND",
+    "PILOT_OUTSIDE_PROPOSED_BOUND",
+    "PILOT_INSUFFICIENT_SUPPORT"
+   ],
+   "operator_choices": [
+    "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
+    "REVISE_BEFORE_THE_PILOT_RUN",
+    "REJECT_FOR_THE_PILOT"
+   ]
+  }
+ ],
+ "B_retry": {
+  "proposed_reading": [
+   "at most ONE retry per record",
+   "retry ONLY when the forced-tool payload is missing, is not valid against the strict schema, or is structurally incomplete",
+   "no retry on a deterministic validator refusal of a schema-valid payload",
+   "no retry on a provider or network error",
+   "no retry because a schema-valid semantic answer appears wrong",
+   "no provider or model fallback"
+  ],
+  "inside_the_retry_class": [
+   "the gateway raises SchemaValidationError: no tool_use payload, or one failing the strict schema",
+   "a required key such as extraction_state or findings is missing",
+   "a finding object lacks a required field"
+  ],
+  "outside_the_retry_class": [
+   "a schema-valid payload whose quote is not in the surface (validator refusal)",
+   "a payload whose extraction_state disagrees with its findings, refused by the validator",
+   "HTTP 400/429/5xx, a timeout or a connection error",
+   "stop_reason max_tokens (output limit reached) or a refusal",
+   "a schema-valid answer the operator believes is semantically wrong"
+  ],
+  "implemented_as": "sros_semantic_extraction.may_retry: only AttemptOutcome.SCHEMA_FAILURE with 0 retries used is retried",
+  "cost_consequence": "the retry worst case (every record retried once) is covered by the proposed ceiling",
+  "operator_choices": [
+   "RATIFY",
+   "REVISE",
+   "REJECT"
+  ]
+ },
+ "C_hard_ceiling": {
+  "provider": "anthropic",
+  "model": "claude-sonnet-5",
+  "model_state": "ACTIVE",
+  "approved_record_count": 46,
+  "EXPECTED_CALLS": 46,
+  "MAX_CALLS_WITH_RETRY": 92,
+  "planning_estimate_usd": "0.898863",
+  "conservative_bound_usd": "3.185090",
+  "retry_worst_case_usd": "6.370179",
+  "per_call_documented_maximum_usd": "2.245056",
+  "proposed_hard_ceiling_usd": "9.000000",
+  "old_full_context_window_bound_usd": "206.5452",
+  "old_bound_reused": false,
+  "pricing": {
+   "input_usd_per_mtok": "2",
+   "output_usd_per_mtok": "10",
+   "multiplier_applied": "1.1",
+   "source": "docs/data/anthropic-claude-sonnet-5-pilot-verification-v1.json",
+   "source_sha256": "342d9a537ba49465f412b6686f9e03dcef4a0f39617972dd2738d472e6d717ce",
+   "retrieved_on": "2026-09-17"
+  },
+  "token_estimation_methodology": {
+   "cost_model": "semantic-extraction-pilot-cost-model@1.0.0",
+   "measured": "exact UTF-8 bytes of each of the 46 request bodies, built offline by the runner's own prompt, strict tool and body builder (docs/data/semantic-extraction-request-size-development-v1.json)",
+   "no_local_tokenizer": "NOT_PUBLISHED: token counts come from the token-counting endpoint, which would transmit the text, and are documented as estimates",
+   "conservative_input_tokens_per_call": "request body bytes + 474 documented tool-use system prompt tokens + 2000 policy allowance for the undocumented strict prompt; counting a byte as a token over-counts English text and code, and two real strict requests in this repository reported about 0.40 tokens per character",
+   "conservative_output_tokens_per_call": 4096,
+   "planning_input_tokens_per_call": "ceil(body bytes x 0.40) + 474",
+   "planning_output_tokens_per_call": 1000,
+   "multiplier": "the US-only 1.1x is applied because inference_geo is not sent and the workspace default is not observable",
+   "ceiling_rule": "retry worst case + one call at the documented maximum (full context window and the runner's output bound), rounded up to a whole dollar"
+  },
+  "enforcement": {
+   "preflight": "the runner refuses before any transport if the accepted ceiling is below retry worst case + one documented-maximum call",
+   "before_each_call": "including a retry: refused if spent + one documented-maximum call would exceed the accepted ceiling",
+   "accumulation": "each HTTP 200 adds its reported usage at the verified prices and multiplier; any call without reported usage is charged at the documented maximum",
+   "estimate_check": "a call whose reported input tokens exceed that record's conservative bound stops the run, fail-closed"
+  },
+  "operator_choices": [
+   "ACCEPT",
+   "REVISE",
+   "REJECT"
+  ],
+  "per_record_conservative_input_tokens": {
+   "fa1a8536-4624-5386-b814-c829932cb1ab": 11159,
+   "1a659352-390f-5c53-97de-0f725d017f46": 11193,
+   "17064c93-71cf-5474-ba7f-39ccd516782f": 14724,
+   "ac423fe4-a4b4-589d-ac49-96932ed51d54": 9476,
+   "203268d4-baf6-5410-a001-cf77843e96e3": 10230,
+   "9f91eeea-25e6-5a9e-89e6-54d4490ecd7c": 12208,
+   "37bf2146-b9fc-5e5a-b35b-d59f5f6bfc57": 9446,
+   "99bdc4b0-959d-541e-bc59-7aa5706cf282": 9217,
+   "bf04af60-1364-5fd0-8f4f-a8104d131aff": 10475,
+   "e9edbbaa-5331-5584-8d3e-847c8f759551": 11051,
+   "d6bff833-780d-55d3-a5ad-1effebb8a328": 11670,
+   "7c8a2ac5-1fdd-5c72-bdb5-4422a11e4084": 9025,
+   "c4d96f4e-c766-5c79-a8c9-1f023647618b": 9301,
+   "3d224ece-4791-550e-8a47-352f9c568b92": 16444,
+   "96054702-3d78-55b0-b5b9-ed63e611c6d7": 10960,
+   "f876b0be-fa18-5b60-9fdd-b505e7529413": 9380,
+   "f98ff185-01b0-5612-9c36-07b1fe5dea5f": 10199,
+   "b7996f9d-72fe-5544-a30a-ce9270edfe09": 9122,
+   "c98a64a0-0940-5835-a617-c26220a5d9a2": 9406,
+   "47b3c6ea-dff4-50c4-b9fd-15874b743288": 10078,
+   "e3d79e11-9064-5f15-ac93-929e08114601": 8898,
+   "4a3fc738-bb4a-5992-bb2e-2e422b9f4a00": 9553,
+   "e35f990d-117a-59d1-b54e-5165632378bf": 9394,
+   "3d0568c4-5876-5863-921b-2c0fc3d3e27a": 10591,
+   "f269e805-7ccf-5a79-a765-e68f31e7b1bd": 11086,
+   "db663e12-3ffd-59e5-b31f-1de31f41acbb": 13048,
+   "2c9e95be-2262-52d0-947f-e6a268020b71": 9668,
+   "42642469-23b7-5a7a-b897-5052012d9fd3": 13713,
+   "3194f76d-a845-54c5-9a14-bd0520da6cbb": 10130,
+   "6dfbef0a-3a64-5fd1-9433-21f7cdb01402": 13326,
+   "e2162aae-f496-58d4-b905-73e4b0164a66": 9856,
+   "dbf8a356-e318-566d-8ce4-327ac6b45166": 9883,
+   "71928de8-fd31-5c35-8f80-187d2bb7ed05": 11804,
+   "5d0a1e34-7eeb-5820-89f2-7cf9706a8fb8": 24509,
+   "6bd78806-211b-5d3b-b10a-d60f4fe2bca3": 9620,
+   "a561974f-fc12-564d-9cb5-51c5bd59c40e": 10535,
+   "1d65b04f-4da6-5d67-bb0a-d74ae98ad048": 9210,
+   "c1180149-42cd-5088-ab01-b3ff8694d73d": 9690,
+   "c128f807-cbdf-512b-bbde-30a00a9fdb39": 11964,
+   "58966c7e-425d-59de-85ce-116ae98309ab": 12913,
+   "19c64e71-5844-520d-844c-97c1f0aaa750": 10940,
+   "f53c6872-b340-5e5b-845c-e8b2bd3147d8": 10738,
+   "88376fa5-5cd3-58f9-b099-bad69077b0f7": 10124,
+   "03dc37e7-8e12-5d4b-87f4-2bb7461b1510": 8994,
+   "7eed79ff-81d0-50c1-94c2-3a1b6fa3b4a8": 11695,
+   "02dd341e-30e8-538b-986a-5d4c26a5791f": 9042
+  }
+ },
+ "decision_state": {
+  "decisions_file": "docs/data/semantic-extraction-operator-decisions-development-v1.json",
+  "decisions_sha256": "ac2bb1d977f0f7fb9ffaa133aa9564f93b7c499b15956f4b06ad1bef2ba94994",
+  "decided_by": "operator-a",
+  "decided_at": "2026-09-17T15:37:35+04:00",
+  "thresholds_unmade": 0,
+  "thresholds": [
+   {
+    "item_id": "false_present_rate_upper_95::NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT"
+   },
+   {
+    "item_id": "false_present_rate_upper_95::REPORTED_FAILED_ATTEMPT",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT"
+   },
+   {
+    "item_id": "min_true_present_and_min_true_absent::each extractable label",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT"
+   },
+   {
+    "item_id": "mechanical_unsupported_assertions_accepted::all",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT"
+   },
+   {
+    "item_id": "validator_acceptance_rate::all",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT"
+   },
+   {
+    "item_id": "unnecessary_abstention_rate_on_gold_decided::all",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT"
+   },
+   {
+    "item_id": "run_to_run_label_flip_rate::each extractable label",
+    "operator_decision": "REJECT_FOR_THE_PILOT",
+    "repeatability_disposition": "REJECT_FOR_THIS_FIRST_PILOT"
+   },
+   {
+    "item_id": "composition_gate::each extractable label, each split",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT"
+   },
+   {
+    "item_id": "recall::each extractable label",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT"
+   },
+   {
+    "item_id": "cost_and_latency::all",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT"
+   }
+  ],
+  "retry_decision": "RATIFY",
+  "ceiling_decision": "ACCEPT",
+  "accepted_hard_ceiling_usd": "9.000000",
+  "record_problems": []
+ }
+}

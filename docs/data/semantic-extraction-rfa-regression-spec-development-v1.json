@@ -1,0 +1,129 @@
+{
+ "$comment": "OFFLINE REGRESSION SPECIFICATION for REPORTED_FAILED_ATTEMPT (Mission 1.85.11). Ids and digests only. A targeted post-model development diagnostic for the next DEVELOPMENT pilot: not a threshold, not certification, not a rewrite of the Mission 1.85.9 result. Never part of any provider prompt.",
+ "spec_id": "semantic-extraction-rfa-regression-spec-development",
+ "version": "1.0.0",
+ "label": "REPORTED_FAILED_ATTEMPT",
+ "split": "DEVELOPMENT",
+ "inputs": {
+  "post_model_review_sha256": "390caadaaaacd8dd45b11e6a1ce837de76c83449f767cf001a53b580f4caa093",
+  "annotation_sha256": "449ff10f8a60217bbf4b7887254cf81b492fdba962b39283f39d2acdf1a9fa3c",
+  "eligibility_sha256": "299ebc0bbdc115d1d7250cb53e5426541ac195879e35658ac317d6efe1258640",
+  "corpus_sha256": "3e0b0a903a3a976cccc2ecff4721397ff3b85096634c286201b4e7433cb0438c"
+ },
+ "sets": {
+  "KNOWN_OVERREAD": {
+   "source": "Mission 1.85.10 POST_MODEL_OPERATOR_REVIEW, HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+   "desired_next_run_behaviour": "REPORTED_FAILED_ATTEMPT is not PRESENT",
+   "report": "count of records still PRESENT, and records without valid output, reported apart from every preregistered reading",
+   "records": [
+    {
+     "normalized_record_id": "17064c93-71cf-5474-ba7f-39ccd516782f",
+     "surface_sha256": "70486f6802b1ca84a63e8c38d12b820d504210e5e0c96b6f7ac41822120a25c2"
+    },
+    {
+     "normalized_record_id": "1a659352-390f-5c53-97de-0f725d017f46",
+     "surface_sha256": "dea3bf3d40f89c91348db8609ddf28c105024c2ffa46d0d542fc17a398626760"
+    },
+    {
+     "normalized_record_id": "203268d4-baf6-5410-a001-cf77843e96e3",
+     "surface_sha256": "fdb6b5cfa87fc4d2a4ff4411e577e7c8525a0a0c8a72fea580966c71d428256a"
+    },
+    {
+     "normalized_record_id": "37bf2146-b9fc-5e5a-b35b-d59f5f6bfc57",
+     "surface_sha256": "f56c63774966be50841cb31ef919535ea659f2851eb3b0622fd374466549b120"
+    },
+    {
+     "normalized_record_id": "9f91eeea-25e6-5a9e-89e6-54d4490ecd7c",
+     "surface_sha256": "f2cd0a74c2f667995730fe2fa64ea5f9b7abed0d16c8a830abaa0f0f0f6b8edd"
+    },
+    {
+     "normalized_record_id": "ac423fe4-a4b4-589d-ac49-96932ed51d54",
+     "surface_sha256": "1865020f0cba48dbed4f3d7533ae4ec3633b4f69364bea9a5397cbd9efae5bfa"
+    },
+    {
+     "normalized_record_id": "bf04af60-1364-5fd0-8f4f-a8104d131aff",
+     "surface_sha256": "1d6221ff1e8223c9f3d226f9ad624fed04442ea36a390a7c697c67e600627d2d"
+    },
+    {
+     "normalized_record_id": "d6bff833-780d-55d3-a5ad-1effebb8a328",
+     "surface_sha256": "a6903fb7063e9c164636d8e32f35d48accc316cd07204e0d4e5d0d40d26b0f19"
+    },
+    {
+     "normalized_record_id": "e35f990d-117a-59d1-b54e-5165632378bf",
+     "surface_sha256": "ddc7381ca99362070f28df277580cf3af67ed752f227ddd4754227d4707f210f"
+    }
+   ]
+  },
+  "POSITIVE_SENSITIVITY": {
+   "source": "blind SINGLE_HUMAN_REFERENCE, REPORTED_FAILED_ATTEMPT = PRESENT, EGRESS_APPROVED",
+   "desired_next_run_behaviour": "the revision keeps finding reference positives; precision is not bought by answering ABSENT everywhere",
+   "report": "true PRESENT, missed reference PRESENT and recall over this set, descriptive, with no threshold",
+   "records": [
+    {
+     "normalized_record_id": "19c64e71-5844-520d-844c-97c1f0aaa750",
+     "surface_sha256": "3fbdc56d7059242d0214958d1ede1f0149faf42c4b4767e2b4c63b47e139880f"
+    },
+    {
+     "normalized_record_id": "2c9e95be-2262-52d0-947f-e6a268020b71",
+     "surface_sha256": "a5a9c30048ac35613f3c210873016091207007d039d8bf1541e398dd10835bee"
+    },
+    {
+     "normalized_record_id": "47b3c6ea-dff4-50c4-b9fd-15874b743288",
+     "surface_sha256": "d543fdfd8ab6d45f2b216b0dbf83fbc15a20e7ef26a90e5490311363f0894b7a"
+    },
+    {
+     "normalized_record_id": "4a3fc738-bb4a-5992-bb2e-2e422b9f4a00",
+     "surface_sha256": "7ae8f3dfb8d97e4ae786443896fcbb90de5cd561b6adfe310e888625a4b6e48e"
+    },
+    {
+     "normalized_record_id": "6bd78806-211b-5d3b-b10a-d60f4fe2bca3",
+     "surface_sha256": "aad5998d4119d07de229709c51f0576091cc51d6a6f6a5a60f8e5b88aff1a2ad"
+    },
+    {
+     "normalized_record_id": "7c8a2ac5-1fdd-5c72-bdb5-4422a11e4084",
+     "surface_sha256": "f6bb50bc692e787e206bf74e97174eec940c6e323c152d2fe4ed910932d0ca05"
+    },
+    {
+     "normalized_record_id": "96054702-3d78-55b0-b5b9-ed63e611c6d7",
+     "surface_sha256": "70ab4463876798f80a4620ddb0e873e735dc39d9221e6ffaffaeb4bf37e49e56"
+    },
+    {
+     "normalized_record_id": "a561974f-fc12-564d-9cb5-51c5bd59c40e",
+     "surface_sha256": "12b0b01e55ac520507a4af70550eaa117adff9606db8096b87e34d526a29dd5e"
+    },
+    {
+     "normalized_record_id": "b7996f9d-72fe-5544-a30a-ce9270edfe09",
+     "surface_sha256": "db96588f1b73824f99547c706dbea2ef416f5e5d7e90ebe8e40279958bbbaefe"
+    },
+    {
+     "normalized_record_id": "e2162aae-f496-58d4-b905-73e4b0164a66",
+     "surface_sha256": "ebd146372d4dda73d58f59306b2feb1f0adf0937be21cdfcf7a7b2b26cb3f5b9"
+    },
+    {
+     "normalized_record_id": "e9edbbaa-5331-5584-8d3e-847c8f759551",
+     "surface_sha256": "12ee26a430ba565d443e1e40fc896fa653d95532fe7e897620f3e17f2839c9bb"
+    },
+    {
+     "normalized_record_id": "f269e805-7ccf-5a79-a765-e68f31e7b1bd",
+     "surface_sha256": "dcef1665ff17fbff260e8604e4a3cae0387a755fc608d53505b1101cd1eb157c"
+    },
+    {
+     "normalized_record_id": "f876b0be-fa18-5b60-9fdd-b505e7529413",
+     "surface_sha256": "37c3125a495d0264df8c4d12fc21cecd500d86b39bb88eb96823807c98180577"
+    },
+    {
+     "normalized_record_id": "f98ff185-01b0-5612-9c36-07b1fe5dea5f",
+     "surface_sha256": "39264eb4993ee2f0c951aa867b0e606744180a4ab3880c270655f09ac2372bab"
+    },
+    {
+     "normalized_record_id": "fa1a8536-4624-5386-b814-c829932cb1ab",
+     "surface_sha256": "f7a68a5b08f0745a181bfb96495623a9f6099a707d2ecb25c8c39a3c8c581442"
+    }
+   ]
+  }
+ },
+ "is_threshold": false,
+ "is_certification": false,
+ "rewrites_mission_1_85_9": false,
+ "sent_to_provider": false
+}

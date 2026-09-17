@@ -142,11 +142,16 @@ def test_a_second_execution_is_refused_before_the_key_or_any_transport(monkeypat
     monkeypatch.setattr(os, "environ", KeyTripwire(os.environ))
     monkeypatch.setattr(transport.UrllibTransport, "__init__", no_transport)
     monkeypatch.setattr(runner, "_load_compose_env", no_env)
+    # Mission 1.85.11: the current packet is version 5 and has no approval file.
     with pytest.raises(runner.Refused) as refused:
         runner.main(
             ["--execute", "--approval-sha256", APPROVAL_SHA, "--output-dir", str(REPO.parent / "x")]
         )
-    assert refused.value.refusal in {
-        "EVALUATION_APPROVAL_ALREADY_SPENT",
-        "PROVIDER_VERIFICATION_EXPIRED",
-    }
+    assert refused.value.refusal == "OPERATOR_APPROVAL_NOT_RECORDED"
+    # Even pointed at the spent approval file, it names the old packet and unlocks nothing.
+    monkeypatch.setattr(runner, "APPROVAL", APPROVAL_PATH)
+    with pytest.raises(runner.Refused) as refused:
+        runner.main(
+            ["--execute", "--approval-sha256", APPROVAL_SHA, "--output-dir", str(REPO.parent / "x")]
+        )
+    assert refused.value.refusal == "OPERATOR_APPROVAL_DOES_NOT_NAME_THIS_PACKET"

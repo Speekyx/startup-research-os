@@ -491,10 +491,10 @@ class TestRunnerEnforcement:
         with pytest.raises(runner.Refused) as refused:
             runner.main(["--execute"])
         assert refused.value.refusal == "APPROVAL_SHA256_NOT_SUPPLIED"
-        # Mission 1.85.9: the committed approval exists; any other digest is refused before the key.
+        # Mission 1.85.11: the current packet (version 5) has no approval; refused before the key.
         with pytest.raises(runner.Refused) as refused:
             runner.main(["--execute", "--approval-sha256", "0" * 64])
-        assert refused.value.refusal == "APPROVAL_FILE_DIGEST_MISMATCH"
+        assert refused.value.refusal == "OPERATOR_APPROVAL_NOT_RECORDED"
 
 
 class TestNoProviderCallAndNoApproval:
@@ -669,18 +669,19 @@ class TestRecordedDecisionsAndFrozenPacket:
 
     def test_any_bound_artifact_change_changes_the_digest(self, tmp_path, monkeypatch) -> None:
         renderer = load_script("render_semantic_extraction_packet")
-        assert renderer.build()["packet_sha256"] == PACKET["packet_sha256"]
+        current = json.loads(renderer.PACKET.read_text("utf-8"))
+        assert renderer.build()["packet_sha256"] == current["packet_sha256"]
         changed = copy.deepcopy(DECISIONS)
         changed["decided_at"] = "2026-09-17T15:37:36+04:00"
         path = tmp_path / "decisions.json"
         path.write_text(json.dumps(changed), encoding="utf-8")
         monkeypatch.setattr(renderer, "DECISIONS", path)
-        assert renderer.build()["packet_sha256"] != PACKET["packet_sha256"]
+        assert renderer.build()["packet_sha256"] != current["packet_sha256"]
         monkeypatch.undo()
         implementation = tmp_path / "request.py"
         implementation.write_bytes(renderer.RETRY_IMPLEMENTATION.read_bytes() + b"\n")
         monkeypatch.setattr(renderer, "RETRY_IMPLEMENTATION", implementation)
-        assert renderer.build()["packet_sha256"] != PACKET["packet_sha256"]
+        assert renderer.build()["packet_sha256"] != current["packet_sha256"]
 
     def test_an_approval_for_the_previous_digest_is_invalid(self, runner, tmp_path) -> None:
         packet = runner.verify_packet()
@@ -721,6 +722,10 @@ class TestRecordedDecisionsAndFrozenPacket:
         assert packet["approval_requirements"]["merge_is_not_approval"] is True
         assert "packet_sha256" in packet["approval_requirements"]["must_name"]
         # Mission 1.85.9: the one approval was the operator's, not a merge, and its attempt spends it.
+        # Mission 1.85.11: that approval is the spent Mission 1.85.9 one; the current packet has none.
         approvals = list(DATA.glob("semantic-extraction-evaluation-approval*"))
-        assert approvals == [runner.APPROVAL] and runner.ATTEMPT.exists()
-        assert json.loads(runner.APPROVAL.read_text("utf-8"))["approved_by"] == "operator-a"
+        assert approvals == [runner.HISTORICAL_APPROVAL] and runner.HISTORICAL_ATTEMPT.exists()
+        assert not runner.APPROVAL.exists() and not runner.ATTEMPT.exists()
+        assert (
+            json.loads(runner.HISTORICAL_APPROVAL.read_text("utf-8"))["approved_by"] == "operator-a"
+        )

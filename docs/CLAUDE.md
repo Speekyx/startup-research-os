@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.176
-Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.10)
+Version: 1.177
+Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.11)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.177 | 2026-09-17 | **READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL: the over-reads are corrected in the prompt, and the next packet waits for an approval.** Roadmap N08-B-PILOT; 0 provider calls, 0 text egress. **Revised**: prompt 1.1.0 `a4b96eb3...`, a three-anchor REPORTED_FAILED_ATTEMPT procedure; 1.0.0 frozen; label, schema, other label, thresholds and ceiling unchanged. **Analysed** aggregate-only: errors and code standing in for attempts. **Guarded**: offline regression spec, nothing of it in the prompt. **Packet** v5 `6b27bccb...` READY in new files, same 46 records, $9 kept; v4 and its spent approval frozen by digest. `mission-1.85.11-report.md`. |
 | 1.176 | 2026-09-17 | **WAITING_FOR_POST_MODEL_OPERATOR_REVIEW: the nine disagreements can be reviewed, and none has been.** Roadmap N08-B-PILOT; 0 provider calls, 0 reruns. **Tool**: loopback page with the blind reference untouched, model quotes rebuilt from frozen surfaces and offsets, the frozen definition quoted; four choices, no default, no bulk. **Provenance**: POST_MODEL_OPERATOR_REVIEW, never blind, never a replacement, refuses blind attestations, bound to every pilot digest, STALE on change. **Unchanged**: blind annotation `449ff10f...`, Mission 1.85.9 reading PILOT_OUTSIDE_PROPOSED_BOUND. Transport repair verified on loopback tests. `mission-1.85.10-report.md`. |
 | 1.175 | 2026-09-17 | **DEVELOPMENT_PILOT_EXECUTED_PARTIAL_RESULTS_READY_FOR_OPERATOR_REVIEW: the first real semantic extraction ran once, stopped on a network reset, and was not rerun.** Roadmap N08-B-PILOT. **Approved** by operator-a for packet `5f96b418...` only, one execution. **Audited first**: the runner could not have reached its credential, could have retried a max_tokens cut, and would have lost the run on an unclassified error; all fixed before the approval, evaluation rules frozen in code. **Ran**: 24 calls, 23 accepted, 22 unattempted after a 763 s stall and reset; $2.440713 of $9. **Read**: REPORTED_FAILED_ATTEMPT false PRESENT 9/18 OUTSIDE bound, 9/9 human PRESENT found; NEGATIVE_EVALUATION insufficient support; validator 23/24, 0 unsupported. PILOT_NOT_CERTIFICATION. `mission-1.85.9-report.md`. |
 | 1.174 | 2026-09-17 | **READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL: the operator's decisions are recorded, and the packet is frozen for an approval nobody has given.** Roadmap N08-B-PILOT; 0 provider calls, 0 key reads, 0 approvals, 0 attempts. **Recorded** by operator-a at 2026-09-17T15:37:35+04:00: 9 thresholds authorised, flip rate rejected for this first pilot, retry ratified, ceiling $9.000000 accepted. **Validated** strictly: a malformed record is refused, never repaired; 0 problems. **Packet** v4 `5f96b418...` binds the retry policy, the threshold decisions and the decisions file by digest; READY with no blockers; an approval naming the previous digest is refused. **Fixed** a Windows reset race in the egress review server. NO EXECUTION HAS BEEN AUTHORISED. `mission-1.85.8-report.md`. |
@@ -3233,6 +3234,24 @@ was not started.**
 **UPDATED IN 1.176.** The operator completed the review: HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD 9, revision 0,
 ambiguous 0; `POST_MODEL_DISAGREEMENT_REVIEW_COMPLETE`. Recommendation `PROMPT_OR_EXTRACTION_CONTRACT_PRECISION_REVISION_REQUIRED`,
 not applied. **Next is a development decision on REPORTED_FAILED_ATTEMPT precision, not a run.**
+
+
+**ANSWERED IN 1.177 (Mission 1.85.11). N08-B-PILOT: REPORTED_FAILED_ATTEMPT precision is revised in the prompt, and
+the next DEVELOPMENT packet is ready for an approval that does not exist.**
+
+    prompt        1.0.0 53bcc87f... frozen; 1.1.0 a4b96eb3... adds ATTEMPT / FAILURE / LINK anchors
+    unchanged     label definition, tool schema, NEGATIVE_EVALUATION, thresholds, retry policy, $9 ceiling
+    evidence      15 of 15 reference positives fit one 8-400 character quote: schema kept
+    guard         regression spec (9 over-reads, 15 positives) offline only; nothing of it in the prompt
+    packet        v5 6b27bccbc22c7051be9d8f1df4dd22a4635d0f664d4b4fa05ede820e90a72a7e READY; v4 and 77cdea89... frozen
+
+- **FIX THE INSTRUCTION BEFORE THE DEFINITION.** Nine confirmed over-reads, no revision and no ambiguity point at how
+  the prompt operationalised the label, not at what the label means.
+- **ANALYSE WITHOUT READING.** Features counted locally over digest-verified quotes; no source text reached the agent.
+- **HISTORY GETS NEW FILES, NOT NEW BYTES.** The superseded packet, approval and cost facts stay frozen by digest.
+
+**Next is a separate explicit operator approval naming packet `6b27bccb...`.** **Do not create an approval, execute,
+rerun, open HOLDOUT or promote findings without it. Mission 1.85.12 was not started.**
 
 
 

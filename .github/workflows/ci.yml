@@ -259,6 +259,11 @@ jobs:
       - name: Semantic extraction post-model review is current
         run: uv run python infrastructure/scripts/semantic_disagreement_review.py check
 
+      # Mission 1.85.11. The offline REPORTED_FAILED_ATTEMPT regression specification (ids and digests only,
+      # never part of a prompt) is current. Artifacts only.
+      - name: Semantic extraction RFA regression specification is current
+        run: uv run python infrastructure/scripts/render_rfa_regression_spec.py --check
+
       # Mission 1.39 §34. The convergence registry rendered into its artifact.
       # It reads repository code and no database, so unlike the calibration
       # feasibility audit it can live here: an empty deployment changes nothing

@@ -1,0 +1,94 @@
+{
+ "$comment": "AGGREGATE PATTERN ANALYSIS for REPORTED_FAILED_ATTEMPT precision (Mission 1.85.11). Counts only: no text, no quote, no per-record feature row. Coarse English regular expressions over quotes rebuilt from frozen surfaces and committed offsets (digest-verified). Describes weaknesses of the extraction instruction; changes no label.",
+ "analysis_id": "semantic-extraction-rfa-failure-mode-analysis-development",
+ "version": "1.0.0",
+ "inputs": {
+  "run_summary_sha256": "d9c9a0c02bcd2e4b1698914a3e628e63bee1c1492bc37790fc4fad1f9465851d",
+  "annotation_sha256": "449ff10f8a60217bbf4b7887254cf81b492fdba962b39283f39d2acdf1a9fa3c",
+  "post_model_review_sha256": "390caadaaaacd8dd45b11e6a1ce837de76c83449f767cf001a53b580f4caa093"
+ },
+ "feature_definitions": {
+  "explicit_try_verb": "\\b(tried|try|trying|attempted|attempting|tested)\\b",
+  "first_person_action": "\\b(i|we)\\s+(?:have\\s+|had\\s+|'ve\\s+|also\\s+|then\\s+|already\\s+|even\\s+)?(tried|attempted|added|changed|set|installed|ran|run|used|updated|removed|reinstalled|followed|switched|modified|configured|put|wrote|created|did|replaced|called|moved|deleted|restarted|enabled|disabled|upgraded|downgraded|applied|checked|cleared|rebuilt|reset)\\b",
+  "first_person_state_or_usage": "\\b(i\\s+am\\s+using|i'm\\s+using|i\\s+use|we\\s+use|i\\s+have\\s+(a|an|the|my|this)|my\\s+\\w+\\s+(is|has|are))\\b",
+  "failure_phrase": "(did\\s?n[o']?t\\s+work|does\\s?n[o']?t\\s+work|not\\s+working|no\\s+effect|no\\s+luck|to\\s+no\\s+avail|without\\s+(success|luck)|still\\s+(get|gets|getting|shows?|fails?|the\\s+same|not)|same\\s+(error|result|problem|issue)|nothing\\s+(changed|happens?|happened)|(did|does|do|is|was)\\s?n[o']?t\\s+(help|fix|solve|change))",
+  "contrast_marker": "\\b(but|however|still|unfortunately|yet)\\b",
+  "error_token": "(error|exception|traceback|warning|fail(ed|s|ure)?)",
+  "question_form": "(\\?|^\\s*(how|why|is\\s+there|can\\s+i|what)\\b)",
+  "desire_or_goal": "\\b(i\\s+want|i\\s+need|i('d|\\s+would)\\s+like|i\\s+am\\s+trying\\s+to|i'm\\s+trying\\s+to)\\b",
+  "inside_code_or_quoted_region": "quote lies wholly inside a [CODE] or [QUOTE] region",
+  "overlaps_code_or_quoted_region": "quote overlaps a [CODE] or [QUOTE] region",
+  "attempt_and_failure_in_one_quote": "(explicit_try_verb or first_person_action) and (failure_phrase or contrast_marker)",
+  "error_without_attempt_language": "error_token and no attempt language",
+  "state_or_goal_without_attempt_language": "(first_person_state_or_usage or desire_or_goal) and no attempt language"
+ },
+ "groups": {
+  "OVERREAD": {
+   "records": 9,
+   "quotes": 13,
+   "features": {
+    "attempt_and_failure_in_one_quote": 5,
+    "contrast_marker": 5,
+    "desire_or_goal": 0,
+    "error_token": 7,
+    "error_without_attempt_language": 3,
+    "explicit_try_verb": 3,
+    "failure_phrase": 3,
+    "first_person_action": 4,
+    "first_person_state_or_usage": 1,
+    "inside_code_or_quoted_region": 3,
+    "overlaps_code_or_quoted_region": 3,
+    "question_form": 0,
+    "state_or_goal_without_attempt_language": 0
+   }
+  },
+  "MODEL_AGREED": {
+   "quotes": 12,
+   "features": {
+    "attempt_and_failure_in_one_quote": 3,
+    "contrast_marker": 4,
+    "desire_or_goal": 0,
+    "error_token": 2,
+    "error_without_attempt_language": 1,
+    "explicit_try_verb": 2,
+    "failure_phrase": 2,
+    "first_person_action": 1,
+    "first_person_state_or_usage": 0,
+    "inside_code_or_quoted_region": 3,
+    "overlaps_code_or_quoted_region": 3,
+    "question_form": 0,
+    "state_or_goal_without_attempt_language": 0
+   }
+  },
+  "HUMAN_PRESENT": {
+   "records": 15,
+   "quotes": 15,
+   "features": {
+    "attempt_and_failure_in_one_quote": 5,
+    "contrast_marker": 6,
+    "desire_or_goal": 5,
+    "error_token": 3,
+    "error_without_attempt_language": 0,
+    "explicit_try_verb": 9,
+    "failure_phrase": 0,
+    "first_person_action": 3,
+    "first_person_state_or_usage": 3,
+    "inside_code_or_quoted_region": 0,
+    "overlaps_code_or_quoted_region": 0,
+    "question_form": 1,
+    "state_or_goal_without_attempt_language": 0
+   }
+  }
+ },
+ "evidence_representation_audit": {
+  "reference_present_records": 15,
+  "records_by_span_count": {
+   "1": 15
+  },
+  "spans_longer_than_quote_max": 0,
+  "records_whose_spans_fit_one_window_of_quote_max": 15,
+  "records_needing_a_window_over_quote_max": 0,
+  "longest_span_characters": 366,
+  "quote_max_characters": 400
+ }
+}
