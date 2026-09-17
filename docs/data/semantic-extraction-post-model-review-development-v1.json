@@ -1,0 +1,247 @@
+{
+ "$comment": "POST-MODEL OPERATOR REVIEW (Mission 1.85.10). The operator saw the model's disagreement before choosing: this is NOT a blind annotation, does not replace the original reference (left byte-for-byte unchanged), may inform a later prompt, contract or label-definition decision, and leaves the preregistered Mission 1.85.9 readings unchanged. Bounded metadata only: no question text, no model quote.",
+ "review_id": "semantic-extraction-post-model-review-development",
+ "version": "1.0.0",
+ "provenance": "POST_MODEL_OPERATOR_REVIEW",
+ "blind": false,
+ "replaces_original_reference": false,
+ "label": "REPORTED_FAILED_ATTEMPT",
+ "operator_id": "operator-a",
+ "bindings": {
+  "packet_sha256": "5f96b418e75374b098b44b7fe3ba756a5155af94f92cd607ea251fa131d18c0e",
+  "approval_sha256": "77cdea89eba08f768b135e099478884d82b2120f8d0fab13e5f8f018b0b48d95",
+  "run_summary_sha256": "d9c9a0c02bcd2e4b1698914a3e628e63bee1c1492bc37790fc4fad1f9465851d",
+  "pilot_evaluation_sha256": "da468421824e6d66b332057afc0e1873680c28d7c50350ba2be5dfd9192d35ba",
+  "original_annotation_sha256": "449ff10f8a60217bbf4b7887254cf81b492fdba962b39283f39d2acdf1a9fa3c",
+  "label_definition": "first-person-semantic-labels@1.0.0",
+  "label_definition_sha256": "41905c884a693988353db5f451423aa3b73bbe98e9a07503095d6e3274e6af70",
+  "prompt_sha256": "53bcc87f0c761f28326bdbeda37e1018a5e2e3ff71711d9705c3542f940221b9"
+ },
+ "records": [
+  {
+   "normalized_record_id": "17064c93-71cf-5474-ba7f-39ccd516782f",
+   "surface_sha256": "70486f6802b1ca84a63e8c38d12b820d504210e5e0c96b6f7ac41822120a25c2",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "model_findings_sha256": "fd2c7038cf9a25f9652157eec4d7a84af2c3240847d3cbeb5c363c447919d2df"
+  },
+  {
+   "normalized_record_id": "1a659352-390f-5c53-97de-0f725d017f46",
+   "surface_sha256": "dea3bf3d40f89c91348db8609ddf28c105024c2ffa46d0d542fc17a398626760",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "model_findings_sha256": "edf2bde6e0d8f5a1ccf95cf16ee5975072e2af61b469b0cccba1e5d9f7d8da68"
+  },
+  {
+   "normalized_record_id": "203268d4-baf6-5410-a001-cf77843e96e3",
+   "surface_sha256": "fdb6b5cfa87fc4d2a4ff4411e577e7c8525a0a0c8a72fea580966c71d428256a",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "model_findings_sha256": "7f35bad2ee5bd1b17e7768a49bdb9bef0c7a3d8e82ae40fbf0a589c620371456"
+  },
+  {
+   "normalized_record_id": "37bf2146-b9fc-5e5a-b35b-d59f5f6bfc57",
+   "surface_sha256": "f56c63774966be50841cb31ef919535ea659f2851eb3b0622fd374466549b120",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "model_findings_sha256": "97ab515af235c0d22ff5ea6c20cbeda381d9d38f34fdb9a1289ce9d4d1eec326"
+  },
+  {
+   "normalized_record_id": "9f91eeea-25e6-5a9e-89e6-54d4490ecd7c",
+   "surface_sha256": "f2cd0a74c2f667995730fe2fa64ea5f9b7abed0d16c8a830abaa0f0f0f6b8edd",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "model_findings_sha256": "ecfabd4dc470824da64d16f0e2bd026d85db1f7b9fdab9cc1cd462554446d7ce"
+  },
+  {
+   "normalized_record_id": "ac423fe4-a4b4-589d-ac49-96932ed51d54",
+   "surface_sha256": "1865020f0cba48dbed4f3d7533ae4ec3633b4f69364bea9a5397cbd9efae5bfa",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "model_findings_sha256": "d300bd1a7caa013f8724571be39926fdd706dd3a2b144a97a2e4127c545be6b0"
+  },
+  {
+   "normalized_record_id": "bf04af60-1364-5fd0-8f4f-a8104d131aff",
+   "surface_sha256": "1d6221ff1e8223c9f3d226f9ad624fed04442ea36a390a7c697c67e600627d2d",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "model_findings_sha256": "086b293b72fc616f9f3b9f815bc64f34f9a3e2f15d7bb3777cfbe8036b19b8fb"
+  },
+  {
+   "normalized_record_id": "d6bff833-780d-55d3-a5ad-1effebb8a328",
+   "surface_sha256": "a6903fb7063e9c164636d8e32f35d48accc316cd07204e0d4e5d0d40d26b0f19",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "model_findings_sha256": "212a74121fc4d37b0e591861e64377bcb773fd2ddf3f7919bafa6dc4e105f308"
+  },
+  {
+   "normalized_record_id": "e35f990d-117a-59d1-b54e-5165632378bf",
+   "surface_sha256": "ddc7381ca99362070f28df277580cf3af67ed752f227ddd4754227d4707f210f",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "model_findings_sha256": "a7b666c27d80fc518a10557f259f8e92bc80f17e88ab5c4b8565dbf936c4e1a6"
+  }
+ ],
+ "decisions": [
+  {
+   "normalized_record_id": "17064c93-71cf-5474-ba7f-39ccd516782f",
+   "surface_sha256": "70486f6802b1ca84a63e8c38d12b820d504210e5e0c96b6f7ac41822120a25c2",
+   "model_findings_sha256": "fd2c7038cf9a25f9652157eec4d7a84af2c3240847d3cbeb5c363c447919d2df",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+   "operator_note": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-17T19:11:06+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "1a659352-390f-5c53-97de-0f725d017f46",
+   "surface_sha256": "dea3bf3d40f89c91348db8609ddf28c105024c2ffa46d0d542fc17a398626760",
+   "model_findings_sha256": "edf2bde6e0d8f5a1ccf95cf16ee5975072e2af61b469b0cccba1e5d9f7d8da68",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+   "operator_note": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-17T19:16:17+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "203268d4-baf6-5410-a001-cf77843e96e3",
+   "surface_sha256": "fdb6b5cfa87fc4d2a4ff4411e577e7c8525a0a0c8a72fea580966c71d428256a",
+   "model_findings_sha256": "7f35bad2ee5bd1b17e7768a49bdb9bef0c7a3d8e82ae40fbf0a589c620371456",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+   "operator_note": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-17T19:16:28+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "37bf2146-b9fc-5e5a-b35b-d59f5f6bfc57",
+   "surface_sha256": "f56c63774966be50841cb31ef919535ea659f2851eb3b0622fd374466549b120",
+   "model_findings_sha256": "97ab515af235c0d22ff5ea6c20cbeda381d9d38f34fdb9a1289ce9d4d1eec326",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+   "operator_note": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-17T19:16:32+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "9f91eeea-25e6-5a9e-89e6-54d4490ecd7c",
+   "surface_sha256": "f2cd0a74c2f667995730fe2fa64ea5f9b7abed0d16c8a830abaa0f0f0f6b8edd",
+   "model_findings_sha256": "ecfabd4dc470824da64d16f0e2bd026d85db1f7b9fdab9cc1cd462554446d7ce",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+   "operator_note": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-17T19:16:35+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "ac423fe4-a4b4-589d-ac49-96932ed51d54",
+   "surface_sha256": "1865020f0cba48dbed4f3d7533ae4ec3633b4f69364bea9a5397cbd9efae5bfa",
+   "model_findings_sha256": "d300bd1a7caa013f8724571be39926fdd706dd3a2b144a97a2e4127c545be6b0",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+   "operator_note": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-17T19:16:54+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "bf04af60-1364-5fd0-8f4f-a8104d131aff",
+   "surface_sha256": "1d6221ff1e8223c9f3d226f9ad624fed04442ea36a390a7c697c67e600627d2d",
+   "model_findings_sha256": "086b293b72fc616f9f3b9f815bc64f34f9a3e2f15d7bb3777cfbe8036b19b8fb",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+   "operator_note": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-17T19:16:59+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "d6bff833-780d-55d3-a5ad-1effebb8a328",
+   "surface_sha256": "a6903fb7063e9c164636d8e32f35d48accc316cd07204e0d4e5d0d40d26b0f19",
+   "model_findings_sha256": "212a74121fc4d37b0e591861e64377bcb773fd2ddf3f7919bafa6dc4e105f308",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+   "operator_note": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-17T19:17:01+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "e35f990d-117a-59d1-b54e-5165632378bf",
+   "surface_sha256": "ddc7381ca99362070f28df277580cf3af67ed752f227ddd4754227d4707f210f",
+   "model_findings_sha256": "a7b666c27d80fc518a10557f259f8e92bc80f17e88ab5c4b8565dbf936c4e1a6",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+   "operator_note": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-17T19:17:05+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "blind": false
+  }
+ ],
+ "analysis": {
+  "status": "COMPLETE",
+  "counts": {
+   "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD": 9,
+   "POST_MODEL_HUMAN_REVISION": 0,
+   "LABEL_DEFINITION_AMBIGUOUS": 0,
+   "UNRESOLVED": 0
+  },
+  "undecided": 0,
+  "unresolved_or_undecided": 0,
+  "development_recommendations": [
+   "PROMPT_OR_EXTRACTION_CONTRACT_PRECISION_REVISION_REQUIRED"
+  ],
+  "recommendation_rule": "dominant = the largest of the three resolved counts (ties give each); ambiguity substantial at >= 1/3 of reviewed records; derived only when COMPLETE; nothing is revised automatically"
+ },
+ "mission_1_85_9_gate_unchanged": {
+  "item_id": "false_present_rate_upper_95::REPORTED_FAILED_ATTEMPT",
+  "reading": "PILOT_OUTSIDE_PROPOSED_BOUND",
+  "false_present": 9,
+  "present_calls": 18,
+  "clopper_pearson_upper_95": 0.708799,
+  "reference": "the original blind SINGLE_HUMAN_REFERENCE"
+ },
+ "post_model_review_diagnostic": {
+  "name": "POST_MODEL_REVIEW_DIAGNOSTIC",
+  "post_hoc": true,
+  "preregistered": false,
+  "is_the_mission_1_85_9_gate_result": false,
+  "certification": false,
+  "reads": "false PRESENT on REPORTED_FAILED_ATTEMPT if post-model revisions are counted as PRESENT",
+  "ambiguous_counted_as_false_present": {
+   "false_present": 9,
+   "present_calls": 18,
+   "point_estimate": 0.5,
+   "clopper_pearson_upper_95": 0.708799
+  },
+  "ambiguous_excluded": {
+   "false_present": 9,
+   "present_calls": 18,
+   "point_estimate": 0.5,
+   "clopper_pearson_upper_95": 0.708799
+  }
+ }
+}
