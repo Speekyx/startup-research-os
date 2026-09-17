@@ -22,7 +22,11 @@ of those is needed yet, and the gateway already owns retry policy.
 
 from __future__ import annotations
 
+import contextlib
+import http.client
 import json
+import threading
+import time
 import urllib.error
 import urllib.request
 from collections import deque
@@ -113,20 +117,35 @@ class UrllibTransport:
             # Provider endpoints are configuration, and configuration reaches
             # production. An API key on a plaintext connection is a leaked key.
             raise TransportError(f"refusing to send credentials over a non-HTTPS URL: {url!r}")
+
+        # urllib's `timeout` bounds each socket operation, not the request: a
+        # connection that trickles bytes or stalls between reads can run far past
+        # it (Mission 1.85.9: 763 s against 240 s). The exchange therefore runs on
+        # a worker thread, and the caller waits for the whole request at most
+        # `timeout_seconds`. The worker is told to stop, and stops at its next
+        # read or when its shrunken socket timeout fires; its result is discarded.
+        deadline = time.monotonic() + timeout_seconds
+        cancelled = threading.Event()
+        outcome: list[HttpResponse | BaseException] = []
+
+        def exchange() -> None:
+            try:
+                outcome.append(_exchange(request, timeout_seconds, deadline, cancelled))
+            except BaseException as exc:  # noqa: BLE001 - re-raised on the caller's thread
+                outcome.append(exc)
+
+        worker = threading.Thread(target=exchange, name="sros-llm-transport", daemon=True)
+        worker.start()
+        worker.join(max(0.0, deadline - time.monotonic()))
+        if worker.is_alive() or not outcome:
+            cancelled.set()
+            raise TimeoutError(f"request to {url} exceeded {timeout_seconds}s")
+
+        result = outcome[0]
+        if isinstance(result, HttpResponse):
+            return result
         try:
-            with urllib.request.urlopen(request, timeout=timeout_seconds) as response:  # noqa: S310
-                return HttpResponse(
-                    status=response.status,
-                    body=response.read(),
-                    headers={k.lower(): v for k, v in response.headers.items()},
-                )
-        except urllib.error.HTTPError as exc:
-            # A 4xx/5xx is data for the adapter, not an exception here.
-            return HttpResponse(
-                status=exc.code,
-                body=exc.read(),
-                headers={k.lower(): v for k, v in (exc.headers or {}).items()},
-            )
+            raise result
         except TimeoutError as exc:
             raise TimeoutError(f"request to {url} exceeded {timeout_seconds}s") from exc
         except urllib.error.URLError as exc:
@@ -134,6 +153,73 @@ class UrllibTransport:
             if isinstance(reason, TimeoutError):
                 raise TimeoutError(f"request to {url} exceeded {timeout_seconds}s") from exc
             raise TransportError(f"transport failure calling {url}: {reason}") from exc
+        except (OSError, http.client.HTTPException) as exc:
+            # A reset, an abort or a truncated body after the connection opened:
+            # urllib raises these raw rather than as URLError. Unwrapped, they
+            # escape the adapter's error mapping and stop a whole run as
+            # unexpected (Mission 1.85.9, call 24: ConnectionResetError).
+            raise TransportError(
+                f"transport failure calling {url}: {type(exc).__name__}: {exc}"
+            ) from exc
+
+
+_READ_CHUNK_BYTES = 64 * 1024
+
+
+def _exchange(
+    request: urllib.request.Request,
+    timeout_seconds: float,
+    deadline: float,
+    cancelled: threading.Event,
+) -> HttpResponse:
+    """Send the request and read the whole body, never reading past `deadline`."""
+    try:
+        with urllib.request.urlopen(request, timeout=timeout_seconds) as response:  # noqa: S310
+            body = _read_until(response, deadline, cancelled)
+            return HttpResponse(
+                status=response.status,
+                body=body,
+                headers={k.lower(): v for k, v in response.headers.items()},
+            )
+    except urllib.error.HTTPError as exc:
+        # A 4xx/5xx is data for the adapter, not an exception here.
+        with exc:
+            return HttpResponse(
+                status=exc.code,
+                body=_read_until(exc, deadline, cancelled),
+                headers={k.lower(): v for k, v in (exc.headers or {}).items()},
+            )
+
+
+def _read_until(response: Any, deadline: float, cancelled: threading.Event) -> bytes:
+    """Read the body in chunks, checking the deadline before every read.
+
+    The socket timeout is lowered to the time left before each read, so a single
+    stalled read cannot outlast the request either. Reaching the socket is
+    best effort: `http.client` does not expose it, and a response without one
+    still stops at the next chunk boundary.
+    """
+    chunks: list[bytes] = []
+    while True:
+        remaining = deadline - time.monotonic()
+        if cancelled.is_set() or remaining <= 0:
+            raise TimeoutError("the request deadline passed while reading the body")
+        _set_socket_timeout(response, remaining)
+        chunk = response.read(_READ_CHUNK_BYTES)
+        if not chunk:
+            return b"".join(chunks)
+        chunks.append(chunk)
+
+
+def _set_socket_timeout(response: Any, seconds: float) -> None:
+    fp: Any = getattr(response, "fp", None)
+    # An HTTPError wraps the HTTPResponse that holds the socket.
+    fp = getattr(fp, "fp", fp)
+    sock = getattr(getattr(fp, "raw", None), "_sock", None)
+    settimeout = getattr(sock, "settimeout", None)
+    if callable(settimeout):
+        with contextlib.suppress(OSError):
+            settimeout(max(seconds, 0.001))
 
 
 @dataclass
