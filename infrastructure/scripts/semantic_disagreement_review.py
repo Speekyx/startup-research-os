@@ -73,7 +73,10 @@ SUMMARY = DATA / "semantic-extraction-pilot-run-development-v1.json"
 EVALUATION = DATA / "semantic-extraction-pilot-evaluation-development-v1.json"
 ANNOTATION = DATA / "stack-overflow-semantic-annotations-development-operator-a-v1.json"
 CONTRACT = DATA / "first-person-semantic-extraction-contract-v1.json"
-PROMPT_SOURCE = ROOT / "packages/semantic-extraction/python/sros_semantic_extraction/prompt.py"
+# The prompt in effect during the Mission 1.85.9 run, frozen when 1.1.0 replaced it (Mission 1.85.11).
+PROMPT_SOURCE = (
+    ROOT / "packages/semantic-extraction/python/sros_semantic_extraction/prompt_v1_0_0.py"
+)
 REVIEW = DATA / "semantic-extraction-post-model-review-development-v1.json"
 REVIEW_PAGE = DATA / "semantic-extraction-post-model-review-development-v1.md"
 MATERIAL_NAME = "disagreement-review-material.json"

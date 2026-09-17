@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.175
+Version: 1.176
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.10)
+Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.11)
 
 ---
 
@@ -13,6 +13,21 @@ Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.10)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.176 - 2026-09-17 (Sprint 1 / Mission 1.85.11)
+
+**REPORTED_FAILED_ATTEMPT precision revision and the next DEVELOPMENT packet (N08-B-PILOT),
+READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL.** After the operator confirmed 9 of 9 pilot disagreements as model
+over-reads, prompt `first-person-semantic-extraction-prompt@1.1.0` (`a4b96eb3...`) adds a three-anchor procedure
+(attempt, failure, explicit link), states what is not an attempt on its own, and requires the quote to show both
+the attempt and its failure; 1.0.0 (`53bcc87f...`) is frozen. The label definition, tool schema, other label,
+thresholds, retry policy and ceiling are unchanged. An aggregate-only analysis (no text) found error or code
+material and implicit attempts behind the over-reads; all 15 reference positives fit one quote, so the schema stays.
+A regression spec (9 known over-reads, 15 positives) is offline only and never in the prompt. Request bodies grow
+1,503 bytes each; retry worst case $6.370179, ceiling $9.000000 kept. Packet v5
+`6b27bccbc22c7051be9d8f1df4dd22a4635d0f664d4b4fa05ede820e90a72a7e` READY over the same 46 records in new files; the
+v4 packet, its spent approval and v1 cost artifacts are frozen by digest. No approval, 0 provider calls.
+`docs/reports/mission-1.85.11-report.md`.
 
 ## 1.175 - 2026-09-17 (Sprint 1 / Mission 1.85.10)
 

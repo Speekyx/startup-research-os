@@ -53,9 +53,14 @@ for path in (
     sys.path.insert(0, str(ROOT / path))
 
 DATA = ROOT / "docs" / "data"
-PACKET = DATA / "semantic-extraction-evaluation-packet-development-v1.json"
-APPROVAL = DATA / "semantic-extraction-evaluation-approval-development-v1.json"
-ATTEMPT = DATA / "semantic-extraction-evaluation-attempt-development-v1.json"
+# Mission 1.85.11: the current packet is version 5 (prompt 1.1.0) in the v2 files. The v1 packet, approval and
+# attempt record belong to the Mission 1.85.9 run: history, spent, never read as current.
+PACKET = DATA / "semantic-extraction-evaluation-packet-development-v2.json"
+APPROVAL = DATA / "semantic-extraction-evaluation-approval-development-v2.json"
+ATTEMPT = DATA / "semantic-extraction-evaluation-attempt-development-v2.json"
+HISTORICAL_PACKET = DATA / "semantic-extraction-evaluation-packet-development-v1.json"
+HISTORICAL_APPROVAL = DATA / "semantic-extraction-evaluation-approval-development-v1.json"
+HISTORICAL_ATTEMPT = DATA / "semantic-extraction-evaluation-attempt-development-v1.json"
 READY = "READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL"
 APPROVAL_DECISION = "APPROVE_EXACTLY_ONE_EVALUATION_RUN"
 APPROVAL_SCOPE = "ONE_DEVELOPMENT_PILOT_EXECUTION"
@@ -66,7 +71,7 @@ STRUCTURAL_REFUSALS = frozenset(
 )
 # Pinned, not read from the packet: a runner that took its expectation from the file it checks would
 # check nothing. Re-pinned only when a mission deliberately re-renders the packet.
-EXPECTED_PACKET_SHA256 = "5f96b418e75374b098b44b7fe3ba756a5155af94f92cd607ea251fa131d18c0e"
+EXPECTED_PACKET_SHA256 = "6b27bccbc22c7051be9d8f1df4dd22a4635d0f664d4b4fa05ede820e90a72a7e"
 HUMAN_REFERENCE_STRENGTHS = ("SINGLE_HUMAN_REFERENCE", "MULTI_HUMAN_REFERENCE")
 
 

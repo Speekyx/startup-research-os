@@ -1,11 +1,13 @@
-"""Mission 1.85.7 (N08-B-PILOT). Exact size of the requests a future DEVELOPMENT pilot run would send.
+"""Mission 1.85.7 (N08-B-PILOT), re-measured for prompt 1.1.0 in Mission 1.85.11. Exact size of the requests a
+future DEVELOPMENT pilot run would send.
 
 Reads the held records (DATABASE_URL), renders the surfaces, and for every EGRESS_APPROVED record builds
 the exact request body the runner would build -- same prompt, same strict tool, same packet-local index
 -- with the offline provider body builder. Nothing is transmitted: no transport is constructed and no
 token-counting endpoint is called (that endpoint would send the text). Writes counts only, never text:
 
-    docs/data/semantic-extraction-request-size-development-v1.json
+    docs/data/semantic-extraction-request-size-development-v2.json   (current prompt)
+    docs/data/semantic-extraction-request-size-development-v1.json   (historical, prompt 1.0.0, frozen)
 
     uv run python infrastructure/scripts/measure_semantic_extraction_request_sizes.py --write
     uv run python infrastructure/scripts/measure_semantic_extraction_request_sizes.py --check
@@ -47,8 +49,9 @@ from sros_semantic_extraction import (  # noqa: E402
 from sros_semantic_extraction_contract import surface_sha256  # noqa: E402
 
 DATA = ROOT / "docs" / "data"
-OUT = DATA / "semantic-extraction-request-size-development-v1.json"
-PACKET = DATA / "semantic-extraction-evaluation-packet-development-v1.json"
+OUT = DATA / "semantic-extraction-request-size-development-v2.json"
+PACKET_ID = "semantic-extraction-evaluation-packet-development"
+VERIFICATION = DATA / "anthropic-claude-sonnet-5-pilot-verification-v1.json"
 CORPUS = DATA / "stack-overflow-semantic-evaluation-corpus-v1.json"
 ELIGIBILITY = DATA / "stack-overflow-semantic-egress-eligibility-development-v1.json"
 MAX_OUTPUT_TOKENS = 4096
@@ -76,14 +79,19 @@ def distribution(values: list[int]) -> dict[str, Any]:
 
 
 def approved_in_run_order() -> list[dict[str, Any]]:
-    """The records the runner would call, in the runner's own order (packet selection order)."""
-    packet = json.loads(PACKET.read_text("utf-8"))
+    """The records the runner would call, in the runner's own order: the packet selects DEVELOPMENT records in
+    corpus order, and the runner calls the approved ones in that order."""
+    corpus = json.loads(CORPUS.read_text("utf-8"))
     approved = set(json.loads(ELIGIBILITY.read_text("utf-8"))["approved_record_ids"])
-    return [r for r in packet["selection"]["records"] if r["normalized_record_id"] in approved]
+    return [
+        r
+        for r in corpus["records"]
+        if r["split"] == "DEVELOPMENT" and r["normalized_record_id"] in approved
+    ]
 
 
 def build(surfaces: dict[str, str]) -> dict[str, Any]:
-    packet = json.loads(PACKET.read_text("utf-8"))
+    model = json.loads(VERIFICATION.read_text("utf-8"))["model"]["bound_by_packet"]
     provider = AnthropicStrictToolProvider(
         api_key="measurement-only-never-sent",
         transport=FakeTransport(),
@@ -91,7 +99,7 @@ def build(surfaces: dict[str, str]) -> dict[str, Any]:
         max_output_tokens=MAX_OUTPUT_TOKENS,
     )
     binding = ExecutionBinding(
-        packet["packet_id"], "00000000-0000-4000-8000-000000000001", LlmTier.STRONG_MODEL, 240.0
+        PACKET_ID, "00000000-0000-4000-8000-000000000001", LlmTier.STRONG_MODEL, 240.0
     )
     rows = []
     fixed = None
@@ -100,9 +108,7 @@ def build(surfaces: dict[str, str]) -> dict[str, Any]:
         surface = surfaces[rid]
         if surface_sha256(surface) != record["surface_sha256"]:
             raise SystemExit(f"FAIL     surface {rid} does not match the packet")
-        body = provider.build_body(
-            build_extraction_request(surface, index, binding), packet["provider"]["model"]
-        )
+        body = provider.build_body(build_extraction_request(surface, index, binding), model)
         body_bytes = len(json.dumps(body, ensure_ascii=False).encode("utf-8"))
         rows.append(
             {
@@ -128,16 +134,16 @@ def build(surfaces: dict[str, str]) -> dict[str, Any]:
             }
     body_overhead = [r["request_body_utf8_bytes"] - r["surface_utf8_bytes"] for r in rows]
     return {
-        "$comment": "EXACT REQUEST SIZES for the EGRESS_APPROVED DEVELOPMENT records (Mission 1.85.7). Counts only: no surface text. Each request body was built offline by the same prompt, strict tool and provider body builder the runner uses, with the runner's packet-local index. Nothing was transmitted and no token-counting endpoint was called. Token counts are NOT measured here: Anthropic publishes no local tokenizer, and its token-counting endpoint would transmit the text.",
+        "$comment": "EXACT REQUEST SIZES for the EGRESS_APPROVED DEVELOPMENT records (Mission 1.85.7, re-measured for prompt 1.1.0 in Mission 1.85.11). Counts only: no surface text. Each request body was built offline by the same prompt, strict tool and provider body builder the runner uses, with the runner's packet-local index. Nothing was transmitted and no token-counting endpoint was called. Token counts are NOT measured here: Anthropic publishes no local tokenizer, and its token-counting endpoint would transmit the text.",
         "measurement_id": "semantic-extraction-request-size-development",
-        "version": "1.0.0",
-        "mission": "1.85.7",
+        "version": "2.0.0",
+        "mission": "1.85.11",
         "split": "DEVELOPMENT",
         "eligibility_sha256": sha(ELIGIBILITY),
         "corpus_sha256": sha(CORPUS),
         "prompt": {"id": PROMPT_ID, "version": PROMPT_VERSION, "sha256": prompt_sha256()},
         "tool": {"id": TOOL_ID, "version": TOOL_VERSION},
-        "model": packet["provider"]["model"],
+        "model": model,
         "max_output_tokens": MAX_OUTPUT_TOKENS,
         "record_count": len(rows),
         "surface_characters": distribution([r["surface_characters"] for r in rows]),

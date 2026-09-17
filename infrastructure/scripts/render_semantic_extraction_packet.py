@@ -18,7 +18,10 @@ The packet binds everything a run would depend on, and it cannot be executed:
 - (Mission 1.85.8) it binds the operator's recorded decisions by digest: the decisions file, a digest of the
   threshold decisions alone, and a retry policy block whose digest covers the ratified reading and the file
   implementing it. Changing any bound artifact changes the packet digest, so an approval for an earlier
-  digest cannot unlock a later packet.
+  digest cannot unlock a later packet;
+- (Mission 1.85.11) packet version 5 is written to a NEW file for prompt 1.1.0. The version 4 packet of the
+  Mission 1.85.9 run stays frozen byte-for-byte in the v1 file (checked by digest, never re-rendered), and
+  version 5 names it, and its spent approval, as superseded.
 
 Reads committed artifacts only (no database, no network, no model). `--write` renders; `--check` fails
 if the committed packet is stale.
@@ -80,7 +83,14 @@ DATA = ROOT / "docs" / "data"
 RETRY_IMPLEMENTATION = (
     ROOT / "packages" / "semantic-extraction" / "python" / "sros_semantic_extraction" / "request.py"
 )
-PACKET = DATA / "semantic-extraction-evaluation-packet-development-v1.json"
+PACKET = DATA / "semantic-extraction-evaluation-packet-development-v2.json"
+HISTORICAL_PACKET = DATA / "semantic-extraction-evaluation-packet-development-v1.json"
+HISTORICAL_PACKET_SHA256 = "5f96b418e75374b098b44b7fe3ba756a5155af94f92cd607ea251fa131d18c0e"
+HISTORICAL_PACKET_FILE_SHA256 = "0fbc4357b457a3255b832c48fbf868567799b4fc2cda33105f28595895192983"
+SPENT_APPROVAL = DATA / "semantic-extraction-evaluation-approval-development-v1.json"
+SPENT_APPROVAL_SHA256 = "77cdea89eba08f768b135e099478884d82b2120f8d0fab13e5f8f018b0b48d95"
+REGRESSION_SPEC = DATA / "semantic-extraction-rfa-regression-spec-development-v1.json"
+POST_MODEL_REVIEW = DATA / "semantic-extraction-post-model-review-development-v1.json"
 CORPUS = DATA / "stack-overflow-semantic-evaluation-corpus-v1.json"
 ELIGIBILITY = DATA / "stack-overflow-semantic-egress-eligibility-development-v1.json"
 REQUALIFICATION = DATA / "anthropic-api-route-requalification-v1.json"
@@ -88,14 +98,14 @@ CONTRACT = DATA / "first-person-semantic-extraction-contract-v1.json"
 CATALOG = DATA / "source-catalog-v1.json"
 PROVIDER_POLICY = DATA / "model-provider-policy-v1.json"
 VERIFICATION = DATA / "anthropic-claude-sonnet-5-pilot-verification-v1.json"
-DECISION_PACKAGE = DATA / "semantic-extraction-operator-decision-package-development-v1.json"
+DECISION_PACKAGE = DATA / "semantic-extraction-operator-decision-package-development-v2.json"
 DECISIONS = DATA / "semantic-extraction-operator-decisions-development-v1.json"
 ANNOTATION_GLOB = "stack-overflow-semantic-annotations-development-*-v1.json"
 ADJUDICATION = DATA / "stack-overflow-semantic-adjudication-development-v1.json"
 THRESHOLD_PARTITION = DATA / "semantic-extraction-threshold-partition-v1.json"
 
 PACKET_ID = "semantic-extraction-evaluation-packet-development"
-PACKET_VERSION = 4
+PACKET_VERSION = 5
 RETRY_POLICY_ID = "semantic-extraction-schema-failure-retry-policy"
 RETRY_POLICY_VERSION = "1.0.0"
 READY = "READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL"
@@ -231,7 +241,7 @@ def build() -> dict[str, Any]:
         "$comment": "FROZEN FUTURE EVALUATION PACKET (N08-B). NOT EXECUTABLE. Its status is computed from committed facts; the runner refuses any status but READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL before reading an approval, and an approval is a separate operator file named by this packet's digest. Merging this packet authorises nothing. The reference block states what a result could claim: a SINGLE_HUMAN_REFERENCE result is a DEVELOPMENT_PILOT and PILOT_NOT_CERTIFICATION.",
         "packet_id": PACKET_ID,
         "packet_version": PACKET_VERSION,
-        "mission": "1.85.8",
+        "mission": "1.85.11",
         "status": status,
         "blockers": blockers,
         "reference": {
@@ -318,6 +328,24 @@ def build() -> dict[str, Any]:
                     "zero_data_retention_for_this_account"
                 ),
             },
+        },
+        "supersedes": {
+            "packet_file": "docs/data/semantic-extraction-evaluation-packet-development-v1.json",
+            "packet_version": 4,
+            "packet_sha256": HISTORICAL_PACKET_SHA256,
+            "approval_sha256": SPENT_APPROVAL_SHA256,
+            "approval_state": "SPENT_BY_THE_MISSION_1_85_9_ATTEMPT",
+            "result_unchanged": "Mission 1.85.9 PILOT_OUTSIDE_PROPOSED_BOUND against the blind single-human reference",
+            "reason": "prompt 1.1.0 REPORTED_FAILED_ATTEMPT precision revision after the Mission 1.85.10 post-model review confirmed 9 of 9 model over-reads",
+        },
+        "development_diagnostics": {
+            "rfa_regression_spec": "docs/data/semantic-extraction-rfa-regression-spec-development-v1.json",
+            "rfa_regression_spec_sha256": sha(REGRESSION_SPEC),
+            "post_model_review_sha256": sha(POST_MODEL_REVIEW),
+            "is_threshold": False,
+            "is_certification": False,
+            "sent_to_provider": False,
+            "evaluation": "a fresh run of all approved DEVELOPMENT records under prompt 1.1.0; not a resumption of the Mission 1.85.9 run",
         },
         "operator_decisions": {
             "package": "docs/data/semantic-extraction-operator-decision-package-development-v1.json",
@@ -460,7 +488,7 @@ def build() -> dict[str, Any]:
             "canonical_writes": "none: no finding, Signal, Claim, Evidence, independence state or score",
         },
         "approval_requirements": {
-            "file": "docs/data/semantic-extraction-evaluation-approval-development-v1.json, created only by the operator after this packet's final digest is known",
+            "file": "docs/data/semantic-extraction-evaluation-approval-development-v2.json, created only by the operator after this packet's final digest is known",
             "decision": "APPROVE_EXACTLY_ONE_EVALUATION_RUN",
             "must_name": ["packet_id", "packet_version", "packet_sha256"],
             "must_accept": [
@@ -481,12 +509,34 @@ def dump(doc: dict[str, Any]) -> bytes:
     return (json.dumps(doc, indent=1, ensure_ascii=False) + "\n").encode("utf-8")
 
 
+def history_problems() -> list[str]:
+    """The Mission 1.85.9 packet and its spent approval are history: frozen by digest, never re-rendered."""
+    problems = []
+    if not HISTORICAL_PACKET.exists() or sha(HISTORICAL_PACKET) != HISTORICAL_PACKET_FILE_SHA256:
+        problems.append(f"{HISTORICAL_PACKET.name} changed: the version 4 packet is frozen history")
+    elif (
+        json.loads(HISTORICAL_PACKET.read_text("utf-8")).get("packet_sha256")
+        != HISTORICAL_PACKET_SHA256
+    ):
+        problems.append(
+            f"{HISTORICAL_PACKET.name} no longer names packet {HISTORICAL_PACKET_SHA256}"
+        )
+    if not SPENT_APPROVAL.exists() or sha(SPENT_APPROVAL) != SPENT_APPROVAL_SHA256:
+        problems.append(f"{SPENT_APPROVAL.name} changed: the spent approval is frozen history")
+    return problems
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--write", action="store_true")
     mode.add_argument("--check", action="store_true")
     args = parser.parse_args(argv)
+    historical = history_problems()
+    for problem in historical:
+        print(f"FAIL     {problem}")
+    if historical:
+        return 1
     packet = build()
     if args.write:
         PACKET.write_bytes(dump(packet))

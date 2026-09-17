@@ -1,10 +1,9 @@
-"""The versioned evaluation prompt, `first-person-semantic-extraction-prompt@1.1.0`.
+"""HISTORICAL, FROZEN: `first-person-semantic-extraction-prompt@1.0.0`, used by the Mission 1.85.9 pilot.
 
-Version 1.1.0 (Mission 1.85.11) changes only the REPORTED_FAILED_ATTEMPT instructions, after the operator
-confirmed 9 of 9 pilot disagreements as model over-reads: a three-anchor procedure (attempt, failure,
-explicit link), what is not an attempt on its own, an evidence rule requiring the quote to show both the
-attempt and its failure, and invented examples. The label's meaning, the NEGATIVE_EVALUATION_OF_NAMED_SOLUTION
-instructions, the answer rules and the tool are unchanged. Version 1.0.0 stays frozen in `prompt_v1_0_0.py`.
+Kept byte-for-byte so its digest (`53bcc87f...`) and the Mission 1.85.10 review of that run stay reproducible.
+Never edited; the current prompt lives in `prompt.py`.
+
+Original module description follows.
 
 Trusted instructions live in the system region and the task region. The source text lives only in one
 untrusted region, as the exact evaluation surface: no title header, no tags, no URL, no score, no view
@@ -34,7 +33,7 @@ __all__ = [
 ]
 
 PROMPT_ID = "first-person-semantic-extraction-prompt"
-PROMPT_VERSION = "1.1.0"
+PROMPT_VERSION = "1.0.0"
 
 SYSTEM_INSTRUCTIONS = """You read ONE question someone posted on a programming Q&A site and report whether the asker's own words contain either of two things. You are an interpreter of the text you are given, not a source of facts.
 
@@ -43,15 +42,7 @@ Your ONLY output is one call to the provided tool. Do not write prose. Do not ex
 THE TWO FINDING TYPES
 
 REPORTED_FAILED_ATTEMPT
-The asker states, in their own words, that they tried a specific approach and it did not work: an error, a wrong result, or no effect. A failed workaround counts. A question that only asks how to do something, with no attempt reported as failing, does NOT count.
-Report it only when the asker's own words establish all three:
-A. ATTEMPT: the asker performed or tried a concrete action (a command, change, configuration, workaround, procedure or other specific step).
-B. FAILURE: that action did not achieve what the asker intended (it failed, gave a wrong result, had no effect, or produced an error).
-C. LINK: the text itself ties that failure to that same action.
-If A, B or C is only implied, or needs inference from context or from the order of text, code and errors, it is not established: produce no REPORTED_FAILED_ATTEMPT finding.
-None of these is an attempt on its own: wanting or asking how to do something; using or having a tool, library or configuration; code shown in the question; a description of the current state or environment; an error, log or stack trace with no stated attempt. By themselves, statements like "I am using X", "I have X configured", "My app gives error Y", "X behaves like Y", "How can I make X do Y?" and "Why does X do Y?" do not count.
-Error output may support FAILURE but never establishes ATTEMPT. The evidence_quote must be the shortest contiguous passage of the asker's own words that shows both the attempted action and its failure; an error message or a code block alone is not enough. When in doubt, produce no finding for this type.
-Invented illustrations: "I tried clearing the cache and restarting, but the page still shows the old version" counts. "I am on version 3 and get a timeout error" does not. "How do I turn the cache off?" does not.
+The asker states, in their own words, that they tried a specific approach and it did not work: an error, a wrong result, or no effect. A failed workaround counts. A question that only asks how to do something, with no attempt reported as failing, does NOT count. The evidence may be error output inside a code block.
 
 NEGATIVE_EVALUATION_OF_NAMED_SOLUTION
 The asker states, in their own words, a negative evaluation of a solution named in the text: a tool, library, service or product. An error message is not an evaluation. Asking why a tool behaves a certain way is not an evaluation. The evidence must be the asker's prose, never code, logs or quoted material. The named solution must appear verbatim in the text and is given as the subject.
