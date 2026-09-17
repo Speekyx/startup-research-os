@@ -264,14 +264,12 @@ class TestHumanActions:
 
 
 class TestPacketStillCannotExecute:
-    def test_the_committed_packet_has_no_approval_and_cannot_execute(self) -> None:
-        # Mission 1.85.8: the packet is READY for a packet-scoped approval, and no approval exists.
+    def test_the_committed_packet_cannot_execute_again(self) -> None:
+        # Mission 1.85.9: the one packet-scoped approval exists and was spent by its attempt.
         runner = load_script("run_semantic_extraction_evaluation")
         packet = runner.verify_packet()
         assert packet["status"] == runner.READY
-        assert not runner.APPROVAL.exists()
-        assert not runner.ATTEMPT.exists()
+        assert runner.APPROVAL.exists() and runner.ATTEMPT.exists()
         with pytest.raises(runner.Refused) as refused:
             runner.main(["--execute", "--approval-sha256", "0" * 64])
-        assert refused.value.refusal == "OPERATOR_APPROVAL_NOT_RECORDED"
-        assert not runner.ATTEMPT.exists()
+        assert refused.value.refusal == "APPROVAL_FILE_DIGEST_MISMATCH"

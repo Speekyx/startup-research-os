@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.174
-Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.8)
+Version: 1.175
+Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.9)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.175 | 2026-09-17 | **DEVELOPMENT_PILOT_EXECUTED_PARTIAL_RESULTS_READY_FOR_OPERATOR_REVIEW: the first real semantic extraction ran once, stopped on a network reset, and was not rerun.** Roadmap N08-B-PILOT. **Approved** by operator-a for packet `5f96b418...` only, one execution. **Audited first**: the runner could not have reached its credential, could have retried a max_tokens cut, and would have lost the run on an unclassified error; all fixed before the approval, evaluation rules frozen in code. **Ran**: 24 calls, 23 accepted, 22 unattempted after a 763 s stall and reset; $2.440713 of $9. **Read**: REPORTED_FAILED_ATTEMPT false PRESENT 9/18 OUTSIDE bound, 9/9 human PRESENT found; NEGATIVE_EVALUATION insufficient support; validator 23/24, 0 unsupported. PILOT_NOT_CERTIFICATION. `mission-1.85.9-report.md`. |
 | 1.174 | 2026-09-17 | **READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL: the operator's decisions are recorded, and the packet is frozen for an approval nobody has given.** Roadmap N08-B-PILOT; 0 provider calls, 0 key reads, 0 approvals, 0 attempts. **Recorded** by operator-a at 2026-09-17T15:37:35+04:00: 9 thresholds authorised, flip rate rejected for this first pilot, retry ratified, ceiling $9.000000 accepted. **Validated** strictly: a malformed record is refused, never repaired; 0 problems. **Packet** v4 `5f96b418...` binds the retry policy, the threshold decisions and the decisions file by digest; READY with no blockers; an approval naming the previous digest is refused. **Fixed** a Windows reset race in the egress review server. NO EXECUTION HAS BEEN AUTHORISED. `mission-1.85.8-report.md`. |
 | 1.173 | 2026-09-17 | **FINAL_OPERATOR_DECISIONS_PREPARED: the three remaining decisions have their facts, and none is made.** Roadmap N08-B-PILOT; 0 provider calls, 0 token counts, 0 egress, 0 approvals. **Measured** offline: 46 approved requests, 322,746 body bytes. **Verified** from first-party docs: `claude-sonnet-5` ACTIVE, $2/$10 per MTok, ZDR NOT_ESTABLISHED, no substitution. **Cost**: planning $0.838, retry worst case $6.066 over 92 calls, proposed ceiling $9 (not $206.55). **Enforcement**: the ceiling was an approval field only; the runner now refuses any call that could cross the accepted ceiling, charges reported usage, and stops above the conservative input bound. **Packet** v3 `63c7302d...` BLOCKED_OPERATOR_DECISIONS on 10 thresholds, the retry reading and the ceiling. `mission-1.85.7-report.md`. |
 | 1.172 | 2026-09-17 | **EGRESS_REVIEW_COMPLETE_OPERATOR_DECISIONS_REMAIN: the operator decided egress for every reviewable development record.** 49 HUMAN_OPERATOR decisions imported (no bulk): 46 approved, 3 excluded by the operator, 1 excluded by the transport-delimiter rule, 0 review required. Packet `9040fd62...` BLOCKED_OPERATOR_DECISIONS on pilot thresholds, retry ratification and cost ceiling; runner re-pinned. 0 provider calls, 0 egress. `mission-1.85.6-report.md` §7. |
@@ -3186,6 +3187,27 @@ that does not exist.**
 **Next is a separate explicit operator approval naming packet `5f96b418...`.** **Do not create an approval, run
 `--execute`, read an API key or call a provider without it. NO EXECUTION HAS BEEN AUTHORISED. Mission 1.85.9 was
 not started.**
+
+
+**ANSWERED IN 1.175 (Mission 1.85.9). N08-B-PILOT: the approved pilot ran once, partially, and its results await
+the operator.**
+
+    approval      77cdea89... names packet 5f96b418..., anthropic/claude-sonnet-5, 46 records, $9, one execution
+    run           24 calls; 23 accepted; call 24 stalled 763 s then reset; 22 unattempted; no rerun
+    cost          $2.440713 of $9.000000 (reported usage $0.195657)
+    readings      RFA false PRESENT 9/18, upper 0.709: PILOT_OUTSIDE_PROPOSED_BOUND; NEG insufficient support
+    validator     23/24 accepted, 0 unsupported accepted, 0 abstentions, 0 schema failures
+
+- **READ THE RUNNER BEFORE SPENDING THE APPROVAL.** An approval is consumed by its attempt, so a gap found after
+  the first call costs the run; three were found before it.
+- **FREEZE THE EVALUATION BEFORE THE RESULTS EXIST.** The metric rules were committed and pushed before the
+  approval was recorded.
+- **A STOPPED RUN IS A RESULT, NOT A REASON TO RUN AGAIN.** Half the records are unevaluated, and saying so is the
+  finding.
+
+**Next is the operator's review of the 9 REPORTED_FAILED_ATTEMPT disagreements and of the partial run.** **Do not
+rerun, open HOLDOUT, modify the annotation, promote any finding, or start N08-C. Any further execution needs a new
+packet digest and a new explicit approval. Mission 1.85.10 was not started.**
 
 
 

@@ -249,6 +249,11 @@ jobs:
       - name: Semantic extraction operator decision package is current
         run: uv run python infrastructure/scripts/render_semantic_extraction_decision_package.py --check
 
+      # Mission 1.85.9. The one approved DEVELOPMENT pilot, evaluated from its committed summary. This
+      # step reads artifacts only; nothing in CI can call a provider or execute the runner.
+      - name: Semantic extraction pilot evaluation is current
+        run: uv run python infrastructure/scripts/evaluate_semantic_extraction_pilot.py --check
+
       # Mission 1.39 §34. The convergence registry rendered into its artifact.
       # It reads repository code and no database, so unlike the calibration
       # feasibility audit it can live here: an empty deployment changes nothing
