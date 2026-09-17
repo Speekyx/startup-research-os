@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.177
-Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.11)
+Version: 1.178
+Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.12)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.178 | 2026-09-17 | **PROMPT_1_1_DEVELOPMENT_PILOT_RESULTS_READY_FOR_OPERATOR_REVIEW: the revised prompt ran once in full, and it did not fix precision.** Roadmap N08-B-PILOT. **Approved** by operator-a for packet `6b27bccb...` only, one execution. **Rehearsed first**: resets, stalls and provider errors cost one record without a schema retry, the ceiling stops before crossing, spent approvals unlock nothing; no execution code changed; evaluation rules frozen before the approval. **Ran**: 46 calls, 45 accepted, 0 retries, $0.442141 of $9. **Read**: REPORTED_FAILED_ATTEMPT false PRESENT 16/25 upper 0.798 OUTSIDE; over-reads corrected 2/9; positives retained 9/15; valid overlap false PRESENT 9 -> 7, true PRESENT 9 -> 4; NEGATIVE_EVALUATION no regression, insufficient support. PILOT_NOT_CERTIFICATION. `mission-1.85.12-report.md`. |
 | 1.177 | 2026-09-17 | **READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL: the over-reads are corrected in the prompt, and the next packet waits for an approval.** Roadmap N08-B-PILOT; 0 provider calls, 0 text egress. **Revised**: prompt 1.1.0 `a4b96eb3...`, a three-anchor REPORTED_FAILED_ATTEMPT procedure; 1.0.0 frozen; label, schema, other label, thresholds and ceiling unchanged. **Analysed** aggregate-only: errors and code standing in for attempts. **Guarded**: offline regression spec, nothing of it in the prompt. **Packet** v5 `6b27bccb...` READY in new files, same 46 records, $9 kept; v4 and its spent approval frozen by digest. `mission-1.85.11-report.md`. |
 | 1.176 | 2026-09-17 | **WAITING_FOR_POST_MODEL_OPERATOR_REVIEW: the nine disagreements can be reviewed, and none has been.** Roadmap N08-B-PILOT; 0 provider calls, 0 reruns. **Tool**: loopback page with the blind reference untouched, model quotes rebuilt from frozen surfaces and offsets, the frozen definition quoted; four choices, no default, no bulk. **Provenance**: POST_MODEL_OPERATOR_REVIEW, never blind, never a replacement, refuses blind attestations, bound to every pilot digest, STALE on change. **Unchanged**: blind annotation `449ff10f...`, Mission 1.85.9 reading PILOT_OUTSIDE_PROPOSED_BOUND. Transport repair verified on loopback tests. `mission-1.85.10-report.md`. |
 | 1.175 | 2026-09-17 | **DEVELOPMENT_PILOT_EXECUTED_PARTIAL_RESULTS_READY_FOR_OPERATOR_REVIEW: the first real semantic extraction ran once, stopped on a network reset, and was not rerun.** Roadmap N08-B-PILOT. **Approved** by operator-a for packet `5f96b418...` only, one execution. **Audited first**: the runner could not have reached its credential, could have retried a max_tokens cut, and would have lost the run on an unclassified error; all fixed before the approval, evaluation rules frozen in code. **Ran**: 24 calls, 23 accepted, 22 unattempted after a 763 s stall and reset; $2.440713 of $9. **Read**: REPORTED_FAILED_ATTEMPT false PRESENT 9/18 OUTSIDE bound, 9/9 human PRESENT found; NEGATIVE_EVALUATION insufficient support; validator 23/24, 0 unsupported. PILOT_NOT_CERTIFICATION. `mission-1.85.9-report.md`. |
@@ -3252,6 +3253,25 @@ the next DEVELOPMENT packet is ready for an approval that does not exist.**
 
 **Next is a separate explicit operator approval naming packet `6b27bccb...`.** **Do not create an approval, execute,
 rerun, open HOLDOUT or promote findings without it. Mission 1.85.12 was not started.**
+
+
+**ANSWERED IN 1.178 (Mission 1.85.12). N08-B-PILOT: prompt 1.1.0 ran once over all 46 DEVELOPMENT records, and
+REPORTED_FAILED_ATTEMPT precision did not improve.**
+
+    approval      9fc8fac7... names packet 6b27bccb... only; spent by its attempt
+    run           46 calls, 45 accepted, 1 validator refusal, 0 retries, 0 provider errors, $0.442141 of $9
+    RFA           false PRESENT 16/25, upper 0.798, PILOT_OUTSIDE_PROPOSED_BOUND; recall 9/15
+    diagnostics   over-reads corrected 2/9; positives retained 9/15 (post-model, not thresholds)
+    overlap (23)  prompt 1.0.0 -> 1.1.0: false PRESENT 9 -> 7, true PRESENT 9 -> 4 (not independent)
+    NEG           0 PRESENT on 45, no regression; PILOT_INSUFFICIENT_SUPPORT
+
+- **REHEARSE THE FAILURE PATHS BEFORE SPENDING THE APPROVAL.** The transport fix was exercised through the real
+  transport offline; nothing in the execution path changed after it.
+- **COMPARE ONLY WHAT BOTH RUNS ANSWERED.** A partial run against a full run is 23 records, never 46 against 46.
+- **A REVISION THAT LOSES POSITIVES HAS NOT BOUGHT PRECISION.** Keep the three questions apart.
+
+**Next is an operator decision on REPORTED_FAILED_ATTEMPT, not a run.** **Do not execute, rerun, revise the prompt
+to 1.2.0, open HOLDOUT, start N08-C or promote findings without it. Mission 1.85.13 was not started.**
 
 
 

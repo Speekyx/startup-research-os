@@ -59,7 +59,12 @@ def test_the_approval_names_exactly_the_approved_packet_and_one_execution() -> N
     assert APPROVAL["accepted_hard_ceiling_usd"] == "9.000000"
     assert APPROVAL["approved_by"] == "operator-a"
     assert "exactly one DEVELOPMENT pilot execution" in APPROVAL["operator_statement"]
-    assert list(DATA.glob("semantic-extraction-evaluation-approval*")) == [APPROVAL_PATH]
+    # Mission 1.85.12 added exactly one more approval, for packet v5 only.
+    approvals = sorted(DATA.glob("semantic-extraction-evaluation-approval*"))
+    assert approvals == [
+        APPROVAL_PATH,
+        DATA / "semantic-extraction-evaluation-approval-development-v2.json",
+    ]
 
 
 def test_the_attempt_and_the_summary_name_this_packet_and_this_approval() -> None:
@@ -142,12 +147,12 @@ def test_a_second_execution_is_refused_before_the_key_or_any_transport(monkeypat
     monkeypatch.setattr(os, "environ", KeyTripwire(os.environ))
     monkeypatch.setattr(transport.UrllibTransport, "__init__", no_transport)
     monkeypatch.setattr(runner, "_load_compose_env", no_env)
-    # Mission 1.85.11: the current packet is version 5 and has no approval file.
+    # Mission 1.85.12: the current packet (version 5) has its own approval; the v4 digest does not match it.
     with pytest.raises(runner.Refused) as refused:
         runner.main(
             ["--execute", "--approval-sha256", APPROVAL_SHA, "--output-dir", str(REPO.parent / "x")]
         )
-    assert refused.value.refusal == "OPERATOR_APPROVAL_NOT_RECORDED"
+    assert refused.value.refusal == "APPROVAL_FILE_DIGEST_MISMATCH"
     # Even pointed at the spent approval file, it names the old packet and unlocks nothing.
     monkeypatch.setattr(runner, "APPROVAL", APPROVAL_PATH)
     with pytest.raises(runner.Refused) as refused:

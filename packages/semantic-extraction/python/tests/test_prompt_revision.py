@@ -168,7 +168,10 @@ def test_the_new_packet_is_a_new_digest_and_the_spent_approval_unlocks_nothing(t
     )
     assert packet["supersedes"]["packet_sha256"] == OLD_PACKET_SHA256
     assert packet["supersedes"]["approval_sha256"] == SPENT_APPROVAL_SHA256
-    assert not runner.APPROVAL.exists() and not runner.ATTEMPT.exists()
+    # Mission 1.85.12: the v5 approval names the new digest, never the old one.
+    assert (
+        json.loads(runner.APPROVAL.read_text("utf-8"))["packet_sha256"] == packet["packet_sha256"]
+    )
     with pytest.raises(runner.Refused) as refused:
         runner.check_approval(packet, runner.HISTORICAL_APPROVAL, SPENT_APPROVAL_SHA256)
     assert refused.value.refusal == "OPERATOR_APPROVAL_DOES_NOT_NAME_THIS_PACKET"
