@@ -25,7 +25,9 @@ is never blind, never replaces the reference, refuses blind attestations, binds 
 evaluation, annotation, label definition, surface and findings digests, and goes STALE on any change.
 Recommendation rule frozen before any choice. Blind annotation and Mission 1.85.9 evaluation byte-for-byte
 unchanged; PR #185 transport repair verified on loopback tests. 0 provider calls, 0 reruns, no choice recorded.
-`docs/reports/mission-1.85.10-report.md`.
+`docs/reports/mission-1.85.10-report.md`. **Review completed afterwards:** operator-a confirmed the blind ABSENT on
+all 9 (HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD 9, revision 0, ambiguous 0), POST_MODEL_DISAGREEMENT_REVIEW_COMPLETE;
+recommendation PROMPT_OR_EXTRACTION_CONTRACT_PRECISION_REVISION_REQUIRED, not applied.
 
 ## 1.174 - 2026-09-17 (Sprint 1 / Mission 1.85.9)
 

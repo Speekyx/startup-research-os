@@ -1,9 +1,11 @@
 # Mission 1.85.10 report: post-model operator review of the 9 REPORTED_FAILED_ATTEMPT disagreements (N08-B-PILOT)
 
-**Outcome: `WAITING_FOR_POST_MODEL_OPERATOR_REVIEW`.**
+**Outcome: `POST_MODEL_DISAGREEMENT_REVIEW_COMPLETE`** (updated after the review; the tooling merged first as
+`WAITING_FOR_POST_MODEL_OPERATOR_REVIEW` in PR #186).
 
-The review tooling is ready, and the operator's review folder is prepared outside the repository. **No choice is
-recorded**: only the operator can make one, in the local page, and has not yet.
+The operator reviewed all nine disagreements in the local page. Section 9 gives the result:
+**9 of 9 `HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD`**. The mechanical development recommendation is
+`PROMPT_OR_EXTRACTION_CONTRACT_PRECISION_REVISION_REQUIRED`, and nothing was revised.
 
 Counters for this mission:
 - provider calls 0;
@@ -103,7 +105,7 @@ Every decision binds its record's surface digest and a digest of the model's acc
 
 ## 4. Counts and recommendations
 
-**Not yet available.** No choice is recorded:
+When PR #186 merged, no choice was recorded yet (section 9 gives the completed counts):
 
 ```text
 HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD = 0
@@ -192,4 +194,56 @@ neither authorises a rerun.
 Local gates are recorded in the PR. The new CI step, `Semantic extraction post-model review is current`, reads
 committed artifacts only.
 
-**Next:** the operator opens the local page and reviews the nine records. Nothing else starts before that review.
+## 9. The operator's review (recorded after PR #186)
+
+Imported from the operator's working file with `lint` then `import`. Every check passed: bindings current, the exact
+nine records, every choice bound to its surface and findings digests.
+
+`docs/data/semantic-extraction-post-model-review-development-v1.json`, status **COMPLETE**:
+
+```text
+HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD = 9
+POST_MODEL_HUMAN_REVISION               = 0
+LABEL_DEFINITION_AMBIGUOUS              = 0
+UNRESOLVED                              = 0
+```
+
+| Record | Choice | Decided at |
+|---|---|---|
+| `17064c93-71cf-5474-ba7f-39ccd516782f` | HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD | 2026-09-17T19:11:06+04:00 |
+| `1a659352-390f-5c53-97de-0f725d017f46` | HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD | 2026-09-17T19:16:17+04:00 |
+| `203268d4-baf6-5410-a001-cf77843e96e3` | HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD | 2026-09-17T19:16:28+04:00 |
+| `37bf2146-b9fc-5e5a-b35b-d59f5f6bfc57` | HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD | 2026-09-17T19:16:32+04:00 |
+| `9f91eeea-25e6-5a9e-89e6-54d4490ecd7c` | HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD | 2026-09-17T19:16:35+04:00 |
+| `ac423fe4-a4b4-589d-ac49-96932ed51d54` | HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD | 2026-09-17T19:16:54+04:00 |
+| `bf04af60-1364-5fd0-8f4f-a8104d131aff` | HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD | 2026-09-17T19:16:59+04:00 |
+| `d6bff833-780d-55d3-a5ad-1effebb8a328` | HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD | 2026-09-17T19:17:01+04:00 |
+| `e35f990d-117a-59d1-b54e-5165632378bf` | HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD | 2026-09-17T19:17:05+04:00 |
+
+No note was written; the choice does not require one. The timestamps are recorded as saved: the first choice
+at 19:11:06, and the other eight between 19:16:17 and 19:17:05.
+
+**Development recommendation (mechanical):** `PROMPT_OR_EXTRACTION_CONTRACT_PRECISION_REVISION_REQUIRED`. Overread is
+the only non-zero count and ambiguity is 0 of 9. **It was not applied**: no prompt, contract, definition or threshold
+changed.
+
+**What it means:**
+- after seeing the model's quoted evidence, the operator judges that the model over-read `REPORTED_FAILED_ATTEMPT` in
+  all nine cases, under the frozen definition;
+- the pilot's precision problem on that label is therefore attributed to the model and prompt side, not to the blind
+  reference and not to the definition.
+
+This is a single operator's post-model judgement, not adjudication and not certification.
+
+**Post-model diagnostic** (post hoc, not preregistered, not the Mission 1.85.9 gate, not certification). With no
+revision and no ambiguous case, it equals the blind reading: 9 false PRESENT of 18, point 0.50, one-sided upper 95%
+0.709.
+
+**Unchanged:**
+- blind annotation sha256 `449ff10f...` and its attestation;
+- pilot evaluation `da468421...`;
+- Mission 1.85.9 reading `PILOT_OUTSIDE_PROPOSED_BOUND`.
+
+**Next is a development decision, not a run:** whether and how to tighten `REPORTED_FAILED_ATTEMPT` precision in the
+prompt or extraction contract. Any change is a new version, and any new execution needs a new packet digest and a new
+explicit approval.
