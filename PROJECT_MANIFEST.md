@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.169
+Version: 1.170
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.5)
+Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.6)
 
 ---
 
@@ -13,6 +13,19 @@ Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.5)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.170 - 2026-09-17 (Sprint 1 / Mission 1.85.6)
+
+**Local human egress review (N08-B-PILOT), WAITING_FOR_HUMAN_EGRESS_REVIEW.** `semantic_egress_review.py`
+prepare / serve / lint / import: a standard-library page on 127.0.0.1 only (Host and token checked, CSP
+`default-src 'none'`, no external asset, no logging) shows each of the 49 review-required DEVELOPMENT records
+with its exact transmitted surface and highlighted review triggers, and records only the operator's clicks as
+HUMAN_OPERATOR decisions bound to the surface digest, with resume. Optional zero-trigger bulk only after the
+exact confirmation sentence; secret-like approval only by individual TRIGGER_REVIEWED_NOT_PERSONAL. Import
+refuses and never repairs (split, holdout, scan and pattern digests, surface version, stale digests, origin,
+operator, timestamp, reason compatibility, bulk set, duplicates, persisted REVIEW_REQUIRED, completeness). Policy
+REVIEW_OR_EXCLUDE_NO_REDACTION unchanged. No decision imported: 0 approved, 1 mechanically excluded, 49 review
+required; packet unchanged. 0 provider calls, 0 egress. `docs/reports/mission-1.85.6-report.md`.
 
 ## 1.169 - 2026-09-17 (Sprint 1 / Mission 1.85.5)
 
