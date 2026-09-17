@@ -254,7 +254,9 @@ Test changes:
   - only the exact digest passes the approval gate;
   - merge grants nothing.
 
-CI: CI_PLACEHOLDER
+CI: [PR #183](https://github.com/Speekyx/startup-research-os/pull/183). All 13 checks passed on `7b7d170`,
+including Python (ruff, mypy) and Integration (PostgreSQL, Redis, Qdrant). This report line was added
+afterwards, and the merge waited for the checks on that commit too.
 
 ## 9. What this mission did not do
 
