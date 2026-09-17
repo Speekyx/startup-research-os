@@ -24,6 +24,10 @@ Two steps:
 Readings use only PILOT_WITHIN_PROPOSED_BOUND, PILOT_OUTSIDE_PROPOSED_BOUND and PILOT_INSUFFICIENT_SUPPORT,
 under RESULT_SCOPE DEVELOPMENT_PILOT and PILOT_NOT_CERTIFICATION. A descriptive item with no proposed bound
 has reading null. The run-to-run flip rate is not evaluated: the operator rejected it for this first pilot.
+
+Mission 1.85.12 added pilot V2 (packet v5, prompt 1.1.0) with `--pilot v2`. The rules are unchanged and were
+committed before that run; only the files differ. `--check` evaluates every pilot whose attempt record exists,
+and V1 still reproduces byte for byte.
 """
 
 from __future__ import annotations
@@ -34,6 +38,7 @@ import json
 import pathlib
 import statistics
 import sys
+from dataclasses import dataclass
 from decimal import Decimal
 from typing import Any
 
@@ -46,6 +51,55 @@ REFERENCE = DATA / "stack-overflow-semantic-annotations-development-operator-a-v
 SUMMARY = DATA / "semantic-extraction-pilot-run-development-v1.json"
 EVALUATION = DATA / "semantic-extraction-pilot-evaluation-development-v1.json"
 PAGE = DATA / "semantic-extraction-pilot-evaluation-development-v1.md"
+
+
+@dataclass(frozen=True)
+class Pilot:
+    """One approved execution and its artifacts. The rules below are the same for every pilot; only the files and
+    the mission named in the committed comments differ (Mission 1.85.12 added V2 without changing V1's bytes)."""
+
+    name: str
+    packet: pathlib.Path
+    summary: pathlib.Path
+    evaluation: pathlib.Path
+    page: pathlib.Path
+    attempt: pathlib.Path
+    summary_comment: str
+    evaluation_comment: str
+    title: str
+
+
+V1 = Pilot(
+    name="v1",
+    packet=PACKET,
+    summary=SUMMARY,
+    evaluation=EVALUATION,
+    page=PAGE,
+    attempt=DATA / "semantic-extraction-evaluation-attempt-development-v1.json",
+    summary_comment="Summary of the one approved DEVELOPMENT pilot run (Mission 1.85.9). No source text: quotes are digests and offsets. The full run record, with model payloads, stays outside the repository. Evaluation artifact only; nothing here is a Signal, Claim, Evidence or finding.",
+    evaluation_comment="DEVELOPMENT PILOT EVALUATION (Mission 1.85.9). PILOT_NOT_CERTIFICATION. Against a SINGLE_HUMAN_REFERENCE, which is the pilot reference and not absolute truth. Rendered from committed artifacts; evaluation artifact only, never a Signal, Claim, Evidence or production finding.",
+    title="# Semantic extraction DEVELOPMENT pilot evaluation (v1)",
+)
+V2 = Pilot(
+    name="v2",
+    packet=DATA / "semantic-extraction-evaluation-packet-development-v2.json",
+    summary=DATA / "semantic-extraction-pilot-run-development-v2.json",
+    evaluation=DATA / "semantic-extraction-pilot-evaluation-development-v2.json",
+    page=DATA / "semantic-extraction-pilot-evaluation-development-v2.md",
+    attempt=DATA / "semantic-extraction-evaluation-attempt-development-v2.json",
+    summary_comment="Summary of the one approved DEVELOPMENT pilot run of packet v5, prompt 1.1.0 (Mission 1.85.12). No source text: quotes are digests and offsets. The full run record, with model payloads, stays outside the repository. Evaluation artifact only; nothing here is a Signal, Claim, Evidence or finding.",
+    evaluation_comment="DEVELOPMENT PILOT EVALUATION of packet v5, prompt 1.1.0 (Mission 1.85.12). PILOT_NOT_CERTIFICATION. Against the same blind SINGLE_HUMAN_REFERENCE, which is the pilot reference and not absolute truth. Rendered from committed artifacts with the rules frozen in Mission 1.85.9; evaluation artifact only, never a Signal, Claim, Evidence or production finding.",
+    title="# Semantic extraction DEVELOPMENT pilot evaluation (v2: packet v5, prompt 1.1.0)",
+)
+
+
+def current_v1() -> Pilot:
+    """V1 as the module constants name it now, so a caller that redirects SUMMARY, PACKET, EVALUATION or PAGE
+    (the Mission 1.85.9 tests do) still redirects the default pilot."""
+    import dataclasses
+
+    return dataclasses.replace(V1, packet=PACKET, summary=SUMMARY, evaluation=EVALUATION, page=PAGE)
+
 
 EVALUATOR_ID = "semantic-extraction-development-pilot-evaluator"
 EVALUATOR_VERSION = "1.0.0"
@@ -112,7 +166,10 @@ def nearest_rank(values: list[float], percentile: int) -> float | None:
 # -- step 1: summarise --------------------------------------------------------------------------------
 
 
-def summarise(run_path: pathlib.Path, surfaces: dict[str, str]) -> dict[str, Any]:
+def summarise(
+    run_path: pathlib.Path, surfaces: dict[str, str], pilot: Pilot | None = None
+) -> dict[str, Any]:
+    pilot = pilot or current_v1()
     sys.path.insert(0, str(ROOT / "packages" / "semantic-extraction-contract" / "python"))
     from sros_semantic_extraction_contract import surface_sha256
 
@@ -208,7 +265,7 @@ def summarise(run_path: pathlib.Path, surfaces: dict[str, str]) -> dict[str, Any
             }
         )
     return {
-        "$comment": "Summary of the one approved DEVELOPMENT pilot run (Mission 1.85.9). No source text: quotes are digests and offsets. The full run record, with model payloads, stays outside the repository. Evaluation artifact only; nothing here is a Signal, Claim, Evidence or finding.",
+        "$comment": pilot.summary_comment,
         "summary_id": "semantic-extraction-pilot-run-development",
         "version": "1.0.0",
         "run_file_sha256": sha(raw),
@@ -258,9 +315,10 @@ def final_outcome(record: dict[str, Any] | None) -> str:
     return record["attempts"][-1]["outcome"]
 
 
-def evaluate() -> dict[str, Any]:
-    summary = load(SUMMARY)
-    packet = load(PACKET)
+def evaluate(pilot: Pilot | None = None) -> dict[str, Any]:
+    pilot = pilot or current_v1()
+    summary = load(pilot.summary)
+    packet = load(pilot.packet)
     decisions = load(DECISIONS)
     contract = load(CONTRACT)
     reference = load(REFERENCE)
@@ -561,7 +619,7 @@ def evaluate() -> dict[str, Any]:
     }
     flip = next(d for d in decisions["A_pilot_thresholds"] if d["item_id"].startswith("run_to_run"))
     return {
-        "$comment": "DEVELOPMENT PILOT EVALUATION (Mission 1.85.9). PILOT_NOT_CERTIFICATION. Against a SINGLE_HUMAN_REFERENCE, which is the pilot reference and not absolute truth. Rendered from committed artifacts; evaluation artifact only, never a Signal, Claim, Evidence or production finding.",
+        "$comment": pilot.evaluation_comment,
         "evaluation_id": "semantic-extraction-pilot-evaluation-development",
         "evaluator": f"{EVALUATOR_ID}@{EVALUATOR_VERSION}",
         "REFERENCE_STRENGTH": packet["reference"]["REFERENCE_STRENGTH"],
@@ -570,7 +628,7 @@ def evaluate() -> dict[str, Any]:
         "prohibited_claims": packet["reference"]["prohibited_claims"],
         "inputs": {
             "packet_sha256": packet["packet_sha256"],
-            "run_summary_sha256": sha(SUMMARY.read_bytes()),
+            "run_summary_sha256": sha(pilot.summary.read_bytes()),
             "reference_sha256": sha(REFERENCE.read_bytes()),
             "decisions_sha256": sha(DECISIONS.read_bytes()),
         },
@@ -596,10 +654,11 @@ def evaluate() -> dict[str, Any]:
     }
 
 
-def page(evaluation: dict[str, Any]) -> bytes:
+def page(evaluation: dict[str, Any], pilot: Pilot | None = None) -> bytes:
+    pilot = pilot or current_v1()
     e = evaluation["run_execution"]
     lines = [
-        "# Semantic extraction DEVELOPMENT pilot evaluation (v1)",
+        pilot.title,
         "",
         "> Generated by `infrastructure/scripts/evaluate_semantic_extraction_pilot.py` from committed artifacts. Do not edit by hand.",
         "",
@@ -657,8 +716,10 @@ def main(argv: list[str] | None = None) -> int:
     mode.add_argument("--summarise", metavar="RUN_FILE")
     mode.add_argument("--write", action="store_true")
     mode.add_argument("--check", action="store_true")
+    parser.add_argument("--pilot", choices=("v1", "v2"), default=None)
     args = parser.parse_args(argv)
     if args.summarise:
+        pilot = {"v1": current_v1(), "v2": V2}[args.pilot or "v1"]
         sys.path.insert(0, str(ROOT / "infrastructure" / "scripts"))
         for path in (
             "packages/semantic-extraction-contract/python",
@@ -668,21 +729,34 @@ def main(argv: list[str] | None = None) -> int:
             sys.path.insert(0, str(ROOT / path))
         from build_semantic_egress_eligibility import development_surfaces
 
-        SUMMARY.write_bytes(dump(summarise(pathlib.Path(args.summarise), development_surfaces())))
-        print(f"wrote {SUMMARY.name}")
+        pilot.summary.write_bytes(
+            dump(summarise(pathlib.Path(args.summarise), development_surfaces(), pilot))
+        )
+        print(f"wrote {pilot.summary.name}")
         return 0
-    evaluation = evaluate()
-    targets = {EVALUATION: dump(evaluation), PAGE: page(evaluation)}
-    if args.write:
-        for path, content in targets.items():
-            path.write_bytes(content)
-        print(f"wrote {EVALUATION.name} and {PAGE.name}")
-        return 0
-    stale = [p.name for p, c in targets.items() if not p.exists() or p.read_bytes() != c]
-    for name in stale:
-        print(f"FAIL     {name} is stale")
-    if not stale:
-        print(f"ok       {EVALUATION.name} matches")
+    # A pilot is evaluated once its attempt record exists: an attempt means a run happened, so its summary and
+    # evaluation must exist and be current. A pilot with no attempt has nothing to evaluate.
+    available = {"v1": current_v1(), "v2": V2}
+    pilots = (
+        [available[args.pilot]]
+        if args.pilot
+        else [p for p in available.values() if p.attempt.exists()]
+    )
+    stale: list[str] = []
+    for pilot in pilots:
+        evaluation = evaluate(pilot)
+        targets = {pilot.evaluation: dump(evaluation), pilot.page: page(evaluation, pilot)}
+        if args.write:
+            for path, content in targets.items():
+                path.write_bytes(content)
+            print(f"wrote {pilot.evaluation.name} and {pilot.page.name}")
+            continue
+        pilot_stale = [p.name for p, c in targets.items() if not p.exists() or p.read_bytes() != c]
+        for name in pilot_stale:
+            print(f"FAIL     {name} is stale")
+        if not pilot_stale:
+            print(f"ok       {pilot.evaluation.name} matches")
+        stale += pilot_stale
     return 1 if stale else 0
 
 
