@@ -269,9 +269,15 @@ class TestRunnerGovernance:
         assert rebuilt["packet_sha256"] == runner.EXPECTED_PACKET_SHA256
         assert renderer.dump(rebuilt) == renderer.PACKET.read_bytes()
 
-    def test_no_approval_or_attempt_file_exists(self, runner) -> None:
-        assert not runner.APPROVAL.exists()
-        assert not runner.ATTEMPT.exists()
+    def test_the_only_approval_names_this_packet_and_is_spent(self, runner) -> None:
+        # Mission 1.85.9 recorded exactly one approval, and its attempt record spends it.
+        approval = json.loads(runner.APPROVAL.read_text("utf-8"))
+        attempt = json.loads(runner.ATTEMPT.read_text("utf-8"))
+        assert approval["packet_sha256"] == runner.EXPECTED_PACKET_SHA256
+        assert attempt["packet_sha256"] == runner.EXPECTED_PACKET_SHA256
+        with pytest.raises(runner.Refused) as refused:
+            runner.refuse_if_attempted(runner.ATTEMPT)
+        assert refused.value.refusal == "EVALUATION_APPROVAL_ALREADY_SPENT"
 
     def test_a_dry_run_builds_no_transport(self, runner, monkeypatch, capsys) -> None:
         import sros_llm_gateway.transport as transport
@@ -320,9 +326,17 @@ class TestRunnerGovernance:
             "accepts_retry_interpretation": True,
             "accepted_hard_ceiling_usd": ready["execution_bounds"]["hard_ceiling_usd_approved"],
             "accepted_reference_strength": "SINGLE_HUMAN_REFERENCE",
+            "approved_provider": "anthropic",
+            "approved_model": "claude-sonnet-5",
+            "approved_record_count": len(ready["selection"]["egress_approved_record_ids"]),
+            "approval_scope": runner.APPROVAL_SCOPE,
         }
         cases = [
             ("OPERATOR_APPROVAL_DOES_NOT_NAME_THIS_PACKET", dict(good, packet_sha256="0" * 64)),
+            ("OPERATOR_APPROVAL_INCOMPLETE", dict(good, approved_model="claude-opus-5")),
+            ("OPERATOR_APPROVAL_INCOMPLETE", dict(good, approved_provider="openai")),
+            ("OPERATOR_APPROVAL_INCOMPLETE", dict(good, approved_record_count=50)),
+            ("OPERATOR_APPROVAL_INCOMPLETE", dict(good, approval_scope="UNLIMITED")),
             ("OPERATOR_APPROVAL_INCOMPLETE", dict(good, accepts_retry_interpretation="yes")),
             (
                 "OPERATOR_APPROVAL_INCOMPLETE",
@@ -366,7 +380,6 @@ class TestRunnerGovernance:
         with pytest.raises(runner.Refused) as refused:
             runner.check_approval(ready, tmp_path / "approval.json", "0" * 64)
         assert refused.value.refusal == "OPERATOR_APPROVAL_NOT_RECORDED"
-        assert not runner.APPROVAL.exists()
 
     def test_a_reference_that_is_not_human_or_overclaims_is_refused(self, runner) -> None:
         ready = json.loads(runner.PACKET.read_text("utf-8"))

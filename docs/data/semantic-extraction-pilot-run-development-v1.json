@@ -1,0 +1,1322 @@
+{
+ "$comment": "Summary of the one approved DEVELOPMENT pilot run (Mission 1.85.9). No source text: quotes are digests and offsets. The full run record, with model payloads, stays outside the repository. Evaluation artifact only; nothing here is a Signal, Claim, Evidence or finding.",
+ "summary_id": "semantic-extraction-pilot-run-development",
+ "version": "1.0.0",
+ "run_file_sha256": "0e559b243bce391c785a280ee77cf6302647112d9165b24d699bd10fc84c5f78",
+ "packet_id": "semantic-extraction-evaluation-packet-development",
+ "packet_version": 4,
+ "packet_sha256": "5f96b418e75374b098b44b7fe3ba756a5155af94f92cd607ea251fa131d18c0e",
+ "approval_sha256": "77cdea89eba08f768b135e099478884d82b2120f8d0fab13e5f8f018b0b48d95",
+ "provider": "anthropic",
+ "model": "claude-sonnet-5",
+ "REFERENCE_STRENGTH": "SINGLE_HUMAN_REFERENCE",
+ "RESULT_SCOPE": "DEVELOPMENT_PILOT",
+ "result_label": "PILOT_NOT_CERTIFICATION",
+ "records_approved": 46,
+ "started_at": "2026-09-17T13:00:40+00:00",
+ "finished_at": "2026-09-17T13:14:38+00:00",
+ "elapsed_seconds": 838.143,
+ "calls": 24,
+ "stopped": "UNEXPECTED_ERROR",
+ "cost": {
+  "accepted_hard_ceiling_usd": "9.000000",
+  "spent_usd": "2.4407130",
+  "charges": [
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.008844",
+    "spent_usd": "0.008844"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.010613",
+    "spent_usd": "0.019457"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.013825",
+    "spent_usd": "0.033282"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.007317",
+    "spent_usd": "0.040599"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.007889",
+    "spent_usd": "0.048488"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.010441",
+    "spent_usd": "0.058929"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.007117",
+    "spent_usd": "0.066046"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.006112",
+    "spent_usd": "0.072158"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.009216",
+    "spent_usd": "0.081374"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.008956",
+    "spent_usd": "0.090330"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.009387",
+    "spent_usd": "0.099717"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.006974",
+    "spent_usd": "0.106691"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.006050",
+    "spent_usd": "0.112741"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.012366",
+    "spent_usd": "0.125107"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.008624",
+    "spent_usd": "0.133731"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.007198",
+    "spent_usd": "0.140930"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.008562",
+    "spent_usd": "0.149492"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.007014",
+    "spent_usd": "0.156506"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.006125",
+    "spent_usd": "0.162631"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.011255",
+    "spent_usd": "0.173886"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.005775",
+    "spent_usd": "0.179661"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.007698",
+    "spent_usd": "0.187359"
+   },
+   {
+    "basis": "REPORTED_USAGE",
+    "usd": "0.008298",
+    "spent_usd": "0.195657"
+   },
+   {
+    "basis": "NO_REPORTED_USAGE_CHARGED_AT_DOCUMENTED_MAXIMUM",
+    "usd": "2.245056",
+    "spent_usd": "2.440713"
+   }
+  ]
+ },
+ "canonical_writes": 0,
+ "records": [
+  {
+   "normalized_record_id": "fa1a8536-4624-5386-b814-c829932cb1ab",
+   "surface_sha256": "f7a68a5b08f0745a181bfb96495623a9f6099a707d2ecb25c8c39a3c8c581442",
+   "attempts": [
+    {
+     "call_number": 1,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "c5c1c97eb6ddb97f7bfb6c3593779efa4b9b85fca0b81ae71f84167f4c835ce1",
+       "body_sha256": "b388b1d567e8245c09770d8a36f67af58c9cfcef2cfd07f1adc72373d6e7cda0",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 3265,
+        "output_tokens": 151
+       },
+       "elapsed_seconds": 3.94
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "FINDINGS_PRESENT",
+   "payload_finding_types": [
+    "REPORTED_FAILED_ATTEMPT"
+   ],
+   "extraction": {
+    "extraction_id": "7c48b7a733d43b5e955c1d98048ef424fd5679a2512412d7af6e17699e06e1ef",
+    "extraction_state": "FINDINGS_PRESENT",
+    "findings": [
+     {
+      "finding_id": "dbb1506b7de9dc575c1c883893053eaab69926293053f27508f762e47f3b9aae",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 1466,
+      "evidence_end": 1499,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "b9b10954f8b5bc66d845c0532433a36751c5ee0254ba7b4acaf2fbf9411c8000",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     }
+    ]
+   }
+  },
+  {
+   "normalized_record_id": "1a659352-390f-5c53-97de-0f725d017f46",
+   "surface_sha256": "dea3bf3d40f89c91348db8609ddf28c105024c2ffa46d0d542fc17a398626760",
+   "attempts": [
+    {
+     "call_number": 2,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "7ac99851234ad3975b9cc4fd4bc232def88c3b8dd91fd856ac4eca1a5466fed7",
+       "body_sha256": "abd8faf870c446b1833b87ad2262535d4c2f982c2030d282e94462e6283242a3",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 3419,
+        "output_tokens": 281
+       },
+       "elapsed_seconds": 4.001
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "FINDINGS_PRESENT",
+   "payload_finding_types": [
+    "REPORTED_FAILED_ATTEMPT",
+    "REPORTED_FAILED_ATTEMPT"
+   ],
+   "extraction": {
+    "extraction_id": "b8b334662062d8fb26471f646ab104897ffd71a3c06ba3e7b2d9f2e1e4b43418",
+    "extraction_state": "FINDINGS_PRESENT",
+    "findings": [
+     {
+      "finding_id": "4f49a45769ece5ea51569b137480ae01abdb864fd3895647207ccdef1fc37e2d",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 1905,
+      "evidence_end": 1938,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "641427601783c77652716c5861ceecd3a1340d5a12dfbe1988f4ab30780771a5",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     },
+     {
+      "finding_id": "b809742c042c1fe1f24b9e45df54454ad490358d9183fd957e91c8a80b3de41b",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 2037,
+      "evidence_end": 2158,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "b7f9b8a8ef6fe8b5eb7094fc5f0d9f5a0d9030e7c42b977b2e9beb1fe43b9f09",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     }
+    ]
+   }
+  },
+  {
+   "normalized_record_id": "17064c93-71cf-5474-ba7f-39ccd516782f",
+   "surface_sha256": "70486f6802b1ca84a63e8c38d12b820d504210e5e0c96b6f7ac41822120a25c2",
+   "attempts": [
+    {
+     "call_number": 3,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "738272f1b532e0e4abd6f79deef0b0515704ffd8f77e19becf1100e831af7642",
+       "body_sha256": "722409af35f477b1a20d3af1efd4093a75d3cee0d6f8a5b4d682e52cf9d35d57",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 4859,
+        "output_tokens": 285
+       },
+       "elapsed_seconds": 3.941
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "FINDINGS_PRESENT",
+   "payload_finding_types": [
+    "REPORTED_FAILED_ATTEMPT",
+    "REPORTED_FAILED_ATTEMPT"
+   ],
+   "extraction": {
+    "extraction_id": "e97453607b761d78db28870848da08af7c90496663d769d4af25958286601df8",
+    "extraction_state": "FINDINGS_PRESENT",
+    "findings": [
+     {
+      "finding_id": "167af9ce5639a87aefe25c0212063486af112ce8447e228370767fdaff6d5db7",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 1241,
+      "evidence_end": 1359,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "c1bd52af63d8c5fac3dfd0bc9838a68325aa775ac61471526204ff12a55122f3",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     },
+     {
+      "finding_id": "31b468bb281e2ae3ae9891a1842e6bdac9d02af05075843ba0695460541170ec",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 5680,
+      "evidence_end": 5765,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "d0fab51e2231b2ee169db3290e9b906203316c8d20ae966df522cfb85239bc07",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     }
+    ]
+   }
+  },
+  {
+   "normalized_record_id": "ac423fe4-a4b4-589d-ac49-96932ed51d54",
+   "surface_sha256": "1865020f0cba48dbed4f3d7533ae4ec3633b4f69364bea9a5397cbd9efae5bfa",
+   "attempts": [
+    {
+     "call_number": 4,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "a371964fa298c2e754c1aaf3465ac56f95a58ae277433d15bea71980ee11ce25",
+       "body_sha256": "3246c6c19c88d4fde9e4f64fe488fa42caf244a5d3d8edebd20945ab381893d3",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 2526,
+        "output_tokens": 160
+       },
+       "elapsed_seconds": 3.18
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "FINDINGS_PRESENT",
+   "payload_finding_types": [
+    "REPORTED_FAILED_ATTEMPT"
+   ],
+   "extraction": {
+    "extraction_id": "d733a11cdda28a95b1586aab472ac44fc994753e7317487f605220bed9989291",
+    "extraction_state": "FINDINGS_PRESENT",
+    "findings": [
+     {
+      "finding_id": "061e63761a5ff5290b0ba33e1d6739a6978d42421f1177d33524a5edb902e7ee",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 471,
+      "evidence_end": 543,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "f4d569899bdf0491efb3a6c4a70a6a0686efc879020bc57b638c5dc5bd43f9e9",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     }
+    ]
+   }
+  },
+  {
+   "normalized_record_id": "203268d4-baf6-5410-a001-cf77843e96e3",
+   "surface_sha256": "fdb6b5cfa87fc4d2a4ff4411e577e7c8525a0a0c8a72fea580966c71d428256a",
+   "attempts": [
+    {
+     "call_number": 5,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "f6e12784f4f4d548779163fce5367329c5cbf5327569c280baf8188a7dfbabef",
+       "body_sha256": "3103b5f7eaabde691c1a1a90de9df3128a88e420cd868e58aea65f98086ceb3f",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 2731,
+        "output_tokens": 171
+       },
+       "elapsed_seconds": 3.359
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "FINDINGS_PRESENT",
+   "payload_finding_types": [
+    "REPORTED_FAILED_ATTEMPT"
+   ],
+   "extraction": {
+    "extraction_id": "acc8913534a0424fd3873f8d54d77565d6458ded52c2d4115d6321aa332ab1f1",
+    "extraction_state": "FINDINGS_PRESENT",
+    "findings": [
+     {
+      "finding_id": "8eafa49d052a89ceab97b313f298263cde3d055636ded087eaff7a134e1c3677",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 1214,
+      "evidence_end": 1316,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "d67777cda295a63e68dab5610e2c9dd99f2b4f1d16d97fc89d853ba4d3f1b850",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     }
+    ]
+   }
+  },
+  {
+   "normalized_record_id": "9f91eeea-25e6-5a9e-89e6-54d4490ecd7c",
+   "surface_sha256": "f2cd0a74c2f667995730fe2fa64ea5f9b7abed0d16c8a830abaa0f0f0f6b8edd",
+   "attempts": [
+    {
+     "call_number": 6,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "89258b2736cac8a1b5df7f4e601b8f7a423c5fce76b215a2ebe62256510250ae",
+       "body_sha256": "bfc42e402f0a9fa50030742c9ef0ae6c52560a5cb5a5824638595bb7bb2ed2dc",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 3676,
+        "output_tokens": 214
+       },
+       "elapsed_seconds": 3.809
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "FINDINGS_PRESENT",
+   "payload_finding_types": [
+    "REPORTED_FAILED_ATTEMPT"
+   ],
+   "extraction": {
+    "extraction_id": "594600533da4160aa6b22d908aef8314be8800bb54190465c6456b856760eff6",
+    "extraction_state": "FINDINGS_PRESENT",
+    "findings": [
+     {
+      "finding_id": "0800846c506825cbd7d54b588e55af67793cbcb950af2b1dcd1b563f3dc3775d",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 628,
+      "evidence_end": 844,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "7c7580c569b827e734a080c063190744d630f3c13ad518f56a075c59e59ea9b6",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     }
+    ]
+   }
+  },
+  {
+   "normalized_record_id": "37bf2146-b9fc-5e5a-b35b-d59f5f6bfc57",
+   "surface_sha256": "f56c63774966be50841cb31ef919535ea659f2851eb3b0622fd374466549b120",
+   "attempts": [
+    {
+     "call_number": 7,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "90266660522cfbece87cc4695c678046808cb5eb38cbb3ba8cb710d4b668e7cd",
+       "body_sha256": "27745af080f447607ca21d941bb265e7f8e221fe25ebac23dd225c3dc9eaab47",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 2405,
+        "output_tokens": 166
+       },
+       "elapsed_seconds": 2.608
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "FINDINGS_PRESENT",
+   "payload_finding_types": [
+    "REPORTED_FAILED_ATTEMPT"
+   ],
+   "extraction": {
+    "extraction_id": "68abb74ec37bcee188bcacf7f157f0e02dc125042dfa94fde15b3347d40c29d1",
+    "extraction_state": "FINDINGS_PRESENT",
+    "findings": [
+     {
+      "finding_id": "26aea2498df64eca8b9a8b6ad9e948f6871d31a7e82cd03e7afe861e00c51c28",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 446,
+      "evidence_end": 542,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "780dca9d363351f4de282101b8797293301f94aeabec9c603c22b651408ffd16",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     }
+    ]
+   }
+  },
+  {
+   "normalized_record_id": "99bdc4b0-959d-541e-bc59-7aa5706cf282",
+   "surface_sha256": "0ef5cd1230f183d6039c0224d600e021cd706690297ac38f0c203eac960269b7",
+   "attempts": [
+    {
+     "call_number": 8,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "7026850a469e4abf10997fc6e04995951d76ad7e5cd1e2f33f7234c3d88fe605",
+       "body_sha256": "8568eef51f22e5271fe7cf56ab6f003a49d668b6459a62f79b6ef465f83ddd97",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 2408,
+        "output_tokens": 74
+       },
+       "elapsed_seconds": 2.147
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "NO_FINDING_ESTABLISHED",
+   "payload_finding_types": [],
+   "extraction": {
+    "extraction_id": "34297963c664d2b29b32ed5d8225caa6aaf103a007c551e9d2c3102ecd55549c",
+    "extraction_state": "NO_FINDING_ESTABLISHED",
+    "findings": []
+   }
+  },
+  {
+   "normalized_record_id": "bf04af60-1364-5fd0-8f4f-a8104d131aff",
+   "surface_sha256": "1d6221ff1e8223c9f3d226f9ad624fed04442ea36a390a7c697c67e600627d2d",
+   "attempts": [
+    {
+     "call_number": 9,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "467987cf070093bbfc6a8522551d9f7bf4462492b2627ec0fe6695b3865736af",
+       "body_sha256": "8bffde534af2449d3fed3581e0fd637e4ee834b9f820f71f8204bc4f178ecf1d",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 2889,
+        "output_tokens": 260
+       },
+       "elapsed_seconds": 3.837
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "FINDINGS_PRESENT",
+   "payload_finding_types": [
+    "REPORTED_FAILED_ATTEMPT",
+    "REPORTED_FAILED_ATTEMPT"
+   ],
+   "extraction": {
+    "extraction_id": "5bd557189229470e5186a1571e1e8672de53ada31d208365849af61881ebd73d",
+    "extraction_state": "FINDINGS_PRESENT",
+    "findings": [
+     {
+      "finding_id": "10bc3b9557d804634cbf07f734b998bb058e4f0102e4ad965c4d07a9c4ff0f9e",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 974,
+      "evidence_end": 1050,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "69c3a524ff7a014919f0de9c23ca4bda82c1b4208c542dd6dfe29f33c33b477d",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     },
+     {
+      "finding_id": "869a55f445b831e0ff66897a4bd7f53a364169765c01d03b5a093e78dcf59438",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 1447,
+      "evidence_end": 1504,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "5c8e06d0848d6db3f25aa1b89b33f3ece71f047cd6afde7ac1a0443d2834bcb7",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     }
+    ]
+   }
+  },
+  {
+   "normalized_record_id": "e9edbbaa-5331-5584-8d3e-847c8f759551",
+   "surface_sha256": "12ee26a430ba565d443e1e40fc896fa653d95532fe7e897620f3e17f2839c9bb",
+   "attempts": [
+    {
+     "call_number": 10,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "1e57ee115fb1c7e48fd9f90ff90043d6028c61b99165dc6eb679791fa0e1f02a",
+       "body_sha256": "040516838a61b44fc58c896f70e92c56fe70365444b853b75f6d4cf5b2460be7",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 3236,
+        "output_tokens": 167
+       },
+       "elapsed_seconds": 3.595
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "FINDINGS_PRESENT",
+   "payload_finding_types": [
+    "REPORTED_FAILED_ATTEMPT"
+   ],
+   "extraction": {
+    "extraction_id": "96bc14837c0b3db6cb359f73d1d03645df1d288a198baf6bf2a6b5778b7753c1",
+    "extraction_state": "FINDINGS_PRESENT",
+    "findings": [
+     {
+      "finding_id": "9d1d2c5ecbe1cca6417e5b026f3f9b2ff95f0ed5d7ddd0e04c47fcc2d5275e15",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 197,
+      "evidence_end": 289,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "dba1569fba9eb06b4d208b6593c135b7e7a79dcc69ffcf3dc755c428d5bf1bd0",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     }
+    ]
+   }
+  },
+  {
+   "normalized_record_id": "d6bff833-780d-55d3-a5ad-1effebb8a328",
+   "surface_sha256": "a6903fb7063e9c164636d8e32f35d48accc316cd07204e0d4e5d0d40d26b0f19",
+   "attempts": [
+    {
+     "call_number": 11,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "63af8daacc9d29f2b515ec6d3f0c0746cff3d8f1fa9dd56c002cbb0c77eea159",
+       "body_sha256": "81c3853cedb9237773bfb5fb816353f2f5f606ecc9565d8b5dc162383a3dcca1",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 3542,
+        "output_tokens": 145
+       },
+       "elapsed_seconds": 2.606
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "FINDINGS_PRESENT",
+   "payload_finding_types": [
+    "REPORTED_FAILED_ATTEMPT"
+   ],
+   "extraction": {
+    "extraction_id": "b07805a6f95b3f79ddfe5abdf5244e6eeb82b89cd002a583c43511d5d602fc50",
+    "extraction_state": "FINDINGS_PRESENT",
+    "findings": [
+     {
+      "finding_id": "1ce9100aa308658d198c6db075ec837b499241fa195343a6cc52d4ddf8a2e550",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 1926,
+      "evidence_end": 1940,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "c0e673be71312011a75d4c7263f8f1b8ded2da673f3ef27286310eee22bc1f6c",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     }
+    ]
+   }
+  },
+  {
+   "normalized_record_id": "7c8a2ac5-1fdd-5c72-bdb5-4422a11e4084",
+   "surface_sha256": "f6bb50bc692e787e206bf74e97174eec940c6e323c152d2fe4ed910932d0ca05",
+   "attempts": [
+    {
+     "call_number": 12,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "52c93f27c6c63c1b25a1aca73c66e849004aede5afb4ee92458b507d00c6db3d",
+       "body_sha256": "8648826ee6b4da1a80ba18e98733a3f97cb8c75edeb26a5479030dadcf7cd503",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 2305,
+        "output_tokens": 173
+       },
+       "elapsed_seconds": 2.84
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "FINDINGS_PRESENT",
+   "payload_finding_types": [
+    "REPORTED_FAILED_ATTEMPT"
+   ],
+   "extraction": {
+    "extraction_id": "9e299f5bffc41a978e733c6f84dafae7af01167eb44128bb688322cd139ce029",
+    "extraction_state": "FINDINGS_PRESENT",
+    "findings": [
+     {
+      "finding_id": "f0f219ae9d6912c6c47c2e80d5e37330906d4a0aa78a167d534cf46b282d2ac7",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 258,
+      "evidence_end": 355,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "062ab4b0cb6012565dbe0329e7a5be0e453f0fc81a77814d7ad8faa13087a89f",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     }
+    ]
+   }
+  },
+  {
+   "normalized_record_id": "c4d96f4e-c766-5c79-a8c9-1f023647618b",
+   "surface_sha256": "2f4248c77fa6c60108f00039a2b713972af97c358e2c9d86dd811c7c4e91833e",
+   "attempts": [
+    {
+     "call_number": 13,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "19bcd476b8cbcf4abbbf649ee06f841760659b2ffb895c5520d85fc3483be86a",
+       "body_sha256": "dfbbb3584e3806f25eb6af6c47799571bc551a83b642e0300b1594b431d46898",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 2380,
+        "output_tokens": 74
+       },
+       "elapsed_seconds": 2.841
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "NO_FINDING_ESTABLISHED",
+   "payload_finding_types": [],
+   "extraction": {
+    "extraction_id": "61f43dba73477d542d9baeba56253697c412ef10e7249c3678c8a4b9b2e6369e",
+    "extraction_state": "NO_FINDING_ESTABLISHED",
+    "findings": []
+   }
+  },
+  {
+   "normalized_record_id": "3d224ece-4791-550e-8a47-352f9c568b92",
+   "surface_sha256": "14161c731b72c1c848a71f7cd7684241155af33d9edd4e985be08333dca49c2b",
+   "attempts": [
+    {
+     "call_number": 14,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "d7845f7b1f2280bfc83d4cc0bc0e1ee39b99e939271cdbb21a0221767f2a545e",
+       "body_sha256": "a3e65c837448f44aa444def6dbf91b7d8b10b65c114397474632187330eb8e95",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 5251,
+        "output_tokens": 74
+       },
+       "elapsed_seconds": 2.366
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "NO_FINDING_ESTABLISHED",
+   "payload_finding_types": [],
+   "extraction": {
+    "extraction_id": "7613a06caa38f8ce600e26451371a8cbe593585fda51d76ee76d14063e7e5994",
+    "extraction_state": "NO_FINDING_ESTABLISHED",
+    "findings": []
+   }
+  },
+  {
+   "normalized_record_id": "96054702-3d78-55b0-b5b9-ed63e611c6d7",
+   "surface_sha256": "70ab4463876798f80a4620ddb0e873e735dc39d9221e6ffaffaeb4bf37e49e56",
+   "attempts": [
+    {
+     "call_number": 15,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "0448dc760797920405e5f3ced61db4734b7778dabf4dee3edf997fc62f45d77a",
+       "body_sha256": "cc404dcbb3550bcfd8bdd7f263fba91f1a1b996820df39c50cbb2e8fbf3b3004",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 3165,
+        "output_tokens": 151
+       },
+       "elapsed_seconds": 3.237
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "FINDINGS_PRESENT",
+   "payload_finding_types": [
+    "REPORTED_FAILED_ATTEMPT"
+   ],
+   "extraction": {
+    "extraction_id": "e4bcfd81ba6e56f74dd9c84fa7defede6a2ade12a9e7eb9e390a33f75a58ff5c",
+    "extraction_state": "FINDINGS_PRESENT",
+    "findings": [
+     {
+      "finding_id": "b36cbbed7efc1954c3d295a3191f9e24bd1363ca4609143d62373997fadc1ea6",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 1345,
+      "evidence_end": 1367,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "7a783d9ce2b2e2877784c159340c52142d1c4c4ae747a1274e9ca472c6c41bc9",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     }
+    ]
+   }
+  },
+  {
+   "normalized_record_id": "f876b0be-fa18-5b60-9fdd-b505e7529413",
+   "surface_sha256": "37c3125a495d0264df8c4d12fc21cecd500d86b39bb88eb96823807c98180577",
+   "attempts": [
+    {
+     "call_number": 16,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "20e1b6c2edc5c56b31e5331bd3ecf7f522efb6a9ae5ff4d3054b7fb0dfa16fa6",
+       "body_sha256": "0163176460374ae56aa9449f215a3ff7c5451fdea36bcf156a831ddaeb2bb76c",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 2457,
+        "output_tokens": 163
+       },
+       "elapsed_seconds": 2.831
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "FINDINGS_PRESENT",
+   "payload_finding_types": [
+    "REPORTED_FAILED_ATTEMPT"
+   ],
+   "extraction": {
+    "extraction_id": "e94e3eba44647af213cbe95654fda43020f0a7460dcb636f614ae7102aa52a65",
+    "extraction_state": "FINDINGS_PRESENT",
+    "findings": [
+     {
+      "finding_id": "c15d1ddf56b9e7c63505efb9fc9f535d47736aa675ef02c34e00a13ba653ec25",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 252,
+      "evidence_end": 311,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "96a5a05c2bfed8b6a845aad6d07c1a6df0e5af2d16a1656f0605a47a6a5ff13c",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     }
+    ]
+   }
+  },
+  {
+   "normalized_record_id": "f98ff185-01b0-5612-9c36-07b1fe5dea5f",
+   "surface_sha256": "39264eb4993ee2f0c951aa867b0e606744180a4ab3880c270655f09ac2372bab",
+   "attempts": [
+    {
+     "call_number": 17,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "818a5838e38689c430b6665c744fd55d75aee7fccccfad9fc7a2d589cff2bf52",
+       "body_sha256": "dcdfeadb1a08840d7e6bb239a0d37ca83006b414aeaa8e467436152901eb83b1",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 2872,
+        "output_tokens": 204
+       },
+       "elapsed_seconds": 4.601
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "FINDINGS_PRESENT",
+   "payload_finding_types": [
+    "REPORTED_FAILED_ATTEMPT"
+   ],
+   "extraction": {
+    "extraction_id": "ca0a73744f3be78b3484260c3421f13e06457f5a9cdf01bb86bf924fec773150",
+    "extraction_state": "FINDINGS_PRESENT",
+    "findings": [
+     {
+      "finding_id": "1db644a53537469a293b16f7dd5b6feaa380fd9c7b73c239e8299a4d29fe57cd",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 999,
+      "evidence_end": 1111,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "918fc46fdc429595fdde9b78d36c4419fdf9ac45d60943e6538899554b3b91b8",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     }
+    ]
+   }
+  },
+  {
+   "normalized_record_id": "b7996f9d-72fe-5544-a30a-ce9270edfe09",
+   "surface_sha256": "db96588f1b73824f99547c706dbea2ef416f5e5d7e90ebe8e40279958bbbaefe",
+   "attempts": [
+    {
+     "call_number": 18,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "99bdc8522eeb771b99f885ad646a0a7ce8ac6fe0a092057b26369e59ec8bafb2",
+       "body_sha256": "bef11f19166c04e41c08276b770a082b99777c64dc99db015f15a9b198910572",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 2358,
+        "output_tokens": 166
+       },
+       "elapsed_seconds": 2.762
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "FINDINGS_PRESENT",
+   "payload_finding_types": [
+    "REPORTED_FAILED_ATTEMPT"
+   ],
+   "extraction": {
+    "extraction_id": "fd60c1d4bbb9a70bb8f0840d7626415d0b5b7c6e45489f50d48ee7bdfb579cd0",
+    "extraction_state": "FINDINGS_PRESENT",
+    "findings": [
+     {
+      "finding_id": "66e78b59ed1dccc596b9f72d6c42ee53a0593f0750e7ecc1e3d12af456095153",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 218,
+      "evidence_end": 278,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "d6bf82d35f3bcde9faa278c5426c93e6c5cf07f7f5192a018979613be462133d",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     }
+    ]
+   }
+  },
+  {
+   "normalized_record_id": "c98a64a0-0940-5835-a617-c26220a5d9a2",
+   "surface_sha256": "04eaf997346f5c52a5e5078ea6e6904f369e95a2e44cdfe7e35ea16476513be7",
+   "attempts": [
+    {
+     "call_number": 19,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "7baa36046027d6f30aefc1361f7d62b84689932668332c26679ee37248dc7b4b",
+       "body_sha256": "2c8d2bef7f237e69e3d3e8c20f8e630ee6f0991f8bc0f2d8bdcbf1fddac58a40",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 2414,
+        "output_tokens": 74
+       },
+       "elapsed_seconds": 2.7
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "NO_FINDING_ESTABLISHED",
+   "payload_finding_types": [],
+   "extraction": {
+    "extraction_id": "31ab0acc07df3fcaae31e46d41634b3e5379d8a9d69dce77028bf1c1faf05c9b",
+    "extraction_state": "NO_FINDING_ESTABLISHED",
+    "findings": []
+   }
+  },
+  {
+   "normalized_record_id": "47b3c6ea-dff4-50c4-b9fd-15874b743288",
+   "surface_sha256": "d543fdfd8ab6d45f2b216b0dbf83fbc15a20e7ef26a90e5490311363f0894b7a",
+   "attempts": [
+    {
+     "call_number": 20,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "8cbd6200fa750e383766da25af53123167b39e930e46843aa6628844cfc9c812",
+       "body_sha256": "5c1520ab385767beac3d0b09ed626166fe1e88ad4c78c8c494ce3b9bc367bbc0",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 2706,
+        "output_tokens": 482
+       },
+       "elapsed_seconds": 5.165
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "FINDINGS_PRESENT",
+   "payload_finding_types": [
+    "REPORTED_FAILED_ATTEMPT",
+    "REPORTED_FAILED_ATTEMPT",
+    "REPORTED_FAILED_ATTEMPT",
+    "REPORTED_FAILED_ATTEMPT"
+   ],
+   "extraction": {
+    "extraction_id": "1c5810911e1692ad706fe3aa0f2a8660c1d48b321d081d5fe5371c91eb865349",
+    "extraction_state": "FINDINGS_PRESENT",
+    "findings": [
+     {
+      "finding_id": "d689bd612b8475427138a192c08345a643506c1554683fb2035d5c4398a3dd98",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 830,
+      "evidence_end": 907,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "74ae14640f46de03d78260335c4f61d9f18338faf695fe70f31c6afa3d576ad9",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     },
+     {
+      "finding_id": "7f1487f3a7ed230135d072a65b11a4e213b40dd78cd3ced81f6011433da1e2be",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 911,
+      "evidence_end": 982,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "3b6802f259ca5be9f877f09e4838501749c0ebb7c5a31f8ae06d87fc237b4a14",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     },
+     {
+      "finding_id": "d21b19d161737083bf65a6a3a20d1cf5d86ca466d2788e8b822fb065fc9c3920",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 986,
+      "evidence_end": 1141,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "4e0f6598eb94686a2e2597b862c6d52b9b4a797fdb67227a2bdf30d4c9bcf766",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     },
+     {
+      "finding_id": "0ca3c83f192f963b5c5e1cff8444f3d697eefb94f9a162ef794551ced2383f7d",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 1288,
+      "evidence_end": 1322,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "0e6b2580454308d350d95853b6a20c83c0afd57fec672fa8d1a475a88107d348",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     }
+    ]
+   }
+  },
+  {
+   "normalized_record_id": "e3d79e11-9064-5f15-ac93-929e08114601",
+   "surface_sha256": "1ce7a105b16a9e5d28b64d0e937d10ed785d4910ce4a1fb360b5173ffd3e9888",
+   "attempts": [
+    {
+     "call_number": 21,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "ef2b52255b06f006d21d5dca762748cf66f10d4f7a4022066df4c1003878504b",
+       "body_sha256": "afef143cea96a646270118bc32ba10899deee3c288307887220375d9706f83bd",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 2255,
+        "output_tokens": 74
+       },
+       "elapsed_seconds": 2.379
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "NO_FINDING_ESTABLISHED",
+   "payload_finding_types": [],
+   "extraction": {
+    "extraction_id": "c2e63e5db3b1129a3005dd98cc846a0aaca644ac72282232ea2681c4bd608655",
+    "extraction_state": "NO_FINDING_ESTABLISHED",
+    "findings": []
+   }
+  },
+  {
+   "normalized_record_id": "4a3fc738-bb4a-5992-bb2e-2e422b9f4a00",
+   "surface_sha256": "7ae8f3dfb8d97e4ae786443896fcbb90de5cd561b6adfe310e888625a4b6e48e",
+   "attempts": [
+    {
+     "call_number": 22,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "e13ee4df1d4b193cde39e1636246f4aade026e375b06e86fe3e1027b9cf6f93b",
+       "body_sha256": "2af9811d7042e63b2fa55efe8587c7dbcc96a81a3355eabce600f80fb253c826",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 2514,
+        "output_tokens": 197
+       },
+       "elapsed_seconds": 2.953
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "FINDINGS_PRESENT",
+   "payload_finding_types": [
+    "REPORTED_FAILED_ATTEMPT"
+   ],
+   "extraction": {
+    "extraction_id": "b848d85f85e2de4f83853ea5133b8bd7c1394e86a8197f145ef9bd89f76352b8",
+    "extraction_state": "FINDINGS_PRESENT",
+    "findings": [
+     {
+      "finding_id": "f4cc8a8e972483eed2da3179dde8c2f4800512b07d1fb1191a31e25cd4867374",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 617,
+      "evidence_end": 802,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "54007bff1a0455fbc7a14015be53c6c3f90d9b6ffcc588616edcfc73bff7d4d0",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     }
+    ]
+   }
+  },
+  {
+   "normalized_record_id": "e35f990d-117a-59d1-b54e-5165632378bf",
+   "surface_sha256": "ddc7381ca99362070f28df277580cf3af67ed752f227ddd4754227d4707f210f",
+   "attempts": [
+    {
+     "call_number": 23,
+     "retry_number": 0,
+     "outcome": "ACCEPTED",
+     "error": null,
+     "transport": [
+      {
+       "status": 200,
+       "transport_error": null,
+       "request_id_sha256": "66b049b638057e05f17a3e80d819353b8784ff276b0251e7a38a0606509d13b2",
+       "body_sha256": "d5a20eef0f02a9a7a534f5e04ce8c8780c9e890b428f94309bb4117ce4788480",
+       "stop_reason": "tool_use",
+       "usage": {
+        "input_tokens": 2427,
+        "output_tokens": 269
+       },
+       "elapsed_seconds": 3.295
+      }
+     ]
+    }
+   ],
+   "accepted": true,
+   "refusal_codes": [],
+   "payload_extraction_state": "FINDINGS_PRESENT",
+   "payload_finding_types": [
+    "REPORTED_FAILED_ATTEMPT",
+    "REPORTED_FAILED_ATTEMPT"
+   ],
+   "extraction": {
+    "extraction_id": "0722509c06c3b1e8824d213fe04185e71d8d5193182f82919a0f5d4e65c86858",
+    "extraction_state": "FINDINGS_PRESENT",
+    "findings": [
+     {
+      "finding_id": "db5cbd67cc9ce4cbb2117f1f3f31235c7825dc4cf67c8a5fab722502aff3b544",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 202,
+      "evidence_end": 310,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "72bc5f98e900cb009e82c80e69bebb6becd9f321662c6f9be5f36de9cd1d2466",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     },
+     {
+      "finding_id": "e1453189dbc8287a677709971133820a14e4fb467814a78e0bd35d06179bdab2",
+      "finding_type": "REPORTED_FAILED_ATTEMPT",
+      "evidence_start": 326,
+      "evidence_end": 419,
+      "subject_start": null,
+      "subject_end": null,
+      "evidence_sha256": "6476f6f833f911f58244daf2de08a30d9e26a580188a3fc5f29410c63e541e5c",
+      "evidence_span_matches_a_returned_quote": true,
+      "subject_span_matches_a_returned_quote": null
+     }
+    ]
+   }
+  },
+  {
+   "normalized_record_id": "3d0568c4-5876-5863-921b-2c0fc3d3e27a",
+   "surface_sha256": "607871301807c0d701b32dac674885c3336d963c284d766ab390d46254b49120",
+   "attempts": [
+    {
+     "call_number": 24,
+     "retry_number": 0,
+     "outcome": "UNEXPECTED_ERROR",
+     "error": {
+      "class": "ConnectionResetError",
+      "sha256": "c9d65af34f7cef02505f20540fe624a9b6fee5695203954b848c30357c57e8de"
+     },
+     "transport": [
+      {
+       "status": null,
+       "transport_error": "ConnectionResetError",
+       "request_id_sha256": null,
+       "body_sha256": null,
+       "stop_reason": null,
+       "usage": null,
+       "elapsed_seconds": 763.136
+      }
+     ]
+    }
+   ],
+   "accepted": false,
+   "refusal_codes": [],
+   "payload_extraction_state": null,
+   "payload_finding_types": [],
+   "extraction": null
+  }
+ ]
+}

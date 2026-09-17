@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.173
+Version: 1.174
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.8)
+Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.9)
 
 ---
 
@@ -13,6 +13,20 @@ Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.8)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.174 - 2026-09-17 (Sprint 1 / Mission 1.85.9)
+
+**First DEVELOPMENT pilot execution (N08-B-PILOT),
+DEVELOPMENT_PILOT_EXECUTED_PARTIAL_RESULTS_READY_FOR_OPERATOR_REVIEW.** operator-a approved exactly one
+execution of packet `5f96b418e75374b098b44b7fe3ba756a5155af94f92cd607ea251fa131d18c0e`; the approval (`77cdea89...`)
+names provider, model, 46 records, the $9.000000 ceiling and a one-execution scope. A pre-execution audit fixed
+runner gaps (credential path after all non-secret checks, approval binding, no retry at max_tokens, partial-run
+preservation) and froze the evaluation rules in code before the run. One run through the canonical runner: 24 calls,
+23 records accepted, then a network reset after a 763 s stall stopped it with 22 records unattempted; no rerun.
+Cost $2.440713 of $9 (reported usage $0.195657). PILOT_NOT_CERTIFICATION readings: REPORTED_FAILED_ATTEMPT false
+PRESENT 9 of 18 (upper 0.709, PILOT_OUTSIDE_PROPOSED_BOUND) with 9 of 9 human PRESENT found on attempted records;
+NEGATIVE_EVALUATION_OF_NAMED_SOLUTION PILOT_INSUFFICIENT_SUPPORT; validator 23/24, 0 unsupported accepted, 0
+abstentions. No HOLDOUT, no canonical writes. `docs/reports/mission-1.85.9-report.md`.
 
 ## 1.173 - 2026-09-17 (Sprint 1 / Mission 1.85.8)
 

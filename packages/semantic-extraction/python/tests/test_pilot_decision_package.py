@@ -488,14 +488,13 @@ class TestRunnerEnforcement:
         monkeypatch.setattr(os, "environ", KeyTripwire(os.environ))
         monkeypatch.setattr(transport.UrllibTransport, "__init__", no_transport)
         assert runner.verify_packet()["status"] == runner.READY
-        assert not runner.APPROVAL.exists() and not runner.ATTEMPT.exists()
         with pytest.raises(runner.Refused) as refused:
             runner.main(["--execute"])
         assert refused.value.refusal == "APPROVAL_SHA256_NOT_SUPPLIED"
+        # Mission 1.85.9: the committed approval exists; any other digest is refused before the key.
         with pytest.raises(runner.Refused) as refused:
             runner.main(["--execute", "--approval-sha256", "0" * 64])
-        assert refused.value.refusal == "OPERATOR_APPROVAL_NOT_RECORDED"
-        assert not runner.APPROVAL.exists() and not runner.ATTEMPT.exists()
+        assert refused.value.refusal == "APPROVAL_FILE_DIGEST_MISMATCH"
 
 
 class TestNoProviderCallAndNoApproval:
@@ -548,6 +547,10 @@ def approval_for(packet: dict, **overrides) -> dict:
         "accepts_retry_interpretation": True,
         "accepted_hard_ceiling_usd": packet["execution_bounds"]["hard_ceiling_usd_approved"],
         "accepted_reference_strength": packet["reference"]["REFERENCE_STRENGTH"],
+        "approved_provider": packet["provider"]["provider_id"],
+        "approved_model": packet["provider"]["model"],
+        "approved_record_count": len(packet["selection"]["egress_approved_record_ids"]),
+        "approval_scope": "ONE_DEVELOPMENT_PILOT_EXECUTION",
     }
     approval.update(overrides)
     return approval
@@ -711,12 +714,13 @@ class TestRecordedDecisionsAndFrozenPacket:
         with pytest.raises(runner.Refused) as refused:
             runner.check_approval(packet, wrong, hashlib.sha256(wrong.read_bytes()).hexdigest())
         assert refused.value.refusal == "OPERATOR_APPROVAL_INCOMPLETE"
-        assert not runner.APPROVAL.exists() and not runner.ATTEMPT.exists()
 
     def test_merging_grants_no_execution_authority(self, runner) -> None:
         packet = runner.verify_packet()
         assert packet["operator_approval_recorded"] is False
         assert packet["approval_requirements"]["merge_is_not_approval"] is True
         assert "packet_sha256" in packet["approval_requirements"]["must_name"]
-        assert not runner.APPROVAL.exists() and not runner.ATTEMPT.exists()
-        assert not any(DATA.glob("semantic-extraction-evaluation-approval*"))
+        # Mission 1.85.9: the one approval was the operator's, not a merge, and its attempt spends it.
+        approvals = list(DATA.glob("semantic-extraction-evaluation-approval*"))
+        assert approvals == [runner.APPROVAL] and runner.ATTEMPT.exists()
+        assert json.loads(runner.APPROVAL.read_text("utf-8"))["approved_by"] == "operator-a"
