@@ -1,7 +1,9 @@
 """Mission 1.85.7. The final operator decision package, the measured cost model and ceiling enforcement.
 
-No test here reaches a provider. Gateways are scripted, and the committed decisions file is blank: every
-filled decision below is a synthetic copy made inside a test and never written to the repository.
+No test here reaches a provider. Gateways are scripted. Since Mission 1.85.8 the committed decisions file holds
+the operator's own recorded decisions; every other decision set below (blank, filled or malformed) is a
+synthetic copy made inside a test and never written to the repository, and no test creates an approval file
+in the repository.
 """
 
 from __future__ import annotations
@@ -13,7 +15,7 @@ import importlib.util
 import json
 import pathlib
 import sys
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal
 from types import SimpleNamespace
 
@@ -27,7 +29,11 @@ from sros_semantic_extraction.cost import (
     call_cost,
     proposed_hard_ceiling,
 )
-from sros_semantic_extraction.decisions import operator_decision_blockers, provider_blockers
+from sros_semantic_extraction.decisions import (
+    decision_record_problems,
+    operator_decision_blockers,
+    provider_blockers,
+)
 from sros_semantic_extraction_contract import render_question_surface, surface_sha256
 
 REPO = pathlib.Path(__file__).resolve().parents[4]
@@ -78,6 +84,12 @@ def filled_decisions() -> dict:
         "proposed_hard_ceiling_usd"
     ]
     return decisions
+
+
+def blank_decisions() -> dict:
+    """The blank decision set the renderer creates, rebuilt in memory. Never written anywhere."""
+    renderer = load_script("render_semantic_extraction_decision_package")
+    return renderer.blank_decisions(PACKAGE["A_pilot_thresholds"])
 
 
 def codes(blockers: list[str]) -> set[str]:
@@ -176,14 +188,21 @@ class TestReadinessGates:
         renderer = load_script("render_semantic_extraction_packet")
         assert renderer.MODEL == "claude-sonnet-5" == PACKET["provider"]["model"]
 
-    def test_unresolved_decisions_keep_the_packet_blocked(self) -> None:
-        assert codes(operator_decision_blockers(PACKAGE, DECISIONS)) == {
+    def test_unresolved_decisions_keep_the_packet_blocked(self, tmp_path, monkeypatch) -> None:
+        blank = blank_decisions()
+        assert codes(operator_decision_blockers(PACKAGE, blank)) == {
             "THRESHOLDS_NOT_AUTHORISED",
             "RETRY_INTERPRETATION_NOT_RATIFIED",
             "COST_CEILING_NOT_ACCEPTED",
         }
-        assert PACKET["status"] == "BLOCKED_OPERATOR_DECISIONS"
-        assert codes(PACKET["blockers"]) == codes(operator_decision_blockers(PACKAGE, DECISIONS))
+        renderer = load_script("render_semantic_extraction_packet")
+        path = tmp_path / "blank-decisions.json"
+        path.write_text(json.dumps(blank), encoding="utf-8")
+        monkeypatch.setattr(renderer, "DECISIONS", path)
+        packet = renderer.build()
+        assert packet["status"] == "BLOCKED_OPERATOR_DECISIONS"
+        assert codes(packet["blockers"]) == codes(operator_decision_blockers(PACKAGE, blank))
+        assert packet["execution_bounds"]["hard_ceiling_usd_approved"] is None
         assert operator_decision_blockers(PACKAGE, filled_decisions()) == []
 
     def test_each_decision_blocks_on_its_own(self) -> None:
@@ -249,13 +268,35 @@ class TestReadinessGates:
         )
         assert PACKAGE["C_hard_ceiling"]["MAX_CALLS_WITH_RETRY"] == 92
 
-    def test_the_committed_decisions_are_blank_and_nothing_decided_them(self) -> None:
-        assert DECISIONS["decided_by"] is None and DECISIONS["decided_at"] is None
-        assert all(d["operator_decision"] is None for d in DECISIONS["A_pilot_thresholds"])
-        assert DECISIONS["B_retry"]["operator_decision"] is None
-        assert DECISIONS["C_hard_ceiling"]["operator_decision"] is None
-        assert DECISIONS["C_hard_ceiling"]["accepted_hard_ceiling_usd"] is None
-        assert PACKET["execution_bounds"]["hard_ceiling_usd_approved"] is None
+    def test_the_committed_decisions_are_exactly_the_operators(self) -> None:
+        # Mission 1.85.8: the operator's explicit decisions, recorded as given.
+        by_id = {d["item_id"]: d for d in DECISIONS["A_pilot_thresholds"]}
+        flip = by_id.pop("run_to_run_label_flip_rate::each extractable label")
+        assert len(by_id) == 9
+        assert all(
+            d["operator_decision"] == "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT" for d in by_id.values()
+        )
+        assert all(d["revised_value"] is None for d in DECISIONS["A_pilot_thresholds"])
+        assert flip["operator_decision"] == "REJECT_FOR_THE_PILOT"
+        assert flip["repeatability_disposition"] == "REJECT_FOR_THIS_FIRST_PILOT"
+        assert "Do not run additional model calls" in flip["operator_note"]
+        assert DECISIONS["B_retry"] == {
+            "operator_decision": "RATIFY",
+            "revised_reading": None,
+            "operator_note": DECISIONS["B_retry"]["operator_note"],
+        }
+        assert DECISIONS["C_hard_ceiling"]["operator_decision"] == "ACCEPT"
+        assert DECISIONS["C_hard_ceiling"]["accepted_hard_ceiling_usd"] == "9.000000"
+        assert DECISIONS["C_hard_ceiling"]["revised_hard_ceiling_usd"] is None
+        assert DECISIONS["decided_by"] == "operator-a"
+        assert datetime.fromisoformat(DECISIONS["decided_at"]).utcoffset() is not None
+        assert decision_record_problems(PACKAGE, DECISIONS) == []
+        assert operator_decision_blockers(PACKAGE, DECISIONS) == []
+        assert PACKET["execution_bounds"]["hard_ceiling_usd_approved"] == "9.000000"
+        assert (
+            PACKAGE["decision_state"]["decisions_sha256"]
+            == PACKET["operator_decisions"]["decisions_sha256"]
+        )
         composition = PACKAGE["reference_composition_on_approved_records"]
         assert composition["NEGATIVE_EVALUATION_OF_NAMED_SOLUTION"]["PRESENT"] == 0
         assert composition["REPORTED_FAILED_ATTEMPT"] == {
@@ -425,12 +466,36 @@ class TestRunnerEnforcement:
             runner.check_provider_verification(PACKET, date(2027, 6, 1))
         assert refused.value.refusal == "PROVIDER_VERIFICATION_EXPIRED"
 
-    def test_the_committed_packet_cannot_execute_and_no_approval_exists(self, runner) -> None:
-        assert runner.verify_packet()["status"] != runner.READY
+    def test_the_committed_packet_cannot_execute_and_no_approval_exists(
+        self, runner, monkeypatch
+    ) -> None:
+        import os
+
+        from sros_llm_gateway import transport
+
+        class KeyTripwire(dict):
+            def get(self, key, default=None):
+                assert key != "ANTHROPIC_API_KEY", "the runner read the API key"
+                return super().get(key, default)
+
+            def __getitem__(self, key):
+                assert key != "ANTHROPIC_API_KEY", "the runner read the API key"
+                return super().__getitem__(key)
+
+        def no_transport(*args, **kwargs):
+            raise AssertionError("a transport was built")
+
+        monkeypatch.setattr(os, "environ", KeyTripwire(os.environ))
+        monkeypatch.setattr(transport.UrllibTransport, "__init__", no_transport)
+        assert runner.verify_packet()["status"] == runner.READY
         assert not runner.APPROVAL.exists() and not runner.ATTEMPT.exists()
         with pytest.raises(runner.Refused) as refused:
+            runner.main(["--execute"])
+        assert refused.value.refusal == "APPROVAL_SHA256_NOT_SUPPLIED"
+        with pytest.raises(runner.Refused) as refused:
             runner.main(["--execute", "--approval-sha256", "0" * 64])
-        assert refused.value.refusal == "PACKET_NOT_READY_FOR_APPROVAL"
+        assert refused.value.refusal == "OPERATOR_APPROVAL_NOT_RECORDED"
+        assert not runner.APPROVAL.exists() and not runner.ATTEMPT.exists()
 
 
 class TestNoProviderCallAndNoApproval:
@@ -465,3 +530,193 @@ class TestNoProviderCallAndNoApproval:
         assert created is None
         assert renderer.dump(package) == renderer.PACKAGE.read_bytes()
         assert renderer.DECISIONS.read_bytes() == before
+
+
+PREVIOUS_PACKET_SHA256 = "63c7302d64d52aa49e56060de1a2d92ffdb8e2030e9c19ba550acba0cc357993"
+
+
+def approval_for(packet: dict, **overrides) -> dict:
+    approval = {
+        "packet_id": packet["packet_id"],
+        "packet_version": packet["packet_version"],
+        "packet_sha256": packet["packet_sha256"],
+        "decision": "APPROVE_EXACTLY_ONE_EVALUATION_RUN",
+        "approved_by": "synthetic-test-operator",
+        "operator_statement": "synthetic approval inside a test, never written to the repository",
+        "accepts_hard_ceiling_usd": True,
+        "accepts_retention_bound": True,
+        "accepts_retry_interpretation": True,
+        "accepted_hard_ceiling_usd": packet["execution_bounds"]["hard_ceiling_usd_approved"],
+        "accepted_reference_strength": packet["reference"]["REFERENCE_STRENGTH"],
+    }
+    approval.update(overrides)
+    return approval
+
+
+def _item(decisions: dict, metric: str) -> dict:
+    return next(d for d in decisions["A_pilot_thresholds"] if d["item_id"].startswith(metric))
+
+
+def _set_item(metric: str, key: str, value):
+    def change(decisions: dict) -> None:
+        _item(decisions, metric)[key] = value
+
+    return change
+
+
+def _set(section: str | None, key: str, value):
+    def change(decisions: dict) -> None:
+        (decisions[section] if section else decisions)[key] = value
+
+    return change
+
+
+class TestRecordedDecisionsAndFrozenPacket:
+    """Mission 1.85.8. The recorded decisions are validated strictly, the packet is READY only because every
+    gate is satisfied, and only an approval naming the exact new digest could pass the approval gate."""
+
+    def test_a_malformed_decision_record_is_refused_not_repaired(self) -> None:
+        flip = "run_to_run_label_flip_rate"
+        cases = {
+            "REVISE_WITHOUT_REVISED_VALUE": _set_item(
+                "validator_acceptance_rate", "operator_decision", "REVISE_BEFORE_THE_PILOT_RUN"
+            ),
+            "REVISED_VALUE_WITHOUT_REVISE": _set_item(
+                "validator_acceptance_rate", "revised_value", 0.9
+            ),
+            "UNSUPPORTED_THRESHOLD_DECISION": _set_item("recall", "operator_decision", "APPROVE"),
+            "REPEATABILITY_DISPOSITION_CONTRADICTS_REJECT": _set_item(
+                flip, "repeatability_disposition", "DEFER_TO_A_LATER_REPEATABILITY_RUN"
+            ),
+            "REPEATABILITY_DISPOSITION_MISSING": _set_item(flip, "repeatability_disposition", None),
+            "REPEATABILITY_DISPOSITION_ON_ANOTHER_ITEM": _set_item(
+                "recall", "repeatability_disposition", "REJECT_FOR_THIS_FIRST_PILOT"
+            ),
+            "DECIDED_AT_NOT_TIMEZONE_AWARE": _set(None, "decided_at", "2026-09-17T15:37:35"),
+            "DECIDED_BY_MISSING": _set(None, "decided_by", " "),
+            "CEILING_ACCEPTANCE_IS_NOT_THE_PROPOSED_CEILING": _set(
+                "C_hard_ceiling", "accepted_hard_ceiling_usd", 9.0
+            ),
+            "RETRY_REVISE_WITHOUT_REVISED_READING": _set("B_retry", "operator_decision", "REVISE"),
+            "UNSUPPORTED_RETRY_DECISION": _set("B_retry", "operator_decision", "OK"),
+        }
+        for code, change in cases.items():
+            decisions = copy.deepcopy(DECISIONS)
+            change(decisions)
+            assert code in codes(decision_record_problems(PACKAGE, decisions)), code
+            assert "OPERATOR_DECISIONS_INVALID" in codes(
+                operator_decision_blockers(PACKAGE, decisions)
+            ), code
+        old = copy.deepcopy(DECISIONS)
+        old["C_hard_ceiling"]["accepted_hard_ceiling_usd"] = "206.5452"
+        assert "CEILING_ACCEPTANCE_IS_NOT_THE_PROPOSED_CEILING" in codes(
+            decision_record_problems(PACKAGE, old)
+        )
+
+    def test_nine_thresholds_authorised_and_the_flip_rate_needs_no_other_run(self) -> None:
+        decisions = PACKET["operator_decisions"]
+        assert len(decisions["thresholds_authorised"]) == 9
+        assert decisions["thresholds_rejected_for_the_pilot"] == [
+            "run_to_run_label_flip_rate::each extractable label"
+        ]
+        assert decisions["additional_repeatability_runs_authorised"] == 0
+        bounds = PACKET["execution_bounds"]
+        assert bounds["EXPECTED_CALLS"] == 46 and bounds["MAX_CALLS_WITH_RETRY"] == 92
+        assert bounds["max_calls"] == 92
+        assert len(PACKET["selection"]["egress_approved_record_ids"]) == 46
+        assert len(PACKET["selection"]["egress_excluded_record_ids"]) == 4
+
+    def test_the_retry_policy_is_ratified_and_bound_by_digest(self) -> None:
+        renderer = load_script("render_semantic_extraction_packet")
+        policy = PACKET["retry_policy"]
+        assert policy["operator_decision"] == "RATIFY"
+        assert policy["max_schema_retries_per_record"] == 1
+        assert policy["provider_fallback"] is None and policy["model_fallback"] is None
+        rule = {
+            k: policy[k]
+            for k in (
+                "max_schema_retries_per_record",
+                "reading",
+                "inside_the_retry_class",
+                "outside_the_retry_class",
+                "implemented_as",
+            )
+        }
+        assert policy["rule_sha256"] == renderer.canonical_sha(rule)
+        assert (
+            policy["implementation_sha256"]
+            == hashlib.sha256(renderer.RETRY_IMPLEMENTATION.read_bytes()).hexdigest()
+        )
+        assert PACKET["operator_decisions"]["threshold_decisions_sha256"] == renderer.canonical_sha(
+            PACKET["operator_decisions"]["threshold_decisions"]
+        )
+
+    def test_ready_only_when_every_other_gate_is_satisfied(self, tmp_path, monkeypatch) -> None:
+        assert PACKET["status"] == "READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL"
+        assert PACKET["blockers"] == []
+        renderer = load_script("render_semantic_extraction_packet")
+        unpriced = copy.deepcopy(VERIFICATION)
+        unpriced["pricing"]["output_usd_per_mtok"] = None
+        path = tmp_path / "verification.json"
+        path.write_text(json.dumps(unpriced), encoding="utf-8")
+        monkeypatch.setattr(renderer, "VERIFICATION", path)
+        packet = renderer.build()
+        assert packet["status"] == "BLOCKED_OPERATOR_DECISIONS"
+        assert "PROVIDER_PRICING_NOT_ESTABLISHED" in codes(packet["blockers"])
+
+    def test_any_bound_artifact_change_changes_the_digest(self, tmp_path, monkeypatch) -> None:
+        renderer = load_script("render_semantic_extraction_packet")
+        assert renderer.build()["packet_sha256"] == PACKET["packet_sha256"]
+        changed = copy.deepcopy(DECISIONS)
+        changed["decided_at"] = "2026-09-17T15:37:36+04:00"
+        path = tmp_path / "decisions.json"
+        path.write_text(json.dumps(changed), encoding="utf-8")
+        monkeypatch.setattr(renderer, "DECISIONS", path)
+        assert renderer.build()["packet_sha256"] != PACKET["packet_sha256"]
+        monkeypatch.undo()
+        implementation = tmp_path / "request.py"
+        implementation.write_bytes(renderer.RETRY_IMPLEMENTATION.read_bytes() + b"\n")
+        monkeypatch.setattr(renderer, "RETRY_IMPLEMENTATION", implementation)
+        assert renderer.build()["packet_sha256"] != PACKET["packet_sha256"]
+
+    def test_an_approval_for_the_previous_digest_is_invalid(self, runner, tmp_path) -> None:
+        packet = runner.verify_packet()
+        assert packet["packet_sha256"] != PREVIOUS_PACKET_SHA256
+        assert packet["packet_sha256"] == runner.EXPECTED_PACKET_SHA256
+        for stale in (
+            approval_for(packet, packet_sha256=PREVIOUS_PACKET_SHA256, packet_version=3),
+            approval_for(packet, packet_sha256=PREVIOUS_PACKET_SHA256),
+            approval_for(packet, packet_version=3),
+        ):
+            path = tmp_path / "stale-approval.json"
+            path.write_text(json.dumps(stale), encoding="utf-8")
+            with pytest.raises(runner.Refused) as refused:
+                runner.check_approval(packet, path, hashlib.sha256(path.read_bytes()).hexdigest())
+            assert refused.value.refusal == "OPERATOR_APPROVAL_DOES_NOT_NAME_THIS_PACKET"
+
+    def test_only_an_approval_naming_the_exact_ready_digest_passes_the_gate(
+        self, runner, tmp_path
+    ) -> None:
+        packet = runner.verify_packet()
+        path = tmp_path / "approval.json"
+        path.write_text(json.dumps(approval_for(packet)), encoding="utf-8")
+        approval = runner.check_approval(
+            packet, path, hashlib.sha256(path.read_bytes()).hexdigest()
+        )
+        assert approval["packet_sha256"] == packet["packet_sha256"]
+        wrong = tmp_path / "wrong-ceiling.json"
+        wrong.write_text(
+            json.dumps(approval_for(packet, accepted_hard_ceiling_usd="206.5452")), encoding="utf-8"
+        )
+        with pytest.raises(runner.Refused) as refused:
+            runner.check_approval(packet, wrong, hashlib.sha256(wrong.read_bytes()).hexdigest())
+        assert refused.value.refusal == "OPERATOR_APPROVAL_INCOMPLETE"
+        assert not runner.APPROVAL.exists() and not runner.ATTEMPT.exists()
+
+    def test_merging_grants_no_execution_authority(self, runner) -> None:
+        packet = runner.verify_packet()
+        assert packet["operator_approval_recorded"] is False
+        assert packet["approval_requirements"]["merge_is_not_approval"] is True
+        assert "packet_sha256" in packet["approval_requirements"]["must_name"]
+        assert not runner.APPROVAL.exists() and not runner.ATTEMPT.exists()
+        assert not any(DATA.glob("semantic-extraction-evaluation-approval*"))

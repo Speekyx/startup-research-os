@@ -1,4 +1,5 @@
-"""Mission 1.85.7 (N08-B-PILOT). The final operator decision package for the DEVELOPMENT pilot.
+"""Mission 1.85.7 (N08-B-PILOT), decisions mirrored in Mission 1.85.8. The final operator decision package for
+the DEVELOPMENT pilot.
 
 Computes, from committed artifacts only (no database, no network, no model), the facts behind the three
 decisions the operator still has to make, and renders them. It never makes a decision:
@@ -8,7 +9,8 @@ decisions the operator still has to make, and renders them. It never makes a dec
 - C. the hard cost ceiling.
 
 The decisions themselves live in a separate operator-owned file that this script creates BLANK once and
-never writes again:
+never writes again. `decision_state` mirrors what that file records and every problem
+`decision_record_problems` finds in it, so a recorded decision re-renders the package:
 
     docs/data/semantic-extraction-operator-decisions-development-v1.json   (operator-owned)
     docs/data/semantic-extraction-operator-decision-package-development-v1.json   (rendered)
@@ -48,6 +50,7 @@ from sros_semantic_extraction.cost import (  # noqa: E402
     money,
     proposed_hard_ceiling,
 )
+from sros_semantic_extraction.decisions import decision_record_problems  # noqa: E402
 
 DATA = ROOT / "docs" / "data"
 PACKAGE = DATA / "semantic-extraction-operator-decision-package-development-v1.json"
@@ -321,19 +324,34 @@ def blank_decisions(items: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def decision_state(decisions: dict[str, Any], items: list[dict[str, Any]]) -> dict[str, Any]:
+def decision_state(
+    decisions: dict[str, Any], items: list[dict[str, Any]], package: dict[str, Any]
+) -> dict[str, Any]:
     by_id = {d["item_id"]: d for d in decisions.get("A_pilot_thresholds", [])}
-    unmade = [
-        i["item_id"]
-        for i in items
-        if (by_id.get(i["item_id"]) or {}).get("operator_decision") is None
-    ]
+    recorded = [by_id.get(i["item_id"]) or {"item_id": i["item_id"]} for i in items]
+    unmade = [d["item_id"] for d in recorded if d.get("operator_decision") is None]
     return {
         "decisions_file": "docs/data/semantic-extraction-operator-decisions-development-v1.json",
         "decisions_sha256": sha(DECISIONS),
+        "decided_by": decisions.get("decided_by"),
+        "decided_at": decisions.get("decided_at"),
         "thresholds_unmade": len(unmade),
+        "thresholds": [
+            {
+                "item_id": d["item_id"],
+                "operator_decision": d.get("operator_decision"),
+                **(
+                    {"repeatability_disposition": d.get("repeatability_disposition")}
+                    if "repeatability_disposition" in d
+                    else {}
+                ),
+            }
+            for d in recorded
+        ],
         "retry_decision": decisions["B_retry"]["operator_decision"],
         "ceiling_decision": decisions["C_hard_ceiling"]["operator_decision"],
+        "accepted_hard_ceiling_usd": decisions["C_hard_ceiling"].get("accepted_hard_ceiling_usd"),
+        "record_problems": decision_record_problems(package, decisions),
     }
 
 
@@ -349,7 +367,7 @@ def build() -> tuple[dict[str, Any], dict[str, Any] | None]:
     else:
         decisions = load(DECISIONS)
     package = {
-        "$comment": "FINAL OPERATOR DECISION PACKAGE (Mission 1.85.7). Facts for three decisions the operator has not made. Rendered from committed artifacts; decides nothing. Merging it authorises no provider call.",
+        "$comment": "FINAL OPERATOR DECISION PACKAGE (prepared in Mission 1.85.7). Facts behind the operator's three decisions, rendered from committed artifacts. The decisions live in the operator-owned decisions file; decision_state only mirrors it. Rendering decides nothing, and neither recording a decision nor merging authorises a provider call.",
         "package_id": "semantic-extraction-operator-decision-package-development",
         "version": "1.0.0",
         "mission": "1.85.7",
@@ -368,8 +386,8 @@ def build() -> tuple[dict[str, Any], dict[str, Any] | None]:
         "A_pilot_thresholds": items,
         "B_retry": retry_section(),
         "C_hard_ceiling": ceiling_section(),
-        "decision_state": decision_state(decisions, items),
     }
+    package["decision_state"] = decision_state(decisions, items, package)
     return package, created
 
 
@@ -379,12 +397,28 @@ def dump(doc: dict[str, Any]) -> bytes:
 
 def page(package: dict[str, Any]) -> bytes:
     c = package["C_hard_ceiling"]
+    state = package["decision_state"]
+    recorded = {t["item_id"]: t for t in state["thresholds"]}
+
+    def shown(value: Any) -> str:
+        return f"`{value}`" if value is not None else "blank"
+
+    if state["decided_by"]:
+        who = f"Decisions recorded by `{state['decided_by']}` at `{state['decided_at']}`, in `semantic-extraction-operator-decisions-development-v1.json` (sha256 `{state['decisions_sha256']}`), which only the operator fills in. Recording them authorises no evaluation run."
+    else:
+        who = "No decision is recorded yet. The decisions live in `semantic-extraction-operator-decisions-development-v1.json`, which only the operator fills in."
+    problems = (
+        ["", "Problems in the recorded decisions: " + "; ".join(state["record_problems"]) + "."]
+        if state["record_problems"]
+        else []
+    )
     lines = [
         "# Semantic extraction pilot: operator decision package (v1)",
         "",
         "> Generated by `infrastructure/scripts/render_semantic_extraction_decision_package.py` from committed artifacts. Do not edit by hand.",
         "",
-        "Mission 1.85.7. Three decisions remain, and every one is blank. The decisions live in `semantic-extraction-operator-decisions-development-v1.json`, which only the operator fills in.",
+        f"Prepared in Mission 1.85.7. {who}",
+        *problems,
         "",
         f"Reference strength `{package['reference_strength']}`, result scope `{package['result_scope']}`, result label `{package['result_label']}`.",
         "",
@@ -399,7 +433,13 @@ def page(package: dict[str, Any]) -> bytes:
     ]
     for item in package["A_pilot_thresholds"]:
         lines.append(
-            f"| `{item['item_id']}` | `{json.dumps(item['proposed_value'])}` | {item['current_support']} | blank |"
+            f"| `{item['item_id']}` | `{json.dumps(item['proposed_value'])}` | {item['current_support']} | {shown(recorded[item['item_id']].get('operator_decision'))}"
+            + (
+                f", disposition {shown(recorded[item['item_id']]['repeatability_disposition'])}"
+                if "repeatability_disposition" in recorded[item["item_id"]]
+                else ""
+            )
+            + " |"
         )
     lines += [
         "",
@@ -409,7 +449,7 @@ def page(package: dict[str, Any]) -> bytes:
         "",
         *[f"- {line}" for line in package["B_retry"]["proposed_reading"]],
         "",
-        "Decision: `RATIFY`, `REVISE` or `REJECT`. Blank.",
+        f"Decision (`RATIFY`, `REVISE` or `REJECT`): {shown(state['retry_decision'])}.",
         "",
         "## C. Hard cost ceiling",
         "",
@@ -431,7 +471,12 @@ def page(package: dict[str, Any]) -> bytes:
         "",
         f"Enforcement: {c['enforcement']['preflight']}; {c['enforcement']['before_each_call']}.",
         "",
-        "Decision: `ACCEPT`, `REVISE` or `REJECT`. Blank.",
+        f"Decision (`ACCEPT`, `REVISE` or `REJECT`): {shown(state['ceiling_decision'])}"
+        + (
+            f", accepted hard ceiling ${state['accepted_hard_ceiling_usd']}."
+            if state["accepted_hard_ceiling_usd"]
+            else "."
+        ),
         "",
     ]
     return ("\n".join(lines)).encode("utf-8")

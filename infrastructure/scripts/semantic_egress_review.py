@@ -405,6 +405,11 @@ def make_handler(
             return self._json(404, {"error": "NOT_FOUND"})
 
         def do_POST(self) -> None:  # noqa: N802 - stdlib name
+            # Read the (bounded) body before any answer, refusals included: closing a socket that still
+            # holds unread request bytes makes Windows reset the connection, and the client then loses
+            # the refusal it was sent.
+            length = int(self.headers.get("Content-Length") or 0)
+            raw = self.rfile.read(min(length, 1_000_000))
             if not self._host_ok():
                 return self._json(421, {"error": "HOST_NOT_LOOPBACK"})
             if self.headers.get("X-Review-Token") != session.token:
@@ -420,9 +425,8 @@ def make_handler(
             action = actions.get(self.path)
             if action is None:
                 return self._json(404, {"error": "NOT_FOUND"})
-            length = int(self.headers.get("Content-Length") or 0)
             try:
-                body = json.loads(self.rfile.read(min(length, 1_000_000)).decode("utf-8") or "{}")
+                body = json.loads(raw.decode("utf-8") or "{}")
                 action(body if isinstance(body, dict) else {})
             except ChoiceRefusedError as exc:
                 return self._json(422, {"error": str(exc), "state": session.state()})
