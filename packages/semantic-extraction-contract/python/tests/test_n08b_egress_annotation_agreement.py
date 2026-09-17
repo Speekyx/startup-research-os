@@ -223,20 +223,30 @@ class TestEgress(unittest.TestCase):
                 pattern_digest=pattern_table_sha256(),
             )
 
-    def test_committed_egress_artifacts_hold_no_text_and_no_decisions(self) -> None:
+    def test_committed_egress_artifacts_hold_no_text_and_only_human_decisions(self) -> None:
         decisions = json.loads(
             (DATA / "stack-overflow-semantic-egress-decisions-development-v1.json").read_text(
                 "utf-8"
             )
         )
-        self.assertEqual((decisions["decisions"], decisions["bulk_decisions"]), ([], []))
+        # Mission 1.85.6: every decision was clicked by the human operator in the local review page.
+        self.assertTrue(
+            all(
+                d["decision_origin"] == "HUMAN_OPERATOR"
+                for d in [*decisions["decisions"], *decisions["bulk_decisions"]]
+            )
+        )
         eligibility = json.loads(
             (DATA / "stack-overflow-semantic-egress-eligibility-development-v1.json").read_text(
                 "utf-8"
             )
         )
-        self.assertEqual(eligibility["approved_record_ids"], [])
-        self.assertNotIn("EGRESS_APPROVED", eligibility["state_counts"])
+        approved = [r for r in eligibility["records"] if r["state"] == "EGRESS_APPROVED"]
+        self.assertEqual(
+            sorted(eligibility["approved_record_ids"]),
+            sorted(r["normalized_record_id"] for r in approved),
+        )
+        self.assertTrue(all(r["decision_origin"] == "HUMAN_OPERATOR" for r in approved))
         scan = json.loads(
             (DATA / "stack-overflow-semantic-egress-scan-development-v1.json").read_text("utf-8")
         )

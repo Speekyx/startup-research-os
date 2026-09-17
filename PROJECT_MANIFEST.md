@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.170
+Version: 1.171
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.6)
+Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.6, egress decisions imported)
 
 ---
 
@@ -13,6 +13,17 @@ Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.6)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.171 - 2026-09-17 (Sprint 1 / Mission 1.85.6 follow-up)
+
+**Human egress decisions imported, EGRESS_REVIEW_COMPLETE_OPERATOR_DECISIONS_REMAIN.** operator-a reviewed all 49 reviewable DEVELOPMENT records in
+the local page; lint passed and import recorded 49 individual HUMAN_OPERATOR decisions bound to their surface
+digests (no bulk). Eligibility: 46 EGRESS_APPROVED (28 TRIGGER_REVIEWED_NOT_PERSONAL, 18
+TRIGGER_REVIEWED_PUBLIC_REFERENCE), 4 EGRESS_EXCLUDED (2 personal identifier, 1 secret-like value, 1
+deterministic transport delimiter), 0 review required. Packet re-rendered `9040fd62...`, runner pin updated:
+the egress blocker is gone, status stays BLOCKED_OPERATOR_DECISIONS on pilot thresholds, retry ratification and
+the cost ceiling (max_calls 92, hard ceiling $206.5452). Roadmap N08 EGRESS_REVIEW_COMPLETE_OPERATOR_DECISIONS_REMAIN, not DONE. No decision made by
+the assistant; 0 provider calls, 0 egress.
 
 ## 1.170 - 2026-09-17 (Sprint 1 / Mission 1.85.6)
 

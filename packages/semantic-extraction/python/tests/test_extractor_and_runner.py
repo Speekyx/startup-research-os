@@ -249,8 +249,16 @@ class TestRunnerGovernance:
         assert packet["reference"]["holdout_reference_permitted"] is False
         assert packet["operator_approval_recorded"] is False
         assert packet["selection"]["holdout_included"] is False
-        assert packet["selection"]["egress_approved_record_ids"] == []
-        assert packet["execution_bounds"]["max_calls"] == 0
+        eligibility = json.loads(
+            (
+                REPO / "docs/data/stack-overflow-semantic-egress-eligibility-development-v1.json"
+            ).read_text("utf-8")
+        )
+        approved = packet["selection"]["egress_approved_record_ids"]
+        assert sorted(approved) == sorted(eligibility["approved_record_ids"])
+        assert packet["selection"]["egress_review_required_record_ids"] == []
+        assert not any(b.startswith("EGRESS_REVIEW_PENDING") for b in packet["blockers"])
+        assert packet["execution_bounds"]["max_calls"] == 2 * len(approved)
 
     def test_the_rendered_packet_is_current_and_the_pin_matches(self, runner) -> None:
         renderer = load_script("render_semantic_extraction_packet")

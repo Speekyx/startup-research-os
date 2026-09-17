@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.171
-Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.6)
+Version: 1.172
+Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.6, egress decisions imported)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.172 | 2026-09-17 | **EGRESS_REVIEW_COMPLETE_OPERATOR_DECISIONS_REMAIN: the operator decided egress for every reviewable development record.** 49 HUMAN_OPERATOR decisions imported (no bulk): 46 approved, 3 excluded by the operator, 1 excluded by the transport-delimiter rule, 0 review required. Packet `9040fd62...` BLOCKED_OPERATOR_DECISIONS on pilot thresholds, retry ratification and cost ceiling; runner re-pinned. 0 provider calls, 0 egress. `mission-1.85.6-report.md` §7. |
 | 1.171 | 2026-09-17 | **WAITING_FOR_HUMAN_EGRESS_REVIEW: the operator can review egress in a local page, and no decision was made for them.** Roadmap N08-B-PILOT; 0 provider calls, 0 egress, 0 decisions imported. **Recomputed**: 50 DEVELOPMENT, 1 mechanically excluded, 49 review required (21 triggered, 28 zero-trigger, 3 secret-like). **Tool** `semantic_egress_review.py` prepare/serve/lint/import: loopback-only stdlib page, exact surface with local trigger highlights, clicks saved as HUMAN_OPERATOR decisions bound to the digest, resume; bulk only for the exact zero-trigger set after a typed confirmation; secret-like only individual NOT_PERSONAL. **Import** refuses, never repairs. Packet unchanged `894d8532...`. `mission-1.85.6-report.md`. |
 | 1.170 | 2026-09-17 | **SINGLE_HUMAN_REFERENCE_RECORDED_OPERATOR_DECISIONS_PENDING: one genuine human annotation is a named pilot reference, not gold, and no second human was invented.** Roadmap N08-B-PILOT; 0 provider calls, 0 AI annotations, 0 egress, 0 findings. **Strengths**: SINGLE_HUMAN_REFERENCE (DEVELOPMENT_PILOT, PILOT_NOT_CERTIFICATION), MULTI_HUMAN_REFERENCE unchanged, AI_ASSISTED_PROVISIONAL diagnostic only and stored apart. **Metrics** for one annotator NOT_APPLICABLE_SINGLE_ANNOTATOR, never 0. **Thresholds** partitioned, unchanged, unauthorised. **Packet** v2 `894d8532...` BLOCKED_OPERATOR_DECISIONS; runner refuses a non-human or overclaiming reference. **Holdout** needs multi-human or a new operator decision. `mission-1.85.5-report.md`. |
 | 1.169 | 2026-09-17 | **First human development annotation imported** (operator-a, 50 records, attested, no quote or note text committed). Packet re-rendered, still BLOCKED_HUMAN_LABELS pending a second independent human annotator; runner pin updated. |
@@ -3138,6 +3139,10 @@ entirely theirs.**
 
 **Next is the operator's egress review in the local page, then lint and import.** **Do not decide egress for the
 operator, call a provider, open holdout, or treat the pilot as certification. Mission 1.85.7 was not started.**
+
+**UPDATED IN 1.172.** The operator completed the review: 46 approved, 4 excluded, 0 review required; outcome
+`EGRESS_REVIEW_COMPLETE_OPERATOR_DECISIONS_REMAIN`. **Next is the operator's decisions on the pilot thresholds, the retry reading and the ceiling, then
+a packet-scoped approval.** **Do not call a provider before that approval exists.**
 
 
 

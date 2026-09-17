@@ -385,3 +385,52 @@ class TestCompleteReview(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestCommittedDevelopmentDecisions(unittest.TestCase):
+    """The imported operator decisions (Mission 1.85.6 follow-up), read-only."""
+
+    DATA = pathlib.Path(__file__).resolve().parents[4] / "docs" / "data"
+
+    def load(self, name):
+        import json
+
+        return json.loads((self.DATA / name).read_text("utf-8"))
+
+    def test_every_decision_is_a_human_operator_choice_and_nothing_is_left_to_review(self) -> None:
+        decisions = self.load("stack-overflow-semantic-egress-decisions-development-v1.json")
+        eligibility = self.load("stack-overflow-semantic-egress-eligibility-development-v1.json")
+        scan = {
+            r["normalized_record_id"]: r
+            for r in self.load("stack-overflow-semantic-egress-scan-development-v1.json")["records"]
+        }
+        self.assertEqual(
+            {d["decision_origin"] for d in decisions["decisions"]}
+            | {b["decision_origin"] for b in decisions["bulk_decisions"]},
+            {"HUMAN_OPERATOR"},
+        )
+        self.assertNotIn("EGRESS_REVIEW_REQUIRED", eligibility["state_counts"])
+        for row in eligibility["records"]:
+            if scan[row["normalized_record_id"]]["transmission_problems"]:
+                self.assertEqual(row["state"], "EGRESS_EXCLUDED")
+                self.assertEqual(row["decision_origin"], "DETERMINISTIC_RULE")
+            else:
+                self.assertEqual(row["decision_origin"], "HUMAN_OPERATOR")
+            if row["state"] == "EGRESS_APPROVED" and "secret_like" in row["triggers"]:
+                self.assertEqual(row["basis"], "TRIGGER_REVIEWED_NOT_PERSONAL")
+        for decision in decisions["decisions"]:
+            self.assertEqual(
+                decision["surface_sha256"], scan[decision["normalized_record_id"]]["surface_sha256"]
+            )
+            self.assertFalse(
+                set(decision)
+                - {
+                    "normalized_record_id",
+                    "surface_sha256",
+                    "decision",
+                    "reason",
+                    "decision_origin",
+                    "decided_by",
+                    "decided_at",
+                }
+            )
