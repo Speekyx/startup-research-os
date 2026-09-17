@@ -59,7 +59,7 @@ READY = "READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL"
 APPROVAL_DECISION = "APPROVE_EXACTLY_ONE_EVALUATION_RUN"
 # Pinned, not read from the packet: a runner that took its expectation from the file it checks would
 # check nothing. Re-pinned only when a mission deliberately re-renders the packet.
-EXPECTED_PACKET_SHA256 = "63c7302d64d52aa49e56060de1a2d92ffdb8e2030e9c19ba550acba0cc357993"
+EXPECTED_PACKET_SHA256 = "5f96b418e75374b098b44b7fe3ba756a5155af94f92cd607ea251fa131d18c0e"
 HUMAN_REFERENCE_STRENGTHS = ("SINGLE_HUMAN_REFERENCE", "MULTI_HUMAN_REFERENCE")
 
 

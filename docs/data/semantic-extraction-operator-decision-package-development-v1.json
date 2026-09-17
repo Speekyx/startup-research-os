@@ -1,5 +1,5 @@
 {
- "$comment": "FINAL OPERATOR DECISION PACKAGE (Mission 1.85.7). Facts for three decisions the operator has not made. Rendered from committed artifacts; decides nothing. Merging it authorises no provider call.",
+ "$comment": "FINAL OPERATOR DECISION PACKAGE (prepared in Mission 1.85.7). Facts behind the operator's three decisions, rendered from committed artifacts. The decisions live in the operator-owned decisions file; decision_state only mirrors it. Rendering decides nothing, and neither recording a decision nor merging authorises a provider call.",
  "package_id": "semantic-extraction-operator-decision-package-development",
  "version": "1.0.0",
  "mission": "1.85.7",
@@ -391,9 +391,56 @@
  },
  "decision_state": {
   "decisions_file": "docs/data/semantic-extraction-operator-decisions-development-v1.json",
-  "decisions_sha256": "395f77b307a9fd85f92c9ed6cf45936d1f85dd1a4789a49636464bc0e09ac4b5",
-  "thresholds_unmade": 10,
-  "retry_decision": null,
-  "ceiling_decision": null
+  "decisions_sha256": "ac2bb1d977f0f7fb9ffaa133aa9564f93b7c499b15956f4b06ad1bef2ba94994",
+  "decided_by": "operator-a",
+  "decided_at": "2026-09-17T15:37:35+04:00",
+  "thresholds_unmade": 0,
+  "thresholds": [
+   {
+    "item_id": "false_present_rate_upper_95::NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT"
+   },
+   {
+    "item_id": "false_present_rate_upper_95::REPORTED_FAILED_ATTEMPT",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT"
+   },
+   {
+    "item_id": "min_true_present_and_min_true_absent::each extractable label",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT"
+   },
+   {
+    "item_id": "mechanical_unsupported_assertions_accepted::all",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT"
+   },
+   {
+    "item_id": "validator_acceptance_rate::all",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT"
+   },
+   {
+    "item_id": "unnecessary_abstention_rate_on_gold_decided::all",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT"
+   },
+   {
+    "item_id": "run_to_run_label_flip_rate::each extractable label",
+    "operator_decision": "REJECT_FOR_THE_PILOT",
+    "repeatability_disposition": "REJECT_FOR_THIS_FIRST_PILOT"
+   },
+   {
+    "item_id": "composition_gate::each extractable label, each split",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT"
+   },
+   {
+    "item_id": "recall::each extractable label",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT"
+   },
+   {
+    "item_id": "cost_and_latency::all",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT"
+   }
+  ],
+  "retry_decision": "RATIFY",
+  "ceiling_decision": "ACCEPT",
+  "accepted_hard_ceiling_usd": "9.000000",
+  "record_problems": []
  }
 }

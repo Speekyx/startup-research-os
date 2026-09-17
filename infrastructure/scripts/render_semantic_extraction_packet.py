@@ -1,5 +1,6 @@
 """Mission 1.85.4 (N08-B), reference strength added in Mission 1.85.5, operator decisions and the measured
-cost model in Mission 1.85.7. The frozen evaluation packet for a FUTURE development-split extraction run.
+cost model in Mission 1.85.7, recorded operator decisions and a bound retry policy in Mission 1.85.8. The frozen
+evaluation packet for a FUTURE development-split extraction run.
 
 The packet binds everything a run would depend on, and it cannot be executed:
 
@@ -13,7 +14,11 @@ The packet binds everything a run would depend on, and it cannot be executed:
   MULTI_HUMAN_REFERENCE path;
 - an approval is never written into the packet (that would change the approved bytes); it is a separate
   file, named by the packet digest, that only the operator creates after the final digest is known;
-- the packet carries DEVELOPMENT records only; holdout is never in a prompt-development packet.
+- the packet carries DEVELOPMENT records only; holdout is never in a prompt-development packet;
+- (Mission 1.85.8) it binds the operator's recorded decisions by digest: the decisions file, a digest of the
+  threshold decisions alone, and a retry policy block whose digest covers the ratified reading and the file
+  implementing it. Changing any bound artifact changes the packet digest, so an approval for an earlier
+  digest cannot unlock a later packet.
 
 Reads committed artifacts only (no database, no network, no model). `--write` renders; `--check` fails
 if the committed packet is stale.
@@ -72,6 +77,9 @@ from sros_semantic_extraction_contract.reference import (  # noqa: E402
 )
 
 DATA = ROOT / "docs" / "data"
+RETRY_IMPLEMENTATION = (
+    ROOT / "packages" / "semantic-extraction" / "python" / "sros_semantic_extraction" / "request.py"
+)
 PACKET = DATA / "semantic-extraction-evaluation-packet-development-v1.json"
 CORPUS = DATA / "stack-overflow-semantic-evaluation-corpus-v1.json"
 ELIGIBILITY = DATA / "stack-overflow-semantic-egress-eligibility-development-v1.json"
@@ -87,7 +95,9 @@ ADJUDICATION = DATA / "stack-overflow-semantic-adjudication-development-v1.json"
 THRESHOLD_PARTITION = DATA / "semantic-extraction-threshold-partition-v1.json"
 
 PACKET_ID = "semantic-extraction-evaluation-packet-development"
-PACKET_VERSION = 3
+PACKET_VERSION = 4
+RETRY_POLICY_ID = "semantic-extraction-schema-failure-retry-policy"
+RETRY_POLICY_VERSION = "1.0.0"
 READY = "READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL"
 BLOCKED = "BLOCKED_HUMAN_LABELS"
 BLOCKED_DECISIONS = "BLOCKED_OPERATOR_DECISIONS"
@@ -101,6 +111,12 @@ UNBOUND = {"$comment", "packet_sha256", "status_note"}
 
 def sha(path: pathlib.Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def canonical_sha(value: Any) -> str:
+    return hashlib.sha256(
+        json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    ).hexdigest()
 
 
 def digest(packet: dict[str, Any]) -> str:
@@ -185,6 +201,27 @@ def build() -> dict[str, Any]:
         )
         blockers.append("COST_CEILING_NOT_ACCEPTED: the multi-human path has no accepted ceiling")
     accepted = accepted_ceiling(package, decisions) if single else None
+    threshold_decisions = [
+        {
+            key: d.get(key)
+            for key in (
+                "item_id",
+                "operator_decision",
+                "revised_value",
+                "repeatability_disposition",
+            )
+            if key in d
+        }
+        for d in decisions.get("A_pilot_thresholds", [])
+    ]
+    retry = package["B_retry"]
+    retry_rule = {
+        "max_schema_retries_per_record": MAX_SCHEMA_RETRIES_PER_RECORD,
+        "reading": retry["proposed_reading"],
+        "inside_the_retry_class": retry["inside_the_retry_class"],
+        "outside_the_retry_class": retry["outside_the_retry_class"],
+        "implemented_as": retry["implemented_as"],
+    }
 
     if reference.strength is ReferenceStrength.NO_HUMAN_REFERENCE:
         status = BLOCKED
@@ -194,7 +231,7 @@ def build() -> dict[str, Any]:
         "$comment": "FROZEN FUTURE EVALUATION PACKET (N08-B). NOT EXECUTABLE. Its status is computed from committed facts; the runner refuses any status but READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL before reading an approval, and an approval is a separate operator file named by this packet's digest. Merging this packet authorises nothing. The reference block states what a result could claim: a SINGLE_HUMAN_REFERENCE result is a DEVELOPMENT_PILOT and PILOT_NOT_CERTIFICATION.",
         "packet_id": PACKET_ID,
         "packet_version": PACKET_VERSION,
-        "mission": "1.85.7",
+        "mission": "1.85.8",
         "status": status,
         "blockers": blockers,
         "reference": {
@@ -287,6 +324,37 @@ def build() -> dict[str, Any]:
             "package_sha256": sha(DECISION_PACKAGE),
             "decisions": "docs/data/semantic-extraction-operator-decisions-development-v1.json",
             "decisions_sha256": sha(DECISIONS),
+            "decided_by": decisions.get("decided_by"),
+            "decided_at": decisions.get("decided_at"),
+            "threshold_decisions": threshold_decisions,
+            "threshold_decisions_sha256": canonical_sha(threshold_decisions),
+            "thresholds_authorised": [
+                d["item_id"]
+                for d in threshold_decisions
+                if d.get("operator_decision") == "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT"
+            ],
+            "thresholds_rejected_for_the_pilot": [
+                d["item_id"]
+                for d in threshold_decisions
+                if d.get("operator_decision") == "REJECT_FOR_THE_PILOT"
+            ],
+            "retry_decision": decisions["B_retry"].get("operator_decision"),
+            "ceiling_decision": decisions["C_hard_ceiling"].get("operator_decision"),
+            "accepted_hard_ceiling_usd": decisions["C_hard_ceiling"].get(
+                "accepted_hard_ceiling_usd"
+            ),
+            "additional_repeatability_runs_authorised": 0,
+        },
+        "retry_policy": {
+            "id": RETRY_POLICY_ID,
+            "version": RETRY_POLICY_VERSION,
+            **retry_rule,
+            "provider_fallback": None,
+            "model_fallback": None,
+            "implementation_file": "packages/semantic-extraction/python/sros_semantic_extraction/request.py",
+            "implementation_sha256": sha(RETRY_IMPLEMENTATION),
+            "rule_sha256": canonical_sha(retry_rule),
+            "operator_decision": decisions["B_retry"].get("operator_decision"),
         },
         "source": {
             "source_id": "stack-exchange",

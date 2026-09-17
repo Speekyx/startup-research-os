@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.173
-Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.7)
+Version: 1.174
+Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.8)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.174 | 2026-09-17 | **READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL: the operator's decisions are recorded, and the packet is frozen for an approval nobody has given.** Roadmap N08-B-PILOT; 0 provider calls, 0 key reads, 0 approvals, 0 attempts. **Recorded** by operator-a at 2026-09-17T15:37:35+04:00: 9 thresholds authorised, flip rate rejected for this first pilot, retry ratified, ceiling $9.000000 accepted. **Validated** strictly: a malformed record is refused, never repaired; 0 problems. **Packet** v4 `5f96b418...` binds the retry policy, the threshold decisions and the decisions file by digest; READY with no blockers; an approval naming the previous digest is refused. **Fixed** a Windows reset race in the egress review server. NO EXECUTION HAS BEEN AUTHORISED. `mission-1.85.8-report.md`. |
 | 1.173 | 2026-09-17 | **FINAL_OPERATOR_DECISIONS_PREPARED: the three remaining decisions have their facts, and none is made.** Roadmap N08-B-PILOT; 0 provider calls, 0 token counts, 0 egress, 0 approvals. **Measured** offline: 46 approved requests, 322,746 body bytes. **Verified** from first-party docs: `claude-sonnet-5` ACTIVE, $2/$10 per MTok, ZDR NOT_ESTABLISHED, no substitution. **Cost**: planning $0.838, retry worst case $6.066 over 92 calls, proposed ceiling $9 (not $206.55). **Enforcement**: the ceiling was an approval field only; the runner now refuses any call that could cross the accepted ceiling, charges reported usage, and stops above the conservative input bound. **Packet** v3 `63c7302d...` BLOCKED_OPERATOR_DECISIONS on 10 thresholds, the retry reading and the ceiling. `mission-1.85.7-report.md`. |
 | 1.172 | 2026-09-17 | **EGRESS_REVIEW_COMPLETE_OPERATOR_DECISIONS_REMAIN: the operator decided egress for every reviewable development record.** 49 HUMAN_OPERATOR decisions imported (no bulk): 46 approved, 3 excluded by the operator, 1 excluded by the transport-delimiter rule, 0 review required. Packet `9040fd62...` BLOCKED_OPERATOR_DECISIONS on pilot thresholds, retry ratification and cost ceiling; runner re-pinned. 0 provider calls, 0 egress. `mission-1.85.6-report.md` §7. |
 | 1.171 | 2026-09-17 | **WAITING_FOR_HUMAN_EGRESS_REVIEW: the operator can review egress in a local page, and no decision was made for them.** Roadmap N08-B-PILOT; 0 provider calls, 0 egress, 0 decisions imported. **Recomputed**: 50 DEVELOPMENT, 1 mechanically excluded, 49 review required (21 triggered, 28 zero-trigger, 3 secret-like). **Tool** `semantic_egress_review.py` prepare/serve/lint/import: loopback-only stdlib page, exact surface with local trigger highlights, clicks saved as HUMAN_OPERATOR decisions bound to the digest, resume; bulk only for the exact zero-trigger set after a typed confirmation; secret-like only individual NOT_PERSONAL. **Import** refuses, never repairs. Packet unchanged `894d8532...`. `mission-1.85.6-report.md`. |
@@ -3164,6 +3165,27 @@ ceiling the runner actually enforces.**
 
 **Next is the operator filling the decisions file, then a separate packet-scoped approval.** **Do not fill a
 decision on the operator's behalf, call a provider, or create an approval. Mission 1.85.8 was not started.**
+
+
+**ANSWERED IN 1.174 (Mission 1.85.8). N08-B-PILOT: the operator decided, and the packet is ready for an approval
+that does not exist.**
+
+    decisions     operator-a, 2026-09-17T15:37:35+04:00; 9 authorised, flip rate rejected, retry RATIFY
+    ceiling       ACCEPT "9.000000"; old $206.5452 not used
+    packet        v4 5f96b418e75374b098b44b7fe3ba756a5155af94f92cd607ea251fa131d18c0e READY, blockers []
+    bound         retry policy, threshold decisions and decisions file, each by digest
+    approval      none; a previous-digest approval is refused; merging authorises nothing
+
+- **A RECORDED DECISION IS VALIDATED, NEVER REPAIRED.** A malformed record blocks the packet; it is not rewritten
+  into what the operator probably meant.
+- **A REJECTION FOR A PILOT IS NOT A DELETION FROM THE METHOD.** The flip rate is out of this first run and still
+  in the methodology for a separately approved later one.
+- **READY IS A STATE, NOT A PERMISSION.** The approval must name this exact digest, and any bound change moves the
+  digest.
+
+**Next is a separate explicit operator approval naming packet `5f96b418...`.** **Do not create an approval, run
+`--execute`, read an API key or call a provider without it. NO EXECUTION HAS BEEN AUTHORISED. Mission 1.85.9 was
+not started.**
 
 
 

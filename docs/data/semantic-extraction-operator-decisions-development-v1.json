@@ -1,81 +1,81 @@
 {
- "$comment": "OPERATOR DECISIONS for the DEVELOPMENT pilot. Filled only by the operator. Every field is blank until the operator supplies it; no script, model or mission writes a decision here. REVISE carries a revised value and a reason, and a revision needs the package re-rendered before it can count.",
+ "$comment": "OPERATOR DECISIONS for the DEVELOPMENT pilot. Every decision here is the operator's own, supplied explicitly by operator-a in the Mission 1.85.8 brief and transcribed on their instruction; no script, model or mission chose one. REVISE carries a revised value and a reason, and a revision needs the package re-rendered before it can count. Recording these decisions authorises no evaluation run: that needs a separate packet-scoped approval naming the final packet digest.",
  "decisions_id": "semantic-extraction-operator-decisions-development",
  "version": "1.0.0",
- "decided_by": null,
- "decided_at": null,
+ "decided_by": "operator-a",
+ "decided_at": "2026-09-17T15:37:35+04:00",
  "A_pilot_thresholds": [
   {
    "item_id": "false_present_rate_upper_95::NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
-   "operator_decision": null,
+   "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
    "revised_value": null,
-   "operator_note": null
+   "operator_note": "Zero human-reference PRESENT examples exist for this label. PILOT_INSUFFICIENT_SUPPORT is an acceptable expected outcome. This authorisation does not convert insufficient evidence into success."
   },
   {
    "item_id": "false_present_rate_upper_95::REPORTED_FAILED_ATTEMPT",
-   "operator_decision": null,
+   "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
    "revised_value": null,
    "operator_note": null
   },
   {
    "item_id": "min_true_present_and_min_true_absent::each extractable label",
-   "operator_decision": null,
+   "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
    "revised_value": null,
-   "operator_note": null
+   "operator_note": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION cannot satisfy the PRESENT half of this requirement in this pilot and may yield insufficient support."
   },
   {
    "item_id": "mechanical_unsupported_assertions_accepted::all",
-   "operator_decision": null,
+   "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
    "revised_value": null,
-   "operator_note": null
+   "operator_note": "Proposed value kept at 0."
   },
   {
    "item_id": "validator_acceptance_rate::all",
-   "operator_decision": null,
+   "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
    "revised_value": null,
-   "operator_note": null
+   "operator_note": "Proposed value kept at 0.95."
   },
   {
    "item_id": "unnecessary_abstention_rate_on_gold_decided::all",
-   "operator_decision": null,
+   "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
    "revised_value": null,
-   "operator_note": null
+   "operator_note": "Proposed value kept at 0.10. The metric id is not renamed; gold here means the single-human decided reference, as preregistered."
   },
   {
    "item_id": "run_to_run_label_flip_rate::each extractable label",
-   "operator_decision": null,
+   "operator_decision": "REJECT_FOR_THE_PILOT",
    "revised_value": null,
-   "operator_note": null,
-   "repeatability_disposition": null
+   "operator_note": "This first DEVELOPMENT pilot is intentionally a single pinned execution. Repeatability may be evaluated later under its own separately approved runs. Do not run additional model calls for this criterion. The rejection is specific to this first pilot and does not delete the metric from future methodology.",
+   "repeatability_disposition": "REJECT_FOR_THIS_FIRST_PILOT"
   },
   {
    "item_id": "composition_gate::each extractable label, each split",
-   "operator_decision": null,
+   "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
    "revised_value": null,
-   "operator_note": null
+   "operator_note": "Kept at min_present 4 and min_absent 4, not weakened. NEGATIVE_EVALUATION_OF_NAMED_SOLUTION is expected to give insufficient reference composition."
   },
   {
    "item_id": "recall::each extractable label",
-   "operator_decision": null,
+   "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
    "revised_value": null,
-   "operator_note": null
+   "operator_note": "Descriptive only. For a label with zero reference PRESENT, recall is reported as undefined or insufficient, not 0."
   },
   {
    "item_id": "cost_and_latency::all",
-   "operator_decision": null,
+   "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
    "revised_value": null,
-   "operator_note": null
+   "operator_note": "Descriptive operational measurements, not quality criteria."
   }
  ],
  "B_retry": {
-  "operator_decision": null,
+  "operator_decision": "RATIFY",
   "revised_reading": null,
-  "operator_note": null
+  "operator_note": "Ratified reading, not revised: maximum ONE retry per record; retry ONLY if the forced-tool payload is missing, invalid against the strict schema, or structurally incomplete; no retry on deterministic validator refusal, HTTP/provider/network errors, timeout, provider refusal, max_tokens, or a schema-valid answer that looks incorrect; no provider fallback and no model fallback."
  },
  "C_hard_ceiling": {
-  "operator_decision": null,
-  "accepted_hard_ceiling_usd": null,
+  "operator_decision": "ACCEPT",
+  "accepted_hard_ceiling_usd": "9.000000",
   "revised_hard_ceiling_usd": null,
-  "operator_note": null
+  "operator_note": "Accepted as proposed, not revised. Basis: 46 approved records, 46 expected calls, 92 maximum calls with retry, planning estimate $0.838035, conservative bound $3.032986, retry worst case $6.065972, accepted hard ceiling $9.000000. The old full-context bound $206.5452 is not used."
  }
 }

@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.172
+Version: 1.173
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.7)
+Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.8)
 
 ---
 
@@ -13,6 +13,20 @@ Last amended: 2026-09-17 (Sprint 1 / Mission 1.85.7)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.173 - 2026-09-17 (Sprint 1 / Mission 1.85.8)
+
+**Operator decisions recorded and the ready packet frozen (N08-B-PILOT),
+READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL.** operator-a's explicit decisions, recorded at
+2026-09-17T15:37:35+04:00: 9 pilot thresholds authorised, the run-to-run flip rate rejected for this first
+pilot (REJECT_FOR_THIS_FIRST_PILOT, no additional runs), the retry reading ratified, the $9.000000 hard ceiling
+accepted. A new strict validator (`decision_record_problems`) refuses a malformed record rather than repairing
+it, and found 0 problems. Packet v4 `5f96b418e75374b098b44b7fe3ba756a5155af94f92cd607ea251fa131d18c0e` binds a
+versioned retry policy, the threshold decisions and the decisions file by digest; every other gate was already
+satisfied, so it is READY with no blockers. Runner re-pinned; an approval for the previous digest is refused. A
+Windows reset race in the egress review server (a refusal sent before the body was read) was fixed at its cause.
+0 provider calls, 0 key reads, 0 approvals, 0 attempts. NO EXECUTION HAS BEEN AUTHORISED.
+`docs/reports/mission-1.85.8-report.md`.
 
 ## 1.172 - 2026-09-17 (Sprint 1 / Mission 1.85.7)
 

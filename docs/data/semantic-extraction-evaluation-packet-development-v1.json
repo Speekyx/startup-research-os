@@ -1,14 +1,10 @@
 {
  "$comment": "FROZEN FUTURE EVALUATION PACKET (N08-B). NOT EXECUTABLE. Its status is computed from committed facts; the runner refuses any status but READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL before reading an approval, and an approval is a separate operator file named by this packet's digest. Merging this packet authorises nothing. The reference block states what a result could claim: a SINGLE_HUMAN_REFERENCE result is a DEVELOPMENT_PILOT and PILOT_NOT_CERTIFICATION.",
  "packet_id": "semantic-extraction-evaluation-packet-development",
- "packet_version": 3,
- "mission": "1.85.7",
- "status": "BLOCKED_OPERATOR_DECISIONS",
- "blockers": [
-  "THRESHOLDS_NOT_AUTHORISED: 10 of 10 single-human pilot threshold decisions unmade",
-  "RETRY_INTERPRETATION_NOT_RATIFIED: the retry decision is blank",
-  "COST_CEILING_NOT_ACCEPTED: the ceiling decision is blank"
- ],
+ "packet_version": 4,
+ "mission": "1.85.8",
+ "status": "READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL",
+ "blockers": [],
  "reference": {
   "model": "semantic-reference-strength@1.0.0",
   "REFERENCE_STRENGTH": "SINGLE_HUMAN_REFERENCE",
@@ -113,9 +109,115 @@
  },
  "operator_decisions": {
   "package": "docs/data/semantic-extraction-operator-decision-package-development-v1.json",
-  "package_sha256": "91375c3adf259266637f6cf0261b6352007e6487df07abcfaec654116176e9cc",
+  "package_sha256": "9001c4ecf1d65c366cbbf4ece3ae09a25454dede000db6e95f66f33485da0d0b",
   "decisions": "docs/data/semantic-extraction-operator-decisions-development-v1.json",
-  "decisions_sha256": "395f77b307a9fd85f92c9ed6cf45936d1f85dd1a4789a49636464bc0e09ac4b5"
+  "decisions_sha256": "ac2bb1d977f0f7fb9ffaa133aa9564f93b7c499b15956f4b06ad1bef2ba94994",
+  "decided_by": "operator-a",
+  "decided_at": "2026-09-17T15:37:35+04:00",
+  "threshold_decisions": [
+   {
+    "item_id": "false_present_rate_upper_95::NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
+    "revised_value": null
+   },
+   {
+    "item_id": "false_present_rate_upper_95::REPORTED_FAILED_ATTEMPT",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
+    "revised_value": null
+   },
+   {
+    "item_id": "min_true_present_and_min_true_absent::each extractable label",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
+    "revised_value": null
+   },
+   {
+    "item_id": "mechanical_unsupported_assertions_accepted::all",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
+    "revised_value": null
+   },
+   {
+    "item_id": "validator_acceptance_rate::all",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
+    "revised_value": null
+   },
+   {
+    "item_id": "unnecessary_abstention_rate_on_gold_decided::all",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
+    "revised_value": null
+   },
+   {
+    "item_id": "run_to_run_label_flip_rate::each extractable label",
+    "operator_decision": "REJECT_FOR_THE_PILOT",
+    "revised_value": null,
+    "repeatability_disposition": "REJECT_FOR_THIS_FIRST_PILOT"
+   },
+   {
+    "item_id": "composition_gate::each extractable label, each split",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
+    "revised_value": null
+   },
+   {
+    "item_id": "recall::each extractable label",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
+    "revised_value": null
+   },
+   {
+    "item_id": "cost_and_latency::all",
+    "operator_decision": "AUTHORISE_FOR_THE_SINGLE_HUMAN_PILOT",
+    "revised_value": null
+   }
+  ],
+  "threshold_decisions_sha256": "2cbae12aa1eb6341d2b2109951dfad170e14de927a00a2d88109cc3ec3cbe0b3",
+  "thresholds_authorised": [
+   "false_present_rate_upper_95::NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "false_present_rate_upper_95::REPORTED_FAILED_ATTEMPT",
+   "min_true_present_and_min_true_absent::each extractable label",
+   "mechanical_unsupported_assertions_accepted::all",
+   "validator_acceptance_rate::all",
+   "unnecessary_abstention_rate_on_gold_decided::all",
+   "composition_gate::each extractable label, each split",
+   "recall::each extractable label",
+   "cost_and_latency::all"
+  ],
+  "thresholds_rejected_for_the_pilot": [
+   "run_to_run_label_flip_rate::each extractable label"
+  ],
+  "retry_decision": "RATIFY",
+  "ceiling_decision": "ACCEPT",
+  "accepted_hard_ceiling_usd": "9.000000",
+  "additional_repeatability_runs_authorised": 0
+ },
+ "retry_policy": {
+  "id": "semantic-extraction-schema-failure-retry-policy",
+  "version": "1.0.0",
+  "max_schema_retries_per_record": 1,
+  "reading": [
+   "at most ONE retry per record",
+   "retry ONLY when the forced-tool payload is missing, is not valid against the strict schema, or is structurally incomplete",
+   "no retry on a deterministic validator refusal of a schema-valid payload",
+   "no retry on a provider or network error",
+   "no retry because a schema-valid semantic answer appears wrong",
+   "no provider or model fallback"
+  ],
+  "inside_the_retry_class": [
+   "the gateway raises SchemaValidationError: no tool_use payload, or one failing the strict schema",
+   "a required key such as extraction_state or findings is missing",
+   "a finding object lacks a required field"
+  ],
+  "outside_the_retry_class": [
+   "a schema-valid payload whose quote is not in the surface (validator refusal)",
+   "a payload whose extraction_state disagrees with its findings, refused by the validator",
+   "HTTP 400/429/5xx, a timeout or a connection error",
+   "stop_reason max_tokens (output limit reached) or a refusal",
+   "a schema-valid answer the operator believes is semantically wrong"
+  ],
+  "implemented_as": "sros_semantic_extraction.may_retry: only AttemptOutcome.SCHEMA_FAILURE with 0 retries used is retried",
+  "provider_fallback": null,
+  "model_fallback": null,
+  "implementation_file": "packages/semantic-extraction/python/sros_semantic_extraction/request.py",
+  "implementation_sha256": "329106a02627bad1d0922105c6ea9c40c5d1e0e14b9a3c9b50d6b0948c314c3d",
+  "rule_sha256": "1515359ed300780c1a9668b71d772ca592a44cc1ae4938ea5aac01a628480105",
+  "operator_decision": "RATIFY"
  },
  "source": {
   "source_id": "stack-exchange",
@@ -579,7 +681,7 @@
    "02dd341e-30e8-538b-986a-5d4c26a5791f": 7539
   },
   "proposed_hard_ceiling_usd": "9.000000",
-  "hard_ceiling_usd_approved": null,
+  "hard_ceiling_usd_approved": "9.000000",
   "hard_ceiling_basis": "retry worst case + one call at the documented maximum (full context window and the runner's output bound), rounded up to a whole dollar",
   "enforcement": {
    "preflight": "the runner refuses before any transport if the accepted ceiling is below retry worst case + one documented-maximum call",
@@ -629,5 +731,5 @@
   "runtime": "--execute --approval-sha256 <sha256 of the approval file>",
   "merge_is_not_approval": true
  },
- "packet_sha256": "63c7302d64d52aa49e56060de1a2d92ffdb8e2030e9c19ba550acba0cc357993"
+ "packet_sha256": "5f96b418e75374b098b44b7fe3ba756a5155af94f92cd607ea251fa131d18c0e"
 }

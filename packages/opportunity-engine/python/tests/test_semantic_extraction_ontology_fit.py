@@ -75,6 +75,7 @@ def test_roadmap_records_n08_as_preregistered_not_done() -> None:
         "DEVELOPMENT_PILOT_SINGLE_HUMAN_REFERENCE",
         "EGRESS_REVIEW_COMPLETE_OPERATOR_DECISIONS_REMAIN",
         "FINAL_OPERATOR_DECISIONS_PREPARED",
+        "READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL",
     }
     assert nodes["N08"]["phases"]["N08-A"].startswith(CONTRACT["outcome"])
     assert nodes["N08"]["status"] != "DONE"

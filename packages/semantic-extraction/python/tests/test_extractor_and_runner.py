@@ -240,9 +240,12 @@ def runner():
 
 
 class TestRunnerGovernance:
-    def test_the_committed_packet_verifies_and_is_blocked(self, runner) -> None:
+    def test_the_committed_packet_verifies_and_is_ready_for_a_packet_scoped_approval(
+        self, runner
+    ) -> None:
         packet = runner.verify_packet()
-        assert packet["status"] == "BLOCKED_OPERATOR_DECISIONS"
+        assert packet["status"] == runner.READY
+        assert packet["blockers"] == []
         assert packet["reference"]["REFERENCE_STRENGTH"] == "SINGLE_HUMAN_REFERENCE"
         assert packet["reference"]["RESULT_SCOPE"] == "DEVELOPMENT_PILOT"
         assert packet["reference"]["result_label"] == "PILOT_NOT_CERTIFICATION"
@@ -282,6 +285,9 @@ class TestRunnerGovernance:
     def test_execute_refuses_a_blocked_packet_before_reading_an_approval(
         self, runner, monkeypatch
     ) -> None:
+        blocked = runner.verify_packet()
+        blocked["status"] = "BLOCKED_OPERATOR_DECISIONS"
+        monkeypatch.setattr(runner, "verify_packet", lambda: blocked)
         monkeypatch.setattr(runner, "APPROVAL", pathlib.Path("/nonexistent/approval.json"))
         with pytest.raises(runner.Refused) as refused:
             runner.main(["--execute", "--approval-sha256", "0" * 64])
