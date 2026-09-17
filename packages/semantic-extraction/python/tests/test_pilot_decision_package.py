@@ -548,6 +548,10 @@ def approval_for(packet: dict, **overrides) -> dict:
         "accepts_retry_interpretation": True,
         "accepted_hard_ceiling_usd": packet["execution_bounds"]["hard_ceiling_usd_approved"],
         "accepted_reference_strength": packet["reference"]["REFERENCE_STRENGTH"],
+        "approved_provider": packet["provider"]["provider_id"],
+        "approved_model": packet["provider"]["model"],
+        "approved_record_count": len(packet["selection"]["egress_approved_record_ids"]),
+        "approval_scope": "ONE_DEVELOPMENT_PILOT_EXECUTION",
     }
     approval.update(overrides)
     return approval

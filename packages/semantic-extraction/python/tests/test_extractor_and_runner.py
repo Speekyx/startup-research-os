@@ -320,9 +320,17 @@ class TestRunnerGovernance:
             "accepts_retry_interpretation": True,
             "accepted_hard_ceiling_usd": ready["execution_bounds"]["hard_ceiling_usd_approved"],
             "accepted_reference_strength": "SINGLE_HUMAN_REFERENCE",
+            "approved_provider": "anthropic",
+            "approved_model": "claude-sonnet-5",
+            "approved_record_count": len(ready["selection"]["egress_approved_record_ids"]),
+            "approval_scope": runner.APPROVAL_SCOPE,
         }
         cases = [
             ("OPERATOR_APPROVAL_DOES_NOT_NAME_THIS_PACKET", dict(good, packet_sha256="0" * 64)),
+            ("OPERATOR_APPROVAL_INCOMPLETE", dict(good, approved_model="claude-opus-5")),
+            ("OPERATOR_APPROVAL_INCOMPLETE", dict(good, approved_provider="openai")),
+            ("OPERATOR_APPROVAL_INCOMPLETE", dict(good, approved_record_count=50)),
+            ("OPERATOR_APPROVAL_INCOMPLETE", dict(good, approval_scope="UNLIMITED")),
             ("OPERATOR_APPROVAL_INCOMPLETE", dict(good, accepts_retry_interpretation="yes")),
             (
                 "OPERATOR_APPROVAL_INCOMPLETE",

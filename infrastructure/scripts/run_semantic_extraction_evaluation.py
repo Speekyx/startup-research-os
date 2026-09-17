@@ -37,6 +37,7 @@ import hashlib
 import json
 import pathlib
 import sys
+import time
 from dataclasses import dataclass, field
 from datetime import UTC, date, datetime, timedelta
 from decimal import Decimal
@@ -57,6 +58,12 @@ APPROVAL = DATA / "semantic-extraction-evaluation-approval-development-v1.json"
 ATTEMPT = DATA / "semantic-extraction-evaluation-attempt-development-v1.json"
 READY = "READY_FOR_PACKET_SCOPED_OPERATOR_APPROVAL"
 APPROVAL_DECISION = "APPROVE_EXACTLY_ONE_EVALUATION_RUN"
+APPROVAL_SCOPE = "ONE_DEVELOPMENT_PILOT_EXECUTION"
+# Validator refusals that mean the payload itself is structurally incomplete or invalid against the
+# strict schema, which the ratified retry reading treats as a schema failure.
+STRUCTURAL_REFUSALS = frozenset(
+    {"PAYLOAD_NOT_AN_OBJECT", "UNKNOWN_OR_MISSING_KEY", "UNKNOWN_EXTRACTION_STATE"}
+)
 # Pinned, not read from the packet: a runner that took its expectation from the file it checks would
 # check nothing. Re-pinned only when a mission deliberately re-renders the packet.
 EXPECTED_PACKET_SHA256 = "5f96b418e75374b098b44b7fe3ba756a5155af94f92cd607ea251fa131d18c0e"
@@ -152,7 +159,37 @@ def check_approval(
         raise Refused(
             "OPERATOR_APPROVAL_INCOMPLETE", "the accepted reference strength is not the packet's"
         )
+    # Mission 1.85.9: the approval also names what it lets leave the machine and how often.
+    provider = packet.get("provider") or {}
+    for field_name, expected in (
+        ("approved_provider", provider.get("provider_id")),
+        ("approved_model", provider.get("model")),
+        (
+            "approved_record_count",
+            len(packet["selection"]["egress_approved_record_ids"]),
+        ),
+        ("approval_scope", APPROVAL_SCOPE),
+    ):
+        if approval.get(field_name) != expected:
+            raise Refused(
+                "OPERATOR_APPROVAL_INCOMPLETE", f"{field_name} is not the packet's {expected!r}"
+            )
     return approval
+
+
+COMPOSE_ENV = ROOT / "infrastructure" / "compose" / ".env"
+
+
+def _load_compose_env(env_file: pathlib.Path = COMPOSE_ENV) -> None:
+    import os
+
+    if not env_file.exists():
+        return
+    for line in env_file.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            key, _, value = line.partition("=")
+            os.environ.setdefault(key.strip(), value.strip())
 
 
 def refuse_if_attempted(attempt_path: pathlib.Path) -> None:
@@ -189,11 +226,24 @@ class RecordingTransport:
     def post_json(
         self, url: str, headers: dict[str, str], body: dict[str, Any], timeout_seconds: float
     ) -> Any:
-        response = self.inner.post_json(url, headers, body, timeout_seconds)
+        started = time.monotonic()
+        try:
+            response = self.inner.post_json(url, headers, body, timeout_seconds)
+        except Exception as exc:
+            # A timeout or a connection failure has no response; keep its class and duration only.
+            self.responses.append(
+                {
+                    "status": None,
+                    "transport_error": type(exc).__name__,
+                    "elapsed_seconds": round(time.monotonic() - started, 3),
+                }
+            )
+            raise
         entry: dict[str, Any] = {
             "status": response.status,
             "request_id": response.header("request-id"),
             "body_sha256": _sha(response.body),
+            "elapsed_seconds": round(time.monotonic() - started, 3),
         }
         if response.status == 200:
             try:
@@ -230,6 +280,7 @@ def execute(
     out_dir: pathlib.Path,
     *,
     workspace_id: str,
+    approval_sha256: str | None = None,
 ) -> dict[str, Any]:
     from sros_contracts import LlmTier
     from sros_llm_gateway.providers.anthropic import (
@@ -269,11 +320,21 @@ def execute(
     calls = 0
     results: list[dict[str, Any]] = []
     reference = packet.get("reference") or {}
+    run_started_at = datetime.now(UTC).isoformat(timespec="seconds")
+    run_started = time.monotonic()
 
     def write_run(stopped: str | None) -> dict[str, Any]:
         out_dir.mkdir(parents=True, exist_ok=True)
         run = {
+            "packet_id": packet["packet_id"],
+            "packet_version": packet["packet_version"],
             "packet_sha256": packet["packet_sha256"],
+            "approval_sha256": approval_sha256,
+            "provider": packet["provider"]["provider_id"],
+            "model": packet["provider"]["model"],
+            "records_approved": len(records),
+            "started_at": run_started_at,
+            "elapsed_seconds": round(time.monotonic() - run_started, 3),
             "REFERENCE_STRENGTH": reference.get("REFERENCE_STRENGTH"),
             "RESULT_SCOPE": reference.get("RESULT_SCOPE"),
             "result_label": reference.get("result_label"),
@@ -334,8 +395,22 @@ def execute(
             try:
                 response = _call_once(gateway, request)
             except SchemaValidationError as exc:
-                outcome, report, payload = AttemptOutcome.SCHEMA_FAILURE, None, None
                 error = {"class": type(exc).__name__, "sha256": _sha(str(exc).encode())}
+                payload, report = None, None
+                # The provider's own completion signal outranks the schema check: a response cut
+                # at max_tokens or refused is not a schema failure and is never retried.
+                stop = (
+                    recorder.responses[seen].get("stop_reason")
+                    if len(recorder.responses) > seen
+                    else None
+                )
+                completion = classify_forced_tool_completion(stop)
+                if completion is AnthropicCompletion.OUTPUT_LIMIT_REACHED:
+                    outcome = AttemptOutcome.OUTPUT_LIMIT_REACHED
+                elif completion is AnthropicCompletion.REFUSED:
+                    outcome = AttemptOutcome.MODEL_REFUSED
+                else:
+                    outcome = AttemptOutcome.SCHEMA_FAILURE
             except ProviderError as exc:
                 outcome, report, payload = AttemptOutcome.PROVIDER_ERROR, None, None
                 error = {
@@ -343,6 +418,26 @@ def execute(
                     "status": getattr(exc, "status_code", None),
                     "sha256": _sha(str(exc).encode()),
                 }
+            except Exception as exc:  # noqa: BLE001 - any other failure stops the run, recorded
+                attempts.append(
+                    {
+                        "call_number": calls,
+                        "retry_number": schema_retries,
+                        "outcome": "UNEXPECTED_ERROR",
+                        "error": {"class": type(exc).__name__, "sha256": _sha(str(exc).encode())},
+                        "transport": recorder.responses[seen:],
+                    }
+                )
+                if not any("usage" in e for e in recorder.responses[seen:]):
+                    ledger.charge_unknown()
+                results.append(
+                    {
+                        "normalized_record_id": record["normalized_record_id"],
+                        "surface_sha256": record["surface_sha256"],
+                        "attempts": attempts,
+                    }
+                )
+                raise halt("UNEXPECTED_ERROR", type(exc).__name__) from None
             else:
                 error = None
                 stop = (
@@ -360,8 +455,22 @@ def execute(
                     outcome, report = AttemptOutcome.SCHEMA_FAILURE, None
                 else:
                     outcome, report = interpret_payload(payload, context)
+                    if outcome is AttemptOutcome.VALIDATOR_REFUSED and any(
+                        str(reason) in STRUCTURAL_REFUSALS for reason, _ in report.refusals
+                    ):
+                        # The ratified reading retries a payload that is missing, invalid against
+                        # the strict schema, or structurally incomplete (a finding lacking a
+                        # required key). The gateway checks only top-level keys, so those cases
+                        # reach the validator; they are schema failures, not semantic refusals.
+                        outcome = AttemptOutcome.SCHEMA_FAILURE
             attempts.append(
-                {"outcome": outcome.value, "error": error, "transport": recorder.responses[seen:]}
+                {
+                    "call_number": calls,
+                    "retry_number": schema_retries,
+                    "outcome": outcome.value,
+                    "error": error,
+                    "transport": recorder.responses[seen:],
+                }
             )
             usages = [e["usage"] for e in recorder.responses[seen:] if "usage" in e]
             if usages:
@@ -371,6 +480,7 @@ def execute(
                     results.append(
                         {
                             "normalized_record_id": record["normalized_record_id"],
+                            "surface_sha256": record["surface_sha256"],
                             "attempts": attempts,
                         }
                     )
@@ -384,13 +494,34 @@ def execute(
                 schema_retries += 1
                 continue
             break
+        extraction = report.extraction if report and report.accepted else None
         results.append(
             {
                 "normalized_record_id": record["normalized_record_id"],
+                "surface_sha256": record["surface_sha256"],
                 "attempts": attempts,
                 "payload": payload,
                 "refusals": [list(r) for r in report.refusals] if report else None,
                 "accepted": bool(report and report.accepted),
+                "extraction": (
+                    {
+                        "extraction_id": extraction.extraction_id,
+                        "extraction_state": extraction.extraction_state.value,
+                        "findings": [
+                            {
+                                "finding_id": f.finding_id,
+                                "finding_type": f.finding_type,
+                                "evidence_start": f.evidence_start,
+                                "evidence_end": f.evidence_end,
+                                "subject_start": f.subject_start,
+                                "subject_end": f.subject_end,
+                            }
+                            for f in extraction.findings
+                        ],
+                    }
+                    if extraction
+                    else None
+                ),
             }
         )
     return write_run(None)
@@ -454,7 +585,14 @@ def main(argv: list[str] | None = None) -> int:
     refuse_if_attempted(ATTEMPT)
     if not args.output_dir:
         raise Refused("OUTPUT_DIRECTORY_NOT_SUPPLIED")
+    if pathlib.Path(args.output_dir).resolve().is_relative_to(ROOT.resolve()):
+        raise Refused("OUTPUT_DIRECTORY_INSIDE_THE_REPOSITORY")
     import os
+
+    # Only now, after every non-secret check has passed, may the provider credential reach this process,
+    # and only through the git-ignored compose .env the other execution runners use. Existing variables
+    # win; the value is never read, printed or written here.
+    _load_compose_env()
 
     from build_semantic_egress_eligibility import development_surfaces
     from sros_acquisition.compliance.inference import (
@@ -508,6 +646,7 @@ def main(argv: list[str] | None = None) -> int:
         recorder,
         pathlib.Path(args.output_dir),
         workspace_id=os.environ.get("SROS_WORKSPACE_ID", "00000000-0000-4000-8000-000000000001"),
+        approval_sha256=args.approval_sha256,
     )
     print(f"run finished: {run['calls']} calls; outputs outside the repository")
     return 0
