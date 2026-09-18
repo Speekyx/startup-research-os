@@ -1,0 +1,556 @@
+{
+ "$comment": "BALANCED POST-MODEL OPERATOR REVIEW (Mission 1.85.13). The operator saw the model's answer before choosing: this is NOT a blind annotation, does not replace the original reference (left byte-for-byte unchanged), may inform a later prompt, contract or label-definition decision, and leaves the preregistered Mission 1.85.12 readings unchanged. Bounded metadata only: no question text, no model quote.",
+ "review_id": "semantic-extraction-balanced-post-model-review-development",
+ "version": "1.0.0",
+ "provenance": "POST_MODEL_OPERATOR_REVIEW",
+ "blind": false,
+ "replaces_original_reference": false,
+ "label": "REPORTED_FAILED_ATTEMPT",
+ "operator_id": "operator-a",
+ "bindings": {
+  "packet_sha256": "6b27bccbc22c7051be9d8f1df4dd22a4635d0f664d4b4fa05ede820e90a72a7e",
+  "approval_sha256": "9fc8fac724bdfa54a2967aaab668524f778ed476e6a1668a596efd6ac57c9974",
+  "run_summary_sha256": "e321901eebf43ffb2083518d36ee2e5f6e13f02488f500f861d34d3746b5d4c9",
+  "pilot_evaluation_sha256": "04e44bfdc4364bca08a28e07b6b1c93b2d3eb018b91b4781c3e7c0b115dedf01",
+  "original_annotation_sha256": "449ff10f8a60217bbf4b7887254cf81b492fdba962b39283f39d2acdf1a9fa3c",
+  "prior_review_sha256": "390caadaaaacd8dd45b11e6a1ce837de76c83449f767cf001a53b580f4caa093",
+  "label_definition": "first-person-semantic-labels@1.0.0",
+  "label_definition_sha256": "5b89ccf8951f28cdeffa25522685163ba842d9e3fde04218ed08a303f2cace48",
+  "prompt_sha256": "a4b96eb3b92d19573bd008fd8690df11fa5e0638f50ffa95d36845415448dde7"
+ },
+ "accounting": {
+  "current_false_present": 16,
+  "current_false_negative": 6,
+  "reviewed_in_mission_1_85_10": 9,
+  "previously_reviewed_current_false_present": 7,
+  "new_unreviewed_false_present": 9,
+  "balanced_review_set": 15
+ },
+ "prior_review_reused": {
+  "$comment": "Records whose post-model judgement already exists at record level (Mission 1.85.10), reused rather than asked again. No timestamp or decision here is new.",
+  "origin": "PRIOR_REVIEW_REUSED_RECORD_LEVEL_JUDGEMENT",
+  "review_id": "semantic-extraction-post-model-review-development",
+  "review_sha256": "390caadaaaacd8dd45b11e6a1ce837de76c83449f767cf001a53b580f4caa093",
+  "records": [
+   {
+    "normalized_record_id": "17064c93-71cf-5474-ba7f-39ccd516782f",
+    "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+    "decided_by": "operator-a",
+    "decided_at": "2026-09-17T19:11:06+04:00",
+    "still_false_present_under_prompt_1_1_0": true
+   },
+   {
+    "normalized_record_id": "1a659352-390f-5c53-97de-0f725d017f46",
+    "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+    "decided_by": "operator-a",
+    "decided_at": "2026-09-17T19:16:17+04:00",
+    "still_false_present_under_prompt_1_1_0": true
+   },
+   {
+    "normalized_record_id": "203268d4-baf6-5410-a001-cf77843e96e3",
+    "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+    "decided_by": "operator-a",
+    "decided_at": "2026-09-17T19:16:28+04:00",
+    "still_false_present_under_prompt_1_1_0": true
+   },
+   {
+    "normalized_record_id": "37bf2146-b9fc-5e5a-b35b-d59f5f6bfc57",
+    "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+    "decided_by": "operator-a",
+    "decided_at": "2026-09-17T19:16:32+04:00",
+    "still_false_present_under_prompt_1_1_0": true
+   },
+   {
+    "normalized_record_id": "9f91eeea-25e6-5a9e-89e6-54d4490ecd7c",
+    "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+    "decided_by": "operator-a",
+    "decided_at": "2026-09-17T19:16:35+04:00",
+    "still_false_present_under_prompt_1_1_0": true
+   },
+   {
+    "normalized_record_id": "bf04af60-1364-5fd0-8f4f-a8104d131aff",
+    "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+    "decided_by": "operator-a",
+    "decided_at": "2026-09-17T19:16:59+04:00",
+    "still_false_present_under_prompt_1_1_0": true
+   },
+   {
+    "normalized_record_id": "e35f990d-117a-59d1-b54e-5165632378bf",
+    "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+    "decided_by": "operator-a",
+    "decided_at": "2026-09-17T19:17:05+04:00",
+    "still_false_present_under_prompt_1_1_0": true
+   }
+  ],
+  "reviewed_in_mission_1_85_10": 9,
+  "reviewed_and_still_false_present": 7,
+  "reviewed_and_corrected_by_prompt_1_1_0": [
+   "ac423fe4-a4b4-589d-ac49-96932ed51d54",
+   "d6bff833-780d-55d3-a5ad-1effebb8a328"
+  ]
+ },
+ "records": [
+  {
+   "normalized_record_id": "3194f76d-a845-54c5-9a14-bd0520da6cbb",
+   "side": "NEW_FALSE_PRESENT",
+   "surface_sha256": "5b4d66acac3db1388f4c79ad9162a06a3074deb95666412548453683b6b500ab",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "model_output_sha256": "2218c5765f072c31f633de0f367aa7b40a80d397d81928352db5d2d83b2f5d80"
+  },
+  {
+   "normalized_record_id": "3d0568c4-5876-5863-921b-2c0fc3d3e27a",
+   "side": "NEW_FALSE_PRESENT",
+   "surface_sha256": "607871301807c0d701b32dac674885c3336d963c284d766ab390d46254b49120",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "model_output_sha256": "e86f4944dd3962a724026bb627db5cf79a2907dd4056475b2357568f2ff0f270"
+  },
+  {
+   "normalized_record_id": "42642469-23b7-5a7a-b897-5052012d9fd3",
+   "side": "NEW_FALSE_PRESENT",
+   "surface_sha256": "f852337be8c3b078696ceaf19ad98c30ed9368417bfc529615419cb21d9313e7",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "model_output_sha256": "df994fe4e1aaf826296efa1d5d5390bf06d42311e05f207f57aef87844d71244"
+  },
+  {
+   "normalized_record_id": "58966c7e-425d-59de-85ce-116ae98309ab",
+   "side": "NEW_FALSE_PRESENT",
+   "surface_sha256": "1dbc8f33af7913b2b033211f8858d5181d165fd4354782316679eda8e2298845",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "model_output_sha256": "47dc86b90de8518d25f39e0a7d0bb3e3c5fbe0285d4faa3850fe4fd1b3554faa"
+  },
+  {
+   "normalized_record_id": "6dfbef0a-3a64-5fd1-9433-21f7cdb01402",
+   "side": "NEW_FALSE_PRESENT",
+   "surface_sha256": "d9d115c55d066b08190b197771a77c3b457eb126b7ca280ed089ebd2b7c8e93b",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "model_output_sha256": "6bdd65b2eef23a8ea5c864f1544063cdeff0a0466240d275aa1b672eab523e5d"
+  },
+  {
+   "normalized_record_id": "7eed79ff-81d0-50c1-94c2-3a1b6fa3b4a8",
+   "side": "NEW_FALSE_PRESENT",
+   "surface_sha256": "055d126455b6543d93e34ebca213942a301488fe6cb177bf7822dcc9f489c9cb",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "model_output_sha256": "2561763708a383df0e0df7c6c821eb4e3180af7caacceb576cfb537b7a5c22d8"
+  },
+  {
+   "normalized_record_id": "88376fa5-5cd3-58f9-b099-bad69077b0f7",
+   "side": "NEW_FALSE_PRESENT",
+   "surface_sha256": "a6bd410f4e0bcaf3d9a04c028a8d17570965f4dd7b4c7ad8a7962c664a6d6d91",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "model_output_sha256": "4dc6a6e98bc073fcc5b6a1a355f2e42120e97d2f5badac700f17ceaa6efeb7b5"
+  },
+  {
+   "normalized_record_id": "c128f807-cbdf-512b-bbde-30a00a9fdb39",
+   "side": "NEW_FALSE_PRESENT",
+   "surface_sha256": "8bafba2a959e1a7f065f4332c3a75f2f85fe52c02d67cb1894a0ec8df19a9b25",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "model_output_sha256": "03983347c079501a115cefda3ace90b030b02101f384fce83ac3163b07340800"
+  },
+  {
+   "normalized_record_id": "f53c6872-b340-5e5b-845c-e8b2bd3147d8",
+   "side": "NEW_FALSE_PRESENT",
+   "surface_sha256": "ee4ce6bcde0f4491d12363d1628136344a9f98b2180d70496aa134d94808ae25",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "model_output_sha256": "74867f8743b05c3640340c633dc61447db910db8128b73b33e318e408824aa1f"
+  },
+  {
+   "normalized_record_id": "4a3fc738-bb4a-5992-bb2e-2e422b9f4a00",
+   "side": "FALSE_NEGATIVE",
+   "surface_sha256": "7ae8f3dfb8d97e4ae786443896fcbb90de5cd561b6adfe310e888625a4b6e48e",
+   "original_blind_state": "PRESENT",
+   "model_state": "ABSENT",
+   "model_output_sha256": "74517c2af4ad7a1c498bc662cf11f1e9ff0d0e92a21a50ed90b73d93fc4c15ea"
+  },
+  {
+   "normalized_record_id": "96054702-3d78-55b0-b5b9-ed63e611c6d7",
+   "side": "FALSE_NEGATIVE",
+   "surface_sha256": "70ab4463876798f80a4620ddb0e873e735dc39d9221e6ffaffaeb4bf37e49e56",
+   "original_blind_state": "PRESENT",
+   "model_state": "ABSENT",
+   "model_output_sha256": "74517c2af4ad7a1c498bc662cf11f1e9ff0d0e92a21a50ed90b73d93fc4c15ea"
+  },
+  {
+   "normalized_record_id": "b7996f9d-72fe-5544-a30a-ce9270edfe09",
+   "side": "FALSE_NEGATIVE",
+   "surface_sha256": "db96588f1b73824f99547c706dbea2ef416f5e5d7e90ebe8e40279958bbbaefe",
+   "original_blind_state": "PRESENT",
+   "model_state": "ABSENT",
+   "model_output_sha256": "74517c2af4ad7a1c498bc662cf11f1e9ff0d0e92a21a50ed90b73d93fc4c15ea"
+  },
+  {
+   "normalized_record_id": "e2162aae-f496-58d4-b905-73e4b0164a66",
+   "side": "FALSE_NEGATIVE",
+   "surface_sha256": "ebd146372d4dda73d58f59306b2feb1f0adf0937be21cdfcf7a7b2b26cb3f5b9",
+   "original_blind_state": "PRESENT",
+   "model_state": "ABSENT",
+   "model_output_sha256": "74517c2af4ad7a1c498bc662cf11f1e9ff0d0e92a21a50ed90b73d93fc4c15ea"
+  },
+  {
+   "normalized_record_id": "e9edbbaa-5331-5584-8d3e-847c8f759551",
+   "side": "FALSE_NEGATIVE",
+   "surface_sha256": "12ee26a430ba565d443e1e40fc896fa653d95532fe7e897620f3e17f2839c9bb",
+   "original_blind_state": "PRESENT",
+   "model_state": "ABSENT",
+   "model_output_sha256": "74517c2af4ad7a1c498bc662cf11f1e9ff0d0e92a21a50ed90b73d93fc4c15ea"
+  },
+  {
+   "normalized_record_id": "f876b0be-fa18-5b60-9fdd-b505e7529413",
+   "side": "FALSE_NEGATIVE",
+   "surface_sha256": "37c3125a495d0264df8c4d12fc21cecd500d86b39bb88eb96823807c98180577",
+   "original_blind_state": "PRESENT",
+   "model_state": "ABSENT",
+   "model_output_sha256": "74517c2af4ad7a1c498bc662cf11f1e9ff0d0e92a21a50ed90b73d93fc4c15ea"
+  }
+ ],
+ "decisions": [
+  {
+   "normalized_record_id": "3194f76d-a845-54c5-9a14-bd0520da6cbb",
+   "side": "NEW_FALSE_PRESENT",
+   "surface_sha256": "5b4d66acac3db1388f4c79ad9162a06a3074deb95666412548453683b6b500ab",
+   "model_output_sha256": "2218c5765f072c31f633de0f367aa7b40a80d397d81928352db5d2d83b2f5d80",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "decision": "POST_MODEL_HUMAN_REVISION_TO_PRESENT",
+   "operator_note": "Revision to PRESENT. The requester explicitly states: “quand j'essaie ./startdocker.sh ça me donne toujours” followed by the ValueError. This directly establishes a concrete attempted action (`./startdocker.sh`), its failure (the command still produces the error), and an explicit link between the two. No inference from the code or stack trace is required. The later hard-coded port workaround is successful and does not itself qualify, but the `startdocker.sh` attempt does.",
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-18T23:48:12+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "review_origin": "MISSION_1_85_13_NEW_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "3d0568c4-5876-5863-921b-2c0fc3d3e27a",
+   "side": "NEW_FALSE_PRESENT",
+   "surface_sha256": "607871301807c0d701b32dac674885c3336d963c284d766ab390d46254b49120",
+   "model_output_sha256": "e86f4944dd3962a724026bb627db5cf79a2907dd4056475b2357568f2ff0f270",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "decision": "POST_MODEL_HUMAN_REVISION_TO_PRESENT",
+   "operator_note": "The requester explicitly reports two failed attempts. First, they state that they tried updating GCC with zypper update, but that it did not update the GCC version. Second, they state that they installed a newer GCC with Homebrew and changed the PATH, but GCC still pointed to version 7.5.0. Both passages explicitly establish the attempted action, the failure, and the link between them.",
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-18T23:48:56+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "review_origin": "MISSION_1_85_13_NEW_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "42642469-23b7-5a7a-b897-5052012d9fd3",
+   "side": "NEW_FALSE_PRESENT",
+   "surface_sha256": "f852337be8c3b078696ceaf19ad98c30ed9368417bfc529615419cb21d9313e7",
+   "model_output_sha256": "df994fe4e1aaf826296efa1d5d5390bf06d42311e05f207f57aef87844d71244",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "decision": "POST_MODEL_HUMAN_REVISION_TO_PRESENT",
+   "operator_note": "The requester explicitly states that they tried manually adding the required channels to .condarc, but that it still did not work. This directly establishes the attempted action, the failure, and the explicit link between the two, so the record should be PRESENT.",
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-18T23:49:38+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "review_origin": "MISSION_1_85_13_NEW_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "4a3fc738-bb4a-5992-bb2e-2e422b9f4a00",
+   "side": "FALSE_NEGATIVE",
+   "surface_sha256": "7ae8f3dfb8d97e4ae786443896fcbb90de5cd561b6adfe310e888625a4b6e48e",
+   "model_output_sha256": "74517c2af4ad7a1c498bc662cf11f1e9ff0d0e92a21a50ed90b73d93fc4c15ea",
+   "original_blind_state": "PRESENT",
+   "model_state": "ABSENT",
+   "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_UNDERREAD",
+   "operator_note": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-18T23:55:06+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "review_origin": "MISSION_1_85_13_NEW_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "58966c7e-425d-59de-85ce-116ae98309ab",
+   "side": "NEW_FALSE_PRESENT",
+   "surface_sha256": "1dbc8f33af7913b2b033211f8858d5181d165fd4354782316679eda8e2298845",
+   "model_output_sha256": "47dc86b90de8518d25f39e0a7d0bb3e3c5fbe0285d4faa3850fe4fd1b3554faa",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "decision": "POST_MODEL_HUMAN_REVISION_TO_PRESENT",
+   "operator_note": "The requester describes a concrete attempt to combine configuration fragments and explains that the resulting configuration did not preserve the expected merged settings. The outcome differed from the intended behavior, and the requester directly connects that incorrect result to the attempted configuration approach. This satisfies the attempt, failure, and link requirements, so the record should be PRESENT.",
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-18T23:51:58+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "review_origin": "MISSION_1_85_13_NEW_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "6dfbef0a-3a64-5fd1-9433-21f7cdb01402",
+   "side": "NEW_FALSE_PRESENT",
+   "surface_sha256": "d9d115c55d066b08190b197771a77c3b457eb126b7ca280ed089ebd2b7c8e93b",
+   "model_output_sha256": "6bdd65b2eef23a8ea5c864f1544063cdeff0a0466240d275aa1b672eab523e5d",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "decision": "POST_MODEL_HUMAN_REVISION_TO_PRESENT",
+   "operator_note": "The requester describes a concrete method they attempted to make the required environment values available during the build process and states that the method did not produce the expected result. The failure is directly tied to that attempted approach, so the attempt, failure, and link requirements are all satisfied. The record should therefore be PRESENT.",
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-18T23:52:40+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "review_origin": "MISSION_1_85_13_NEW_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "7eed79ff-81d0-50c1-94c2-3a1b6fa3b4a8",
+   "side": "NEW_FALSE_PRESENT",
+   "surface_sha256": "055d126455b6543d93e34ebca213942a301488fe6cb177bf7822dcc9f489c9cb",
+   "model_output_sha256": "2561763708a383df0e0df7c6c821eb4e3180af7caacceb576cfb537b7a5c22d8",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "decision": "POST_MODEL_HUMAN_REVISION_TO_PRESENT",
+   "operator_note": "The requester describes several concrete troubleshooting actions and explicitly states that those actions did not resolve the issue. The unsuccessful outcome is directly connected to the attempted recovery steps, so the attempt, failure, and link requirements are satisfied. The record should therefore be PRESENT.",
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-18T23:53:11+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "review_origin": "MISSION_1_85_13_NEW_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "88376fa5-5cd3-58f9-b099-bad69077b0f7",
+   "side": "NEW_FALSE_PRESENT",
+   "surface_sha256": "a6bd410f4e0bcaf3d9a04c028a8d17570965f4dd7b4c7ad8a7962c664a6d6d91",
+   "model_output_sha256": "4dc6a6e98bc073fcc5b6a1a355f2e42120e97d2f5badac700f17ceaa6efeb7b5",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "decision": "POST_MODEL_HUMAN_REVISION_TO_PRESENT",
+   "operator_note": "The requester describes multiple concrete attempts to make the required dependency available to the pipeline and states that the same failure remained after those attempts. The unsuccessful result is directly associated with the troubleshooting approaches that were tried, so the attempt, failure, and link criteria are all satisfied. The record should therefore be PRESENT.",
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-18T23:53:38+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "review_origin": "MISSION_1_85_13_NEW_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "96054702-3d78-55b0-b5b9-ed63e611c6d7",
+   "side": "FALSE_NEGATIVE",
+   "surface_sha256": "70ab4463876798f80a4620ddb0e873e735dc39d9221e6ffaffaeb4bf37e49e56",
+   "model_output_sha256": "74517c2af4ad7a1c498bc662cf11f1e9ff0d0e92a21a50ed90b73d93fc4c15ea",
+   "original_blind_state": "PRESENT",
+   "model_state": "ABSENT",
+   "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_UNDERREAD",
+   "operator_note": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-18T23:55:31+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "review_origin": "MISSION_1_85_13_NEW_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "b7996f9d-72fe-5544-a30a-ce9270edfe09",
+   "side": "FALSE_NEGATIVE",
+   "surface_sha256": "db96588f1b73824f99547c706dbea2ef416f5e5d7e90ebe8e40279958bbbaefe",
+   "model_output_sha256": "74517c2af4ad7a1c498bc662cf11f1e9ff0d0e92a21a50ed90b73d93fc4c15ea",
+   "original_blind_state": "PRESENT",
+   "model_state": "ABSENT",
+   "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_UNDERREAD",
+   "operator_note": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-18T23:55:51+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "review_origin": "MISSION_1_85_13_NEW_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "c128f807-cbdf-512b-bbde-30a00a9fdb39",
+   "side": "NEW_FALSE_PRESENT",
+   "surface_sha256": "8bafba2a959e1a7f065f4332c3a75f2f85fe52c02d67cb1894a0ec8df19a9b25",
+   "model_output_sha256": "03983347c079501a115cefda3ace90b030b02101f384fce83ac3163b07340800",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "decision": "POST_MODEL_HUMAN_REVISION_TO_PRESENT",
+   "operator_note": "The requester describes a concrete attempt to start the containerized application and states that this attempt failed during startup. The unsuccessful outcome is directly connected to the action they performed, so the attempt, failure, and link requirements are all satisfied. The record should therefore be PRESENT.",
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-18T23:54:06+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "review_origin": "MISSION_1_85_13_NEW_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "e2162aae-f496-58d4-b905-73e4b0164a66",
+   "side": "FALSE_NEGATIVE",
+   "surface_sha256": "ebd146372d4dda73d58f59306b2feb1f0adf0937be21cdfcf7a7b2b26cb3f5b9",
+   "model_output_sha256": "74517c2af4ad7a1c498bc662cf11f1e9ff0d0e92a21a50ed90b73d93fc4c15ea",
+   "original_blind_state": "PRESENT",
+   "model_state": "ABSENT",
+   "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_UNDERREAD",
+   "operator_note": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-18T23:56:11+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "review_origin": "MISSION_1_85_13_NEW_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "e9edbbaa-5331-5584-8d3e-847c8f759551",
+   "side": "FALSE_NEGATIVE",
+   "surface_sha256": "12ee26a430ba565d443e1e40fc896fa653d95532fe7e897620f3e17f2839c9bb",
+   "model_output_sha256": "74517c2af4ad7a1c498bc662cf11f1e9ff0d0e92a21a50ed90b73d93fc4c15ea",
+   "original_blind_state": "PRESENT",
+   "model_state": "ABSENT",
+   "decision": "POST_MODEL_HUMAN_REVISION_TO_ABSENT",
+   "operator_note": "The requester describes an environment-specific problem and shows multiple ways of accessing the configuration value, but the text does not explicitly connect a specific attempted action to a failed outcome. Establishing that connection requires inference from the surrounding context and code, which the frozen definition does not allow. The record should therefore be ABSENT.",
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-18T23:56:38+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "review_origin": "MISSION_1_85_13_NEW_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "f53c6872-b340-5e5b-845c-e8b2bd3147d8",
+   "side": "NEW_FALSE_PRESENT",
+   "surface_sha256": "ee4ce6bcde0f4491d12363d1628136344a9f98b2180d70496aa134d94808ae25",
+   "model_output_sha256": "74867f8743b05c3640340c633dc61447db910db8128b73b33e318e408824aa1f",
+   "original_blind_state": "ABSENT",
+   "model_state": "PRESENT",
+   "decision": "POST_MODEL_HUMAN_REVISION_TO_PRESENT",
+   "operator_note": "The requester reports testing several concrete variations of the database initialization setup and states that none of them produced the expected schema and table. The unsuccessful result is directly connected to those attempted changes, so the attempt, failure, and link criteria are all satisfied. The record should therefore be PRESENT.",
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-18T23:54:44+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "review_origin": "MISSION_1_85_13_NEW_REVIEW",
+   "blind": false
+  },
+  {
+   "normalized_record_id": "f876b0be-fa18-5b60-9fdd-b505e7529413",
+   "side": "FALSE_NEGATIVE",
+   "surface_sha256": "37c3125a495d0264df8c4d12fc21cecd500d86b39bb88eb96823807c98180577",
+   "model_output_sha256": "74517c2af4ad7a1c498bc662cf11f1e9ff0d0e92a21a50ed90b73d93fc4c15ea",
+   "original_blind_state": "PRESENT",
+   "model_state": "ABSENT",
+   "decision": "HUMAN_REFERENCE_CONFIRMED_MODEL_UNDERREAD",
+   "operator_note": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-18T23:57:02+04:00",
+   "provenance": "POST_MODEL_OPERATOR_REVIEW",
+   "review_origin": "MISSION_1_85_13_NEW_REVIEW",
+   "blind": false
+  }
+ ],
+ "analysis": {
+  "status": "COMPLETE",
+  "records_reviewed": 15,
+  "sides": {
+   "NEW_FALSE_PRESENT": {
+    "records": 9,
+    "counts": {
+     "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD": 0,
+     "POST_MODEL_HUMAN_REVISION_TO_PRESENT": 9,
+     "LABEL_DEFINITION_AMBIGUOUS": 0,
+     "UNRESOLVED": 0
+    },
+    "decided": 9,
+    "undecided": 0,
+    "resolved": 9
+   },
+   "FALSE_NEGATIVE": {
+    "records": 6,
+    "counts": {
+     "HUMAN_REFERENCE_CONFIRMED_MODEL_UNDERREAD": 5,
+     "POST_MODEL_HUMAN_REVISION_TO_ABSENT": 1,
+     "LABEL_DEFINITION_AMBIGUOUS": 0,
+     "UNRESOLVED": 0
+    },
+    "decided": 6,
+    "undecided": 0,
+    "resolved": 6
+   }
+  },
+  "post_model_human_revisions": 10,
+  "label_definition_ambiguous": 0,
+  "unresolved": 0,
+  "undecided": 0,
+  "unresolved_or_undecided": 0,
+  "development_recommendations": [
+   "RFA_PROMPT_1_1_OVERCONSTRAINS_TRUE_POSITIVES",
+   "REFERENCE_REVIEW_OR_ADJUDICATION_REQUIRED"
+  ],
+  "recommendation_rule": "dominant = at least half the resolved decisions of that side and at least 1; strong = at least two thirds of them and at least 2; substantial = at least a third of every reviewed record. Confirmed over-reads dominant -> RFA_PRECISION_REMAINS_MODEL_OR_EXTRACTION_CONTRACT_PROBLEM; confirmed under-reads dominant -> RFA_PROMPT_1_1_OVERCONSTRAINS_TRUE_POSITIVES; both strong -> PROMPT_ONLY_REVISION_INSUFFICIENT_CONSIDER_STRUCTURED_EXTRACTION_CONTRACT; revisions substantial -> REFERENCE_REVIEW_OR_ADJUDICATION_REQUIRED; ambiguity substantial -> LABEL_DEFINITION_DECISION_REQUIRED. Derived only when the review is COMPLETE; nothing is revised automatically."
+ },
+ "combined_diagnostic": {
+  "name": "BALANCED_POST_MODEL_REVIEW_DIAGNOSTIC",
+  "post_hoc": true,
+  "preregistered": false,
+  "is_the_mission_1_85_12_gate_result": false,
+  "certification": false,
+  "mission_1_85_12_unchanged": {
+   "item_id": "false_present_rate_upper_95::REPORTED_FAILED_ATTEMPT",
+   "reading": "PILOT_OUTSIDE_PROPOSED_BOUND",
+   "false_present": 16,
+   "true_present": 9,
+   "present_calls": 25,
+   "clopper_pearson_upper_95": 0.797622,
+   "recall": 0.6,
+   "reference": "the original blind SINGLE_HUMAN_REFERENCE"
+  },
+  "false_present": {
+   "total": 16,
+   "prior_reviewed_persistent": {
+    "count": 7,
+    "origin": "PRIOR_REVIEW_REUSED_RECORD_LEVEL_JUDGEMENT",
+    "decisions": {
+     "17064c93-71cf-5474-ba7f-39ccd516782f": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+     "1a659352-390f-5c53-97de-0f725d017f46": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+     "203268d4-baf6-5410-a001-cf77843e96e3": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+     "37bf2146-b9fc-5e5a-b35b-d59f5f6bfc57": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+     "9f91eeea-25e6-5a9e-89e6-54d4490ecd7c": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+     "bf04af60-1364-5fd0-8f4f-a8104d131aff": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD",
+     "e35f990d-117a-59d1-b54e-5165632378bf": "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD"
+    }
+   },
+   "reviewed_here": {
+    "count": 9,
+    "origin": "MISSION_1_85_13_NEW_REVIEW",
+    "decisions": {
+     "3194f76d-a845-54c5-9a14-bd0520da6cbb": "POST_MODEL_HUMAN_REVISION_TO_PRESENT",
+     "3d0568c4-5876-5863-921b-2c0fc3d3e27a": "POST_MODEL_HUMAN_REVISION_TO_PRESENT",
+     "42642469-23b7-5a7a-b897-5052012d9fd3": "POST_MODEL_HUMAN_REVISION_TO_PRESENT",
+     "58966c7e-425d-59de-85ce-116ae98309ab": "POST_MODEL_HUMAN_REVISION_TO_PRESENT",
+     "6dfbef0a-3a64-5fd1-9433-21f7cdb01402": "POST_MODEL_HUMAN_REVISION_TO_PRESENT",
+     "7eed79ff-81d0-50c1-94c2-3a1b6fa3b4a8": "POST_MODEL_HUMAN_REVISION_TO_PRESENT",
+     "88376fa5-5cd3-58f9-b099-bad69077b0f7": "POST_MODEL_HUMAN_REVISION_TO_PRESENT",
+     "c128f807-cbdf-512b-bbde-30a00a9fdb39": "POST_MODEL_HUMAN_REVISION_TO_PRESENT",
+     "f53c6872-b340-5e5b-845c-e8b2bd3147d8": "POST_MODEL_HUMAN_REVISION_TO_PRESENT"
+    },
+    "counts": {
+     "HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD": 0,
+     "POST_MODEL_HUMAN_REVISION_TO_PRESENT": 9,
+     "LABEL_DEFINITION_AMBIGUOUS": 0,
+     "UNRESOLVED": 0
+    }
+   }
+  },
+  "false_negative": {
+   "total": 6,
+   "reviewed_here": {
+    "count": 6,
+    "origin": "MISSION_1_85_13_NEW_REVIEW",
+    "decisions": {
+     "4a3fc738-bb4a-5992-bb2e-2e422b9f4a00": "HUMAN_REFERENCE_CONFIRMED_MODEL_UNDERREAD",
+     "96054702-3d78-55b0-b5b9-ed63e611c6d7": "HUMAN_REFERENCE_CONFIRMED_MODEL_UNDERREAD",
+     "b7996f9d-72fe-5544-a30a-ce9270edfe09": "HUMAN_REFERENCE_CONFIRMED_MODEL_UNDERREAD",
+     "e2162aae-f496-58d4-b905-73e4b0164a66": "HUMAN_REFERENCE_CONFIRMED_MODEL_UNDERREAD",
+     "e9edbbaa-5331-5584-8d3e-847c8f759551": "POST_MODEL_HUMAN_REVISION_TO_ABSENT",
+     "f876b0be-fa18-5b60-9fdd-b505e7529413": "HUMAN_REFERENCE_CONFIRMED_MODEL_UNDERREAD"
+    },
+    "counts": {
+     "HUMAN_REFERENCE_CONFIRMED_MODEL_UNDERREAD": 5,
+     "POST_MODEL_HUMAN_REVISION_TO_ABSENT": 1,
+     "LABEL_DEFINITION_AMBIGUOUS": 0,
+     "UNRESOLVED": 0
+    }
+   }
+  }
+ }
+}

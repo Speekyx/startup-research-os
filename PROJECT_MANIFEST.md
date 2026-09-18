@@ -26,7 +26,10 @@ own choices, no default and no bulk; the 7 Mission 1.85.10 judgements are reused
 PRIOR_REVIEW_REUSED_RECORD_LEVEL_JUDGEMENT and never re-asked. Decisions are POST_MODEL_OPERATOR_REVIEW,
 blind false, bound to every pilot digest, STALE on change. A structured-anchor extraction design option is
 recorded, not implemented. 0 provider calls, 0 reruns, 0 HOLDOUT, 0 canonical writes; no packet, approval, prompt
-or label change. `docs/reports/mission-1.85.13-report.md`.
+or label change. `docs/reports/mission-1.85.13-report.md`. **Review completed afterwards:** operator-a revised all 9
+never-reviewed false PRESENT to PRESENT and confirmed 5 of 6 false negatives as model under-reads (1 revised to ABSENT),
+PROMPT_1_1_BALANCED_OPERATOR_REVIEW_COMPLETE; recommendations RFA_PROMPT_1_1_OVERCONSTRAINS_TRUE_POSITIVES and
+REFERENCE_REVIEW_OR_ADJUDICATION_REQUIRED, not applied.
 
 ## 1.177 - 2026-09-17 (Sprint 1 / Mission 1.85.12)
 

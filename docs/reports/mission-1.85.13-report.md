@@ -1,10 +1,15 @@
 # Mission 1.85.13 report: balanced post-model review of the prompt 1.1.0 disagreements (N08-B-PILOT)
 
-**Outcome: `WAITING_FOR_PROMPT_1_1_BALANCED_OPERATOR_REVIEW`.**
+**Outcome: `PROMPT_1_1_BALANCED_OPERATOR_REVIEW_COMPLETE`** (the tooling merged as
+`WAITING_FOR_PROMPT_1_1_BALANCED_OPERATOR_REVIEW` in PR #190; the operator then completed the review, section 12).
 
 The prompt 1.1.0 run disagreed with the blind reference in two directions, and only one of them had ever been
-reviewed. This mission prepares a review of **both**, corrects a counting error in the Mission 1.85.12 report,
-and stops. The operator has not reviewed anything yet.
+reviewed. This mission prepared a review of **both**, corrected a counting error in the Mission 1.85.12 report,
+and recorded the operator's 15 decisions.
+
+**Headline: the review mostly moved the reference, not the model.** All 9 never-reviewed false PRESENT were
+revised to PRESENT: the blind annotation had missed them. 5 of the 6 false negatives were confirmed as model
+under-reads.
 
     review set     9 never-reviewed false PRESENT + 6 false negative = 15 records
     reused         7 Mission 1.85.10 judgements, unchanged and not re-asked
@@ -283,5 +288,76 @@ Then review all 15 records, and import the result:
 uv run python infrastructure/scripts/balanced_disagreement_review.py import "$env:TEMP/sros-balanced-review/balanced-review-working-operator-a.json"
 ```
 
-**N08 is not DONE. N08-C was not started.** The next architectural decision — prompt, extraction contract, label
-definition or repeatability — comes only after this balanced human review.
+## 12. The completed review
+
+operator-a reviewed the 15 records in the local page on 2026-09-18 between 23:48 and 23:57 (+04:00). `lint`
+reported `COMPLETE` with no problem, and `import` wrote
+`semantic-extraction-balanced-post-model-review-development-v1.json` and `.md`.
+
+| Side | Confirmed model error | Post-model revision | Ambiguous | Unresolved |
+|---|---|---|---|---|
+| `NEW_FALSE_PRESENT` (9) | over-read **0** | to PRESENT **9** | 0 | 0 |
+| `FALSE_NEGATIVE` (6) | under-read **5** | to ABSENT **1** (`e9edbbaa`) | 0 | 0 |
+
+Every revision carries a note in the operator's own words. The longest verbatim overlap between any note and its
+question is **29 characters**, under the 40-character guard. One note (`3194f76d`) puts a short passage in
+quotation marks; it is a translation, sharing only 18 consecutive characters with the question. It is recorded
+as written: editing it would change a decision the operator made.
+
+### Combined record-level diagnostic (post-hoc, not preregistered)
+
+**The 16 current false PRESENT:**
+- 7 prior-reviewed persistent cases: `HUMAN_REFERENCE_CONFIRMED_MODEL_OVERREAD` (Mission 1.85.10, reused);
+- 9 newly reviewed: all `POST_MODEL_HUMAN_REVISION_TO_PRESENT`.
+
+**The 6 current false negatives:**
+- 5 `HUMAN_REFERENCE_CONFIRMED_MODEL_UNDERREAD`;
+- 1 `POST_MODEL_HUMAN_REVISION_TO_ABSENT`.
+
+So prompt 1.1.0 has **7 confirmed over-reads and 5 confirmed under-reads**, and the blind reference has **10
+post-model revisions** in the 15 records reviewed here (9 missed positives, 1 over-marked positive).
+
+For orientation only, if the post-model revisions were counted as the reference:
+
+| Measure | Blind reference (Mission 1.85.12, unchanged) | Revisions counted (post-hoc) |
+|---|---|---|
+| True / false PRESENT | 9 / 16 | 18 / 7 |
+| False-PRESENT rate, upper 95 | 0.64, 0.798 | 0.28, 0.462 |
+| Recall | 9 / 15 = 0.60 | 18 / 23 = 0.78 |
+
+**This second column is not a result.** It mixes a blind reference with judgements made after seeing the
+model's evidence, and it would still be `PILOT_OUTSIDE_PROPOSED_BOUND` against the 0.20 bound. The Mission 1.85.12
+reading stands exactly as recorded.
+
+### Recommendations, derived and not applied
+
+The frozen rule derived:
+- **`RFA_PROMPT_1_1_OVERCONSTRAINS_TRUE_POSITIVES`**: 5 of 6 false negatives are confirmed model misses;
+- **`REFERENCE_REVIEW_OR_ADJUDICATION_REQUIRED`**: 10 revisions in 15 records, far above a third.
+
+It did **not** derive `RFA_PRECISION_REMAINS_MODEL_OR_EXTRACTION_CONTRACT_PROBLEM`, and **that must not be read as
+"precision is solved"**. The rule reads only this mission's new decisions, and none of the 9 new false PRESENT
+was an over-read. The 7 Mission 1.85.10 over-reads are still confirmed, so prompt 1.1.0 still has a real
+precision problem of 7 in 25 PRESENT calls. For the same reason the structured-contract recommendation, which
+needs both sides confirmed strongly in this review, was not derived. Section 6's design note still applies
+once the 7 prior over-reads are counted: confirmed false positives and confirmed false negatives both exist.
+
+### What this changes
+
+- **The reference is now the biggest open question.** The blind single-human reference missed at least 9
+  failed attempts on these records, and marked 1 that the operator now reads as absent. A precision
+  measurement against it is partly a measurement of its own gaps.
+- **The model's picture is mixed, not one-sided.** Prompt 1.1.0 still over-reads 7 records the operator has twice
+  judged absent, and it now misses 5 attempts the operator still judges present.
+- **Post-model revision is not adjudication.** Every one of these 10 revisions was made after seeing the model's
+  evidence, which is exactly the setting where anchoring pushes toward the model's answer. That is why they
+  never replace the blind reference, and why the derived recommendation is adjudication (an independent blind
+  second reading of the disputed records, or of all 46) rather than simply adopting the revisions.
+- **A prompt 1.2.0 tuned now would be tuned against a reference that is known to be incomplete.**
+
+**The next decision is the operator's**: whether and how to adjudicate the reference (a second blind annotator,
+a blind re-annotation, or a formal adjudication of the disputed records) before any prompt, contract or
+repeatability work. None of it was started.
+
+**N08 is not DONE. N08-C was not started.** No prompt 1.2.0, contract change, packet v6, approval, provider call,
+repeatability run or HOLDOUT access happened.

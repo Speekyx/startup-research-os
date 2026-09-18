@@ -555,3 +555,21 @@ def test_no_committed_review_yet_means_waiting_not_complete(tool) -> None:
     if tool.REVIEW.exists():
         pytest.skip("the operator has recorded the balanced review")
     assert tool.check() == 0
+
+
+def test_the_committed_operator_review_is_complete_bound_and_reproduces(tool) -> None:
+    if not tool.REVIEW.exists():
+        pytest.skip("the operator has not recorded the balanced review yet")
+    assert tool.check() == 0
+    doc = json.loads(tool.REVIEW.read_text("utf-8"))
+    assert doc["analysis"]["status"] == "COMPLETE"
+    assert doc["blind"] is False and doc["provenance"] == "POST_MODEL_OPERATOR_REVIEW"
+    assert len(doc["decisions"]) == 15
+    assert all(d["review_origin"] == bpmr.THIS_MISSION_REVIEW for d in doc["decisions"])
+    assert len(doc["prior_review_reused"]["records"]) == 7
+    assert hashlib.sha256(tool.ANNOTATION.read_bytes()).hexdigest() == BLIND_ANNOTATION_SHA256
+    unchanged = doc["combined_diagnostic"]["mission_1_85_12_unchanged"]
+    assert (unchanged["false_present"], unchanged["reading"]) == (
+        16,
+        "PILOT_OUTSIDE_PROPOSED_BOUND",
+    )
