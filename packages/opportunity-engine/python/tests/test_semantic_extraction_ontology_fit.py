@@ -84,6 +84,9 @@ def test_roadmap_records_n08_as_preregistered_not_done() -> None:
         "PROMPT_1_1_BALANCED_OPERATOR_REVIEW_COMPLETE",
         "WAITING_FOR_SECOND_BLIND_HUMAN_ANNOTATION",
         "SECOND_BLIND_HUMAN_REFERENCE_COMPLETE_ADJUDICATION_REQUIRED",
+        "WAITING_FOR_SINGLE_OPERATOR_DELAYED_REREAD",
+        "WAITING_FOR_SINGLE_OPERATOR_ADJUDICATION",
+        "SINGLE_HUMAN_ADJUDICATED_REFERENCE_RECORDED",
     }
     assert nodes["N08"]["phases"]["N08-A"].startswith(CONTRACT["outcome"])
     assert nodes["N08"]["status"] != "DONE"

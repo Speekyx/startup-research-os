@@ -168,14 +168,29 @@ def _cell(
 
 
 def run_session(
-    pack: dict[str, Any], surfaces: dict[str, str], ask: Ask, say: Say, save: Save
+    pack: dict[str, Any],
+    surfaces: dict[str, str],
+    ask: Ask,
+    say: Say,
+    save: Save,
+    *,
+    label_ids: tuple[str, ...] | None = None,
+    attestation_wording: dict[str, str] | None = None,
 ) -> str:
     """Annotate every record that still has an UNLABELLED cell, saving after each record.
 
     `surfaces` maps normalized_record_id to the rendered surface; the caller has checked each digest.
     Returns COMPLETE, or raises SessionQuit after saving.
+
+    Mission 1.85.15: `label_ids` limits the questions to those labels (default: every label, as before), and
+    `attestation_wording` replaces the attestation questions (default: the blind annotation's four flags).
     """
-    labels = {label.label_id: label for label in LABELS if label.status is not LabelStatus.NOT_SAFE}
+    labels = {
+        label.label_id: label
+        for label in LABELS
+        if label.status is not LabelStatus.NOT_SAFE
+        and (label_ids is None or label.label_id in label_ids)
+    }
     by_id = {record["normalized_record_id"]: record for record in pack["records"]}
     order = pack["record_order"]
     if not pack.get("annotation_started_at"):
@@ -221,14 +236,14 @@ def run_session(
         say(f"Record {position} enregistré.")
     say("")
     say("Tous les records sont remplis. Attestation (réponds o uniquement si c'est vrai) :")
-    wording = {
+    wording = attestation_wording or {
         "no_model_output_seen": "Je n'ai vu aucune sortie d'un modèle d'IA sur ces questions.",
         "no_model_assistance_used": "Je n'ai utilisé aucune assistance d'IA pour décider ou rédiger mes réponses.",
         "did_not_see_other_annotators_labels": "Je n'ai pas vu les réponses d'un autre annotateur.",
         "labelled_from_rendered_surface_only": "J'ai répondu uniquement à partir du texte affiché.",
     }
     attestation = dict(pack.get("attestation") or {})
-    for flag in ATTESTATION_FLAGS:
+    for flag in wording if attestation_wording else ATTESTATION_FLAGS:
         attestation[flag] = _read(ask, f"  {wording[flag]} (o/n) : ", {"o", "n"}) == "o"
     now = _now()
     attestation["attested_at"] = now

@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.179
+Version: 1.180
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-19 (Sprint 1 / Mission 1.85.14)
+Last amended: 2026-09-19 (Sprint 1 / Mission 1.85.15)
 
 ---
 
@@ -13,6 +13,20 @@ Last amended: 2026-09-19 (Sprint 1 / Mission 1.85.14)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.180 - 2026-09-19 (Sprint 1 / Mission 1.85.15)
+
+**Single-operator adjudication protocol (N08-B-PILOT), WAITING_FOR_SINGLE_OPERATOR_DELAYED_REREAD.** The operator
+confirmed that no second person exists, so the Mission 1.85.14 inter-human path cannot run and the operator cannot
+honestly annotate as operator-b. `single-operator-adjudication-protocol@1.0.0` builds what can be built instead,
+and names it: a delayed reread of the two extractable labels on all 46 EGRESS_APPROVED records, in a fresh order
+with previous labels hidden, starting no earlier than 24 h after the last post-model decision
+(2026-09-19T23:57:02+04:00), with an attestation that discloses prior model exposure rather than claiming
+blindness; then adjudication of only the cells whose readings (original blind, reread, post-model review) disagree
+or are UNCERTAIN, each with a stated reason. The output is a new file labelled SINGLE_HUMAN_ADJUDICATED_REFERENCE:
+not consensus, not inter-human, not blind, not certification, and it never replaces the original blind annotation.
+Reread-versus-original is reported as intra-rater agreement only. 0 provider calls, 0 HOLDOUT, 0 canonical writes;
+no prompt, contract, packet or approval. `docs/reports/mission-1.85.15-report.md`.
 
 ## 1.179 - 2026-09-19 (Sprint 1 / Mission 1.85.14)
 
