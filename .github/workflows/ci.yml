@@ -274,6 +274,11 @@ jobs:
       - name: Semantic extraction balanced post-model review is current
         run: uv run python infrastructure/scripts/balanced_disagreement_review.py check
 
+      # Mission 1.85.14. The blind A/B inter-human agreement: nothing may exist before the second blind
+      # annotation is imported, and afterwards it reproduces from the two blind files only. No provider.
+      - name: Inter-human agreement is absent until the second blind annotation, then current
+        run: uv run python infrastructure/scripts/inter_human_agreement.py --check
+
       # Mission 1.39 §34. The convergence registry rendered into its artifact.
       # It reads repository code and no database, so unlike the calibration
       # feasibility audit it can live here: an empty deployment changes nothing
