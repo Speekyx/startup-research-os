@@ -323,7 +323,7 @@ def committed_form(pack: dict[str, Any], records: list[dict[str, Any]]) -> dict[
     for record in records:
         for label_id, cell in record["labels"].items():
             counts.setdefault(label_id, {s: 0 for s in ANNOTATION_STATES})[cell["state"]] += 1
-    return {
+    committed = {
         "$comment": "Committed human annotation (N08-B). States, offsets and digests only: quotes and notes stay in the annotator's local working file. Origin and attestation are the annotator's own statements; this tool cannot prove a human typed the labels.",
         "importer": IMPORTER_VERSION,
         "dataset_id": pack["dataset_id"],
@@ -341,3 +341,18 @@ def committed_form(pack: dict[str, Any], records: list[dict[str, Any]]) -> dict[
         "state_counts": counts,
         "records": sorted(records, key=lambda r: r["normalized_record_id"]),
     }
+    if "record_scope" in pack:
+        # Mission 1.85.14: a scoped (second) annotation states its scope and what it was blind to. The
+        # blindness fields restate the annotator's own attestation; they add no claim the attestation lacks.
+        attestation = pack["attestation"]
+        committed["record_scope"] = pack["record_scope"]
+        committed["record_scope_ids_sha256"] = pack["record_scope_ids_sha256"]
+        committed["blind_to_model_outputs"] = attestation.get("no_model_output_seen") is True
+        committed["blind_to_other_annotators"] = (
+            attestation.get("did_not_see_other_annotators_labels") is True
+        )
+        committed["blindness_basis"] = (
+            "the annotator's signed attestation, and a preparation path that writes only the blank pack and "
+            "the rendered surfaces: no other annotator's file, no model output and no review status"
+        )
+    return committed

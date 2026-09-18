@@ -65,6 +65,12 @@ SINGLE_COMPOSITION = (
     DATA / "stack-overflow-semantic-single-human-reference-composition-development-v1.json"
 )
 ANNOTATION_GLOB = "stack-overflow-semantic-annotations-development-*-v1.json"
+ELIGIBILITY = DATA / "stack-overflow-semantic-egress-eligibility-development-v1.json"
+# Mission 1.85.14: a record scope narrower than the whole DEVELOPMENT split. The second blind annotator labels
+# exactly the EGRESS_APPROVED records the pilots evaluate, and nothing about how they were chosen for review.
+SCOPE_DEVELOPMENT = "DEVELOPMENT"
+SCOPE_EGRESS_APPROVED = "DEVELOPMENT_EGRESS_APPROVED"
+SCOPES = {"development": SCOPE_DEVELOPMENT, "egress-approved": SCOPE_EGRESS_APPROVED}
 
 
 def dump(doc: Any) -> bytes:
@@ -78,12 +84,30 @@ def split_ids() -> tuple[set[str], set[str]]:
     return dev, hold
 
 
+def scope_ids(scope: str) -> set[str]:
+    dev, _ = split_ids()
+    if scope == SCOPE_DEVELOPMENT:
+        return dev
+    if scope == SCOPE_EGRESS_APPROVED:
+        approved = set(json.loads(ELIGIBILITY.read_text("utf-8"))["approved_record_ids"])
+        if not approved <= dev:
+            raise HoldoutAccessError("the egress-approved scope must be a subset of DEVELOPMENT")
+        return approved
+    raise ValueError(f"unknown record scope {scope!r}")
+
+
+def ids_digest(ids: set[str]) -> str:
+    return hashlib.sha256("\n".join(sorted(ids)).encode("utf-8")).hexdigest()
+
+
 def refuse_holdout_path(path: pathlib.Path) -> None:
     if path.name == HOLDOUT_PACK_NAME or "holdout" in path.name.lower():
         raise HoldoutAccessError(f"{path.name}: development tooling does not open holdout material")
 
 
-def prepare(annotator_id: str, origin: str, out: pathlib.Path) -> int:
+def prepare(
+    annotator_id: str, origin: str, out: pathlib.Path, scope: str = SCOPE_DEVELOPMENT
+) -> int:
     if out.resolve().is_relative_to(ROOT.resolve()):
         print(
             "REFUSED  a working copy holds licensed text and human labels; it lives outside the repository"
@@ -92,10 +116,15 @@ def prepare(annotator_id: str, origin: str, out: pathlib.Path) -> int:
     if origin not in {o.value for o in AnnotationOrigin}:
         print(f"REFUSED  origin {origin!r} is not a human origin")
         return 1
+    if (DATA / f"stack-overflow-semantic-annotations-development-{annotator_id}-v1.json").exists():
+        print(
+            f"REFUSED  {annotator_id} already has an imported annotation; a second reading needs a different annotator"
+        )
+        return 1
     blank = json.loads(BLANK_DEVELOPMENT.read_text("utf-8"))
-    dev, _ = split_ids()
+    in_scope = scope_ids(scope)
     surfaces = development_surfaces()
-    order = annotator_record_order("DEVELOPMENT", annotator_id, sorted(dev))
+    order = annotator_record_order("DEVELOPMENT", annotator_id, sorted(in_scope))
     by_id = {r["normalized_record_id"]: r for r in blank["records"]}
     working = dict(blank)
     working["$comment"] = (
@@ -105,6 +134,10 @@ def prepare(annotator_id: str, origin: str, out: pathlib.Path) -> int:
     working["reference_origin"] = origin
     working["blank_pack_sha256"] = hashlib.sha256(BLANK_DEVELOPMENT.read_bytes()).hexdigest()
     working["record_order"] = order
+    if scope != SCOPE_DEVELOPMENT:
+        # Only the scope's name and the digest of its ids: never why a record is in it.
+        working["record_scope"] = scope
+        working["record_scope_ids_sha256"] = ids_digest(in_scope)
     working["records"] = [by_id[rid] for rid in order]
     working["attestation"] = {
         "attestation_id": ATTESTATION_ID,
@@ -128,11 +161,19 @@ def prepare(annotator_id: str, origin: str, out: pathlib.Path) -> int:
 def _validate(path: pathlib.Path):
     refuse_holdout_path(path)
     pack = json.loads(path.read_text("utf-8"))
-    dev, hold = split_ids()
+    _, hold = split_ids()
+    scope = pack.get("record_scope", SCOPE_DEVELOPMENT) if isinstance(pack, dict) else None
+    if scope not in SCOPES.values():
+        raise HoldoutAccessError(f"unknown record scope {scope!r}")
+    in_scope = scope_ids(scope)
+    if scope != SCOPE_DEVELOPMENT and pack.get("record_scope_ids_sha256") != ids_digest(in_scope):
+        raise HoldoutAccessError(
+            "the pack's record scope no longer matches the committed eligibility"
+        )
     return validate_annotation_pack(
         pack,
         split="DEVELOPMENT",
-        split_record_ids=dev,
+        split_record_ids=in_scope,
         other_split_record_ids=hold,
         surfaces=development_surfaces(),
         blank_pack=json.loads(BLANK_DEVELOPMENT.read_text("utf-8")),
@@ -235,6 +276,13 @@ def analyse() -> int:
         )
         print(f"wrote {SINGLE_COMPOSITION.name} (SINGLE_HUMAN_REFERENCE, PILOT_NOT_CERTIFICATION)")
         return 0
+    # Mission 1.85.14: annotators may cover different scopes; agreement is measured on the records every
+    # annotator labelled, never by filling the others in.
+    common = set.intersection(*({r["normalized_record_id"] for r in f["records"]} for f in files))
+    files = [
+        dict(f, records=[r for r in f["records"] if r["normalized_record_id"] in common])
+        for f in files
+    ]
     COMPOSITION.write_bytes(
         dump(analyse_composition(files, json.loads(CONTRACT.read_text("utf-8"))))
     )
@@ -250,13 +298,14 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--annotator-id", required=True)
     p.add_argument("--origin", required=True)
     p.add_argument("--out", required=True)
+    p.add_argument("--scope", choices=sorted(SCOPES), default="development")
     sub.add_parser("lint").add_argument("pack")
     sub.add_parser("import").add_argument("pack")
     sub.add_parser("label").add_argument("pack")
     sub.add_parser("analyse")
     args = parser.parse_args(argv)
     if args.command == "prepare":
-        return prepare(args.annotator_id, args.origin, pathlib.Path(args.out))
+        return prepare(args.annotator_id, args.origin, pathlib.Path(args.out), SCOPES[args.scope])
     if args.command == "lint":
         return lint(pathlib.Path(args.pack))
     if args.command == "import":

@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.178
+Version: 1.179
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-18 (Sprint 1 / Mission 1.85.13)
+Last amended: 2026-09-19 (Sprint 1 / Mission 1.85.14)
 
 ---
 
@@ -13,6 +13,20 @@ Last amended: 2026-09-18 (Sprint 1 / Mission 1.85.13)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.179 - 2026-09-19 (Sprint 1 / Mission 1.85.14)
+
+**Second blind human reference preparation (N08-B-PILOT), WAITING_FOR_SECOND_BLIND_HUMAN_ANNOTATION.** The original
+blind-annotation tooling, unchanged in what it shows (blank pack, frozen surfaces, the eight original questions,
+committed before any model ran), is scoped for an independent second annotator, operator-b, over all 46
+EGRESS_APPROVED DEVELOPMENT records; the pack names its scope and hashes its ids and says nothing about why a record
+is in it; an annotator with an imported annotation cannot be prepared again. Blindness rests on a preparation path
+that reads no other annotator, model output or review, plus the annotator's signed attestation, which the importer
+requires literally true. Packet v5 is pinned to the annotation it bound, so a second file cannot re-render it (bytes
+unchanged). The A/B agreement (confusion, raw, PRESENT/ABSENT-specific, kappa, alpha, span and subject agreement,
+positive-class support) and the ids-only disagreement set are frozen in code, compute nothing until operator-b is
+imported, and never take a post-model review as input. 0 provider calls, 0 HOLDOUT, 0 canonical writes; no prompt,
+contract, packet or approval. `docs/reports/mission-1.85.14-report.md`.
 
 ## 1.178 - 2026-09-18 (Sprint 1 / Mission 1.85.13)
 

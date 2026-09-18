@@ -100,7 +100,10 @@ PROVIDER_POLICY = DATA / "model-provider-policy-v1.json"
 VERIFICATION = DATA / "anthropic-claude-sonnet-5-pilot-verification-v1.json"
 DECISION_PACKAGE = DATA / "semantic-extraction-operator-decision-package-development-v2.json"
 DECISIONS = DATA / "semantic-extraction-operator-decisions-development-v1.json"
-ANNOTATION_GLOB = "stack-overflow-semantic-annotations-development-*-v1.json"
+# Mission 1.85.14: packet v5 was rendered and approved against exactly this blind annotation. Reading every
+# annotation file by pattern would let a later annotation (operator-b) silently re-render a spent, historical
+# packet into a different one. A future packet decides its own reference; this one keeps the one it bound.
+REFERENCE_ANNOTATION_FILES = ("stack-overflow-semantic-annotations-development-operator-a-v1.json",)
 ADJUDICATION = DATA / "stack-overflow-semantic-adjudication-development-v1.json"
 THRESHOLD_PARTITION = DATA / "semantic-extraction-threshold-partition-v1.json"
 
@@ -164,7 +167,7 @@ def build() -> dict[str, Any]:
         cost["per_record_conservative_input_tokens"]
     ) == {r["normalized_record_id"] for r in approved}
 
-    annotation_files = sorted(DATA.glob(ANNOTATION_GLOB))
+    annotation_files = [DATA / name for name in REFERENCE_ANNOTATION_FILES]
     reference = assess_reference(
         [(p.name, json.loads(p.read_text("utf-8"))) for p in annotation_files],
         split_record_ids={r["normalized_record_id"] for r in development},
