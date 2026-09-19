@@ -282,6 +282,7 @@ jobs:
       # Mission 1.85.15. The single-operator adjudication: no adjudicated reference may exist without a
       # committed delayed reread, the reread never claims to be a second annotator or blind to the model, and
       # the adjudicated reference reproduces from the original, the reread and the reviews. No provider.
+      # Mission 1.85.16: protocol 1.1.0 has no mandatory delay; the same check applies.
       - name: Single-operator adjudication is consistent with what is committed
         run: uv run python infrastructure/scripts/single_operator_adjudication.py check
 

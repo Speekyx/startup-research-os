@@ -5,8 +5,9 @@ Protocol: `sros_semantic_extraction_contract.single_operator_adjudication`.
 
     prepare-reread       --out DIR    the reread pack (46 EGRESS_APPROVED records, the two extractable labels,
                                       every cell UNLABELLED, a fresh order) and the rendered surfaces. DATABASE_URL.
-    reread               PACK         the original terminal form, limited to the two labels. Refuses to start
-                                      before the minimum delay after the last review. No database.
+    reread               PACK         the original terminal form, limited to the two labels. No database. Protocol
+                                      1.1.0 (Mission 1.85.16) has no mandatory delay; a pack prepared under 1.0.0
+                                      is refused and must be prepared again.
     import-reread        PACK         validate and commit the reread (states, offsets, digests). DATABASE_URL.
     prepare-adjudication --out DIR    after the reread: the cells whose readings disagree or are UNCERTAIN, with
                                       every reading, the post-model notes and the model's quotes. DATABASE_URL.
@@ -36,6 +37,7 @@ sys.path.insert(0, str(ROOT / "infrastructure/scripts"))
 from sros_semantic_extraction_contract.annotation import annotator_record_order  # noqa: E402
 from sros_semantic_extraction_contract.labels import LABELS  # noqa: E402
 from sros_semantic_extraction_contract.single_operator_adjudication import (  # noqa: E402
+    MINIMUM_DELAY_POLICY,
     PROTOCOL_ID,
     READING,
     REREAD_ATTESTATION,
@@ -43,7 +45,6 @@ from sros_semantic_extraction_contract.single_operator_adjudication import (  # 
     AdjudicationRefusedError,
     build_reference,
     cells_to_adjudicate,
-    earliest_reread,
     implied_state,
     intra_rater_agreement,
     make_adjudication,
@@ -154,13 +155,13 @@ def prepare_reread(out: pathlib.Path) -> int:
     order = annotator_record_order("DEVELOPMENT", REREAD_ORDER_ID, sorted(ids))
     digests = {r["normalized_record_id"]: r["surface_sha256"] for r in load(CORPUS)["records"]}
     pack = {
-        "$comment": "DELAYED REREAD by the operator. Answer from the text only. Your earlier labels, the reviews and the model's answers are not shown here; do not look them up while you read.",
+        "$comment": "REREAD by the operator. Answer from the text only. Your earlier labels, the reviews and the model's answers are not shown here; do not look them up while you read.",
         "protocol": PROTOCOL_ID,
         "reading": READING,
         "split": "DEVELOPMENT",
         "operator_id": OPERATOR,
         "record_scope": "DEVELOPMENT_EGRESS_APPROVED",
-        "earliest_permitted_start": earliest_reread(last_exposure()),
+        "minimum_delay_policy": MINIMUM_DELAY_POLICY[PROTOCOL_ID],
         "record_order": order,
         "annotation_started_at": None,
         "annotation_completed_at": None,
@@ -183,12 +184,22 @@ def prepare_reread(out: pathlib.Path) -> int:
         (out / "surfaces" / f"{position:03d}-{rid}.txt").write_bytes(surfaces[rid].encode("utf-8"))
     target.write_bytes(dump(pack))
     print(
-        f"prepared the reread of {len(order)} records in {out}; it may start at {pack['earliest_permitted_start']} or later"
+        f"prepared the reread of {len(order)} records in {out}; it may start now (no mandatory delay)"
     )
     return 0
 
 
-def reread(path: pathlib.Path, clock: Any = now) -> int:
+def superseded(pack: dict[str, Any]) -> str | None:
+    """Why a pack cannot be used under the current protocol, or None."""
+    if pack.get("protocol") == PROTOCOL_ID:
+        return None
+    return (
+        f"this pack was prepared under {pack.get('protocol')}; {PROTOCOL_ID} supersedes it for future rereads, "
+        "so prepare a new pack into a new folder (nothing is patched in place)"
+    )
+
+
+def reread(path: pathlib.Path) -> int:
     from sros_semantic_extraction_contract.annotation_session import (
         SessionQuit,
         dumps,
@@ -200,13 +211,9 @@ def reread(path: pathlib.Path, clock: Any = now) -> int:
         print("REFUSED  a reread pack lives outside the repository")
         return 1
     pack = load(path)
-    if pack.get("protocol") != PROTOCOL_ID:
-        print("REFUSED  not a reread pack")
-        return 1
-    if datetime.fromisoformat(clock()) < datetime.fromisoformat(pack["earliest_permitted_start"]):
-        print(
-            f"REFUSED  the protocol's minimum delay has not passed; the reread may start at {pack['earliest_permitted_start']}"
-        )
+    reason = superseded(pack)
+    if reason:
+        print(f"REFUSED  {reason}")
         return 1
     surfaces: dict[str, str] = {}
     for position, rid in enumerate(pack["record_order"], start=1):
@@ -253,12 +260,13 @@ def import_reread(path: pathlib.Path) -> int:
         print(f"REFUSED  {REREAD.name} exists; the reread is committed once")
         return 1
     pack = load(path)
+    reason = superseded(pack)
+    if reason:
+        print(f"REFUSED  {reason}")
+        return 1
     ids = scope_ids()
     refusals, committed = validate_reread_pack(
-        pack,
-        scope_record_ids=ids,
-        surfaces=surfaces_for(ids),
-        earliest=earliest_reread(last_exposure()),
+        pack, scope_record_ids=ids, surfaces=surfaces_for(ids)
     )
     if committed is None:
         for code, detail in refusals:

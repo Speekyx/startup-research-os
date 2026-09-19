@@ -1,7 +1,7 @@
 # CLAUDE.md — Startup Research OS
 
-Version: 1.181
-Last amended: 2026-09-19 (Sprint 1 / Mission 1.85.15)
+Version: 1.182
+Last amended: 2026-09-19 (Sprint 1 / Mission 1.85.16)
 
 ## Boot Sequence
 
@@ -49,6 +49,7 @@ V2.1 resolves unchanged in V2.2.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.182 | 2026-09-19 | **SINGLE_OPERATOR_REREAD_READY_NO_MANDATORY_DELAY: the operator removed the 24-hour wait, and nothing else moved.** Roadmap N08-B-PILOT; 0 provider calls. `single-operator-adjudication-protocol@1.1.0` sets `NO_MANDATORY_DELAY` and records the decision (operator-a, Mission 1.85.16) in the committed reread; 1.0.0 stays historical with its own delay rule; a 1.0.0 pack is refused and regenerated, never patched. Scope, labels, order, hidden material, disclosure, form and labelling unchanged; no stronger blindness claimed. `mission-1.85.16-report.md`. |
 | 1.181 | 2026-09-19 | **WAITING_FOR_SINGLE_OPERATOR_DELAYED_REREAD: there is no second person, so the reference is adjudicated by the one human available and labelled for exactly that.** Roadmap N08-B-PILOT; 0 provider calls. **Reread**: the two extractable labels on all 46 EGRESS_APPROVED records, fresh order, previous labels hidden, not before 2026-09-19T23:57:02+04:00 (24 h after the last post-model decision), attestation discloses prior model exposure and may not claim blindness. **Adjudication**: only cells whose original, reread and post-model readings disagree or are UNCERTAIN, each with a reason. **Label**: SINGLE_HUMAN_ADJUDICATED_REFERENCE, never consensus, inter-human, blind or certification; original blind annotation unchanged; reread versus original is intra-rater only. `mission-1.85.15-report.md`. |
 | 1.180 | 2026-09-19 | **WAITING_FOR_SECOND_BLIND_HUMAN_ANNOTATION: a second blind reading is prepared, and nothing about the first can reach it.** Roadmap N08-B-PILOT; 0 provider calls. **Scoped**: the original form and blank pack for operator-b over all 46 EGRESS_APPROVED records, scope named and hashed, no reason for membership; a second reading needs a new annotator. **Isolated**: no operator-a label, model output, review or regression membership is read on the preparation path; the signed attestation must be true. **Pinned**: packet v5 renders from the annotation it bound, bytes unchanged. **Frozen**: the A/B agreement and disagreement set compute nothing before operator-b is imported and never read a post-model review. `mission-1.85.14-report.md`. |
 | 1.179 | 2026-09-18 | **WAITING_FOR_PROMPT_1_1_BALANCED_OPERATOR_REVIEW: both directions of disagreement are prepared for review, and a count that looked right was wrong.** Roadmap N08-B-PILOT; 0 provider calls, 0 reruns. **Corrected**: 16 current false PRESENT = 7 previously reviewed and still disagreeing + **9 never reviewed**; subtracting the historical review count ignored the two records prompt 1.1.0 corrected. Mission 1.85.12 metrics unchanged, evaluation not rewritten, erratum appended, regression test added. **Prepared**: 9 false PRESENT + 6 false negatives = 15 records, two sides with their own choices, loopback only, no default, no bulk; the 7 prior judgements reused, never re-asked. **Recorded**: a structured-anchor extraction design option, not implemented. `mission-1.85.13-report.md`. |
@@ -3343,6 +3344,17 @@ by the only human available, under a written protocol, and labelled for what it 
 **Next is the operator's delayed reread, then the adjudication, then the import.** **Do not revise the prompt,
 version the contract, create a packet or an approval, call the provider, open HOLDOUT or start N08-C. Mission
 1.85.16 was not started.**
+
+**AMENDED IN 1.182 (Mission 1.85.16). The operator removed the 24-hour delay; protocol 1.1.0 records why.**
+
+- **A PROTOCOL CHANGE IS A NEW VERSION WITH A NAMED DECIDER.** 1.0.0 keeps its delay and still validates its own
+  packs; 1.1.0 carries the decision and its reason into every reread it commits.
+- **REMOVING A SAFEGUARD CLAIMS NOTHING.** The reread is exactly as non-blind as before, and says so.
+- **A PACK IS REGENERATED, NEVER PATCHED.** A pack prepared under a superseded protocol is refused by name.
+
+**Next is the operator's reread, which may start now.** **Do not run it on the operator's behalf, revise the
+prompt, version the contract, create a packet or an approval, call the provider, open HOLDOUT or start N08-C.
+Mission 1.85.17 was not started.**
 
 
 

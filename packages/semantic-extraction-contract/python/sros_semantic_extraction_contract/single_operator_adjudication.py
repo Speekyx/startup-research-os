@@ -4,11 +4,13 @@ There is no second annotator. The operator has seen their own blind labels, the 
 post-model reviews, so no reading they make can be a blind second reference, and none is called one. What
 this module supports instead is a written protocol whose every step says what it is:
 
-    1. DELAYED REREAD   the operator labels the two extractable labels again on all 46 EGRESS_APPROVED records,
-                        in a fresh order, with their earlier labels hidden, at least MIN_DELAY after their last
-                        exposure to a review. Blind to their earlier labels at the time of reading; NOT blind to
-                        model output, which they declare. All 46, so the reread does not reveal which records
-                        were contested.
+    1. REREAD           the operator labels the two extractable labels again on all 46 EGRESS_APPROVED records,
+                        in a fresh order, with their earlier labels hidden. Blind to their earlier labels at the
+                        time of reading; NOT blind to model output, which they declare. All 46, so the reread does
+                        not reveal which records were contested. Protocol 1.0.0 also required a 24-hour delay after
+                        the last post-model decision; protocol 1.1.0 (Mission 1.85.16, an operator decision)
+                        removes it. The delay was a memory-decay safeguard only, and removing it claims no
+                        stronger blindness.
     2. ADJUDICATION     only where the readings of a cell disagree or one is UNCERTAIN: the original blind
                         label, the reread, and the post-model judgement where one exists. The operator sees every
                         reading and decides a final state with a reason.
@@ -36,8 +38,12 @@ __all__ = [
     "ADJUDICATED",
     "CONSISTENT",
     "FINAL_STATES",
+    "MINIMUM_DELAY_POLICY",
     "MIN_DELAY",
+    "PROTOCOLS",
+    "PROTOCOL_DECISION",
     "PROTOCOL_ID",
+    "PROTOCOL_ID_V1_0",
     "REFERENCE_STRENGTH",
     "REREAD_ATTESTATION",
     "REREAD_LABELS",
@@ -51,13 +57,32 @@ __all__ = [
     "validate_reread_pack",
 ]
 
-PROTOCOL_ID = "single-operator-adjudication-protocol@1.0.0"
+PROTOCOL_ID_V1_0 = (
+    "single-operator-adjudication-protocol@1.0.0"  # historical: mandatory 24-hour delay
+)
+PROTOCOL_ID = "single-operator-adjudication-protocol@1.1.0"
+PROTOCOLS = (PROTOCOL_ID_V1_0, PROTOCOL_ID)
 REFERENCE_STRENGTH = "SINGLE_HUMAN_ADJUDICATED_REFERENCE"
 READING = "SAME_OPERATOR_DELAYED_REREAD"
 REREAD_LABELS = ("REPORTED_FAILED_ATTEMPT", "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION")
 STATES = ("PRESENT", "ABSENT", "UNCERTAIN")
 FINAL_STATES = STATES
-MIN_DELAY = timedelta(hours=24)
+MIN_DELAY = timedelta(hours=24)  # protocol 1.0.0 only, kept so its rule stays reproducible
+MINIMUM_DELAY_POLICY = {
+    PROTOCOL_ID_V1_0: "MANDATORY_24_HOURS_AFTER_LAST_POST_MODEL_DECISION",
+    PROTOCOL_ID: "NO_MANDATORY_DELAY",
+}
+# Why 1.1.0 exists. Recorded in the committed reread so the change is attributed, never silent.
+PROTOCOL_DECISION = {
+    "protocol": PROTOCOL_ID,
+    "supersedes": PROTOCOL_ID_V1_0,
+    "change": "the mandatory 24-hour delay before the reread is removed; mandatory_delay_seconds = 0",
+    "decided_by": "operator-a",
+    "decided_in": "Mission 1.85.16",
+    "reason": "the delay is only a memory-decay safeguard and does not affect model behaviour; for this DEVELOPMENT workflow the operator judges the cost of waiting larger than the methodological benefit",
+    "claims_stronger_blindness": False,
+    "unchanged": "records, labels, order rule, hidden material, attestation including the prior model exposure disclosure, annotation and adjudication rules, reference labelling",
+}
 CONSISTENT = "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW"
 ADJUDICATED = "ADJUDICATED_BY_THE_SINGLE_OPERATOR"
 MAX_NOTE = 600
@@ -99,6 +124,7 @@ def _aware(value: Any) -> datetime | None:
 
 
 def earliest_reread(last_exposure: str) -> str:
+    """Protocol 1.0.0's earliest reread start. Historical: protocol 1.1.0 has no mandatory delay."""
     moment = _aware(last_exposure)
     if moment is None:
         raise AdjudicationRefusedError("LAST_EXPOSURE_NOT_TIMEZONE_AWARE", str(last_exposure))
@@ -187,16 +213,20 @@ def validate_reread_pack(
     *,
     scope_record_ids: set[str],
     surfaces: dict[str, str],
-    earliest: str,
+    earliest: str | None = None,
 ) -> tuple[list[tuple[str, str]], dict[str, Any] | None]:
-    """Every problem with a reread pack, and its committed form when there is none. Refuses, never repairs."""
+    """Every problem with a reread pack, and its committed form when there is none. Refuses, never repairs.
+
+    Each protocol is validated by its own rule: a 1.0.0 pack still needs `earliest` and the 24-hour delay (its
+    historical rule, unchanged); a 1.1.0 pack has no time gate, and its actual start time is still required."""
     refusals: list[tuple[str, str]] = []
 
     def refuse(code: str, detail: str) -> None:
         refusals.append((code, detail))
 
-    if not isinstance(pack, dict) or pack.get("protocol") != PROTOCOL_ID:
+    if not isinstance(pack, dict) or pack.get("protocol") not in PROTOCOLS:
         return [("NOT_A_REREAD_PACK", "")], None
+    protocol = pack["protocol"]
     if pack.get("reading") != READING or pack.get("split") != "DEVELOPMENT":
         refuse("READING_OR_SPLIT_INVALID", str(pack.get("reading")))
     ids = [r.get("normalized_record_id") for r in pack.get("records", []) if isinstance(r, dict)]
@@ -212,7 +242,7 @@ def validate_reread_pack(
             "TIMESTAMPS_INVALID",
             "annotation_started_at and annotation_completed_at are required and ordered",
         )
-    elif floor is None or started < floor:
+    elif protocol == PROTOCOL_ID_V1_0 and (floor is None or started < floor):
         refuse(
             "REREAD_STARTED_BEFORE_THE_MINIMUM_DELAY",
             f"started {pack.get('annotation_started_at')}, earliest {earliest}",
@@ -258,7 +288,7 @@ def validate_reread_pack(
         return refusals, None
     return [], {
         "$comment": "SAME-OPERATOR DELAYED REREAD (Mission 1.85.15). The operator labelled the two extractable labels again with their earlier labels hidden. It is NOT a second annotator and NOT blind to model output, which the attestation discloses. States, offsets and digests only.",
-        "protocol": PROTOCOL_ID,
+        "protocol": protocol,
         "reading": READING,
         "split": "DEVELOPMENT",
         "operator_id": pack["operator_id"],
@@ -266,7 +296,12 @@ def validate_reread_pack(
         "blind_to_previous_labels_at_reading": True,
         "blind_to_model_outputs": False,
         "is_a_second_annotator": False,
-        "earliest_permitted_start": earliest,
+        "minimum_delay_policy": MINIMUM_DELAY_POLICY[protocol],
+        **(
+            {"earliest_permitted_start": earliest}
+            if protocol == PROTOCOL_ID_V1_0
+            else {"protocol_decision": PROTOCOL_DECISION}
+        ),
         "annotation_started_at": pack["annotation_started_at"],
         "annotation_completed_at": pack["annotation_completed_at"],
         "attestation": attestation,

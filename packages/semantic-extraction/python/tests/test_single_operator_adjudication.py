@@ -112,7 +112,7 @@ def synthetic_reread(changes: dict[tuple[str, str], str] | None = None) -> dict:
 # -- history and the delay --------------------------------------------------------------------------------
 
 
-def test_the_original_blind_annotation_is_unchanged_and_the_delay_is_derived(tool) -> None:
+def test_the_original_blind_annotation_is_unchanged_and_the_1_0_0_delay_still_derives(tool) -> None:
     assert (
         hashlib.sha256(
             (
@@ -141,7 +141,9 @@ def test_the_reread_pack_is_46_unlabelled_records_in_a_fresh_order_and_shows_not
     ) == 46
     assert all(set(r["labels"]) == set(soa.REREAD_LABELS) for r in pack["records"])
     assert all(c["state"] == "UNLABELLED" for r in pack["records"] for c in r["labels"].values())
-    assert pack["earliest_permitted_start"] == EARLIEST
+    assert pack["protocol"] == soa.PROTOCOL_ID == "single-operator-adjudication-protocol@1.1.0"
+    assert pack["minimum_delay_policy"] == "NO_MANDATORY_DELAY"
+    assert "earliest_permitted_start" not in pack
     original_order = [r["normalized_record_id"] for r in ORIGINAL["records"]]
     assert pack["record_order"] != sorted(APPROVED) and pack["record_order"] != [
         r for r in original_order if r in APPROVED
@@ -162,19 +164,35 @@ def test_the_reread_pack_is_46_unlabelled_records_in_a_fresh_order_and_shows_not
     assert sorted(p.name for p in out.iterdir()) == [tool.PACK_NAME, "surfaces"]
 
 
-def test_the_reread_refuses_to_start_before_the_minimum_delay(tool, tmp_path, monkeypatch) -> None:
+def test_the_reread_starts_immediately_and_records_when_it_started(
+    tool, tmp_path, monkeypatch
+) -> None:
     out = tmp_path / "reread"
     assert tool.prepare_reread(out) == 0
-    for position, rid in enumerate(
-        json.loads((out / tool.PACK_NAME).read_text("utf-8"))["record_order"], start=1
-    ):
-        (out / "surfaces" / f"{position:03d}-{rid}.txt").write_bytes(synthetic(rid).encode())
     asked: list[str] = []
     monkeypatch.setattr(builtins, "input", lambda prompt: asked.append(prompt) or "q")
-    assert tool.reread(out / tool.PACK_NAME, clock=lambda: "2026-09-19T12:00:00+04:00") == 1
-    assert asked == [], "nothing may be asked before the delay"
-    assert tool.reread(out / tool.PACK_NAME, clock=lambda: "2026-09-20T09:00:00+04:00") == 0
-    assert asked, "after the delay the form asks"
+    assert tool.reread(out / tool.PACK_NAME) == 0
+    assert asked, "the form asks at once: there is no time gate"
+    pack = json.loads((out / tool.PACK_NAME).read_text("utf-8"))
+    assert soa._aware(pack["annotation_started_at"]) is not None, (
+        "the actual start is recorded, timezone-aware"
+    )
+    assert all(c["state"] == "UNLABELLED" for r in pack["records"] for c in r["labels"].values())
+
+
+def test_a_pack_prepared_under_1_0_0_is_refused_not_patched(tool, tmp_path, monkeypatch) -> None:
+    out = tmp_path / "reread"
+    assert tool.prepare_reread(out) == 0
+    path = out / tool.PACK_NAME
+    pack = json.loads(path.read_text("utf-8"))
+    pack["protocol"] = soa.PROTOCOL_ID_V1_0
+    pack["earliest_permitted_start"] = EARLIEST
+    path.write_text(json.dumps(pack), encoding="utf-8")
+    before = path.read_bytes()
+    monkeypatch.setattr(builtins, "input", lambda prompt: pytest.fail("nothing may be asked"))
+    assert tool.reread(path) == 1
+    assert tool.import_reread(path) == 1
+    assert path.read_bytes() == before and not tool.REREAD.exists()
 
 
 def complete_pack(tool, tmp_path) -> dict:
@@ -198,7 +216,6 @@ def validate(tool, pack):
         pack,
         scope_record_ids=APPROVED,
         surfaces={rid: synthetic(rid) for rid in APPROVED},
-        earliest=EARLIEST,
     )
 
 
@@ -211,6 +228,56 @@ def test_a_complete_reread_commits_as_a_same_operator_reading_not_blind_to_the_m
     assert committed["blind_to_model_outputs"] is False
     assert committed["blind_to_previous_labels_at_reading"] is True
     assert committed["reading"] == "SAME_OPERATOR_DELAYED_REREAD"
+    assert committed["protocol"] == soa.PROTOCOL_ID
+    assert committed["minimum_delay_policy"] == "NO_MANDATORY_DELAY"
+    decision = committed["protocol_decision"]
+    assert (
+        decision["supersedes"] == soa.PROTOCOL_ID_V1_0
+        and decision["decided_in"] == "Mission 1.85.16"
+    )
+    assert decision["decided_by"] == "operator-a" and decision["claims_stronger_blindness"] is False
+    assert "earliest_permitted_start" not in committed
+
+
+def test_an_immediate_reread_is_accepted_under_1_1_0(tool, tmp_path) -> None:
+    pack = complete_pack(tool, tmp_path)
+    pack["annotation_started_at"] = "2026-09-18T23:57:30+04:00"  # 28 seconds after the last review
+    pack["annotation_completed_at"] = "2026-09-19T00:30:00+04:00"
+    refusals, committed = validate(tool, pack)
+    assert refusals == [] and committed is not None
+    assert "REREAD_STARTED_BEFORE_THE_MINIMUM_DELAY" not in {c for c, _ in refusals}
+
+
+def test_protocol_1_0_0_keeps_its_own_delay_rule(tool, tmp_path) -> None:
+    pack = complete_pack(tool, tmp_path)
+    pack["protocol"] = soa.PROTOCOL_ID_V1_0
+    ok = dict(scope_record_ids=APPROVED, surfaces={rid: synthetic(rid) for rid in APPROVED})
+    refusals, committed = soa.validate_reread_pack(pack, **ok, earliest=EARLIEST)
+    assert refusals == [] and committed["earliest_permitted_start"] == EARLIEST
+    assert committed["minimum_delay_policy"] == "MANDATORY_24_HOURS_AFTER_LAST_POST_MODEL_DECISION"
+    pack["annotation_started_at"] = "2026-09-19T12:00:00+04:00"
+    refusals, committed = soa.validate_reread_pack(pack, **ok, earliest=EARLIEST)
+    assert committed is None and "REREAD_STARTED_BEFORE_THE_MINIMUM_DELAY" in {
+        c for c, _ in refusals
+    }
+    refusals, _ = soa.validate_reread_pack(pack, **ok)
+    assert "REREAD_STARTED_BEFORE_THE_MINIMUM_DELAY" in {c for c, _ in refusals}, (
+        "1.0.0 without a floor refuses"
+    )
+
+
+def test_the_import_accepts_an_immediate_valid_reread(tool, tmp_path) -> None:
+    pack = complete_pack(tool, tmp_path)
+    path = tmp_path / "reread" / tool.PACK_NAME
+    path.write_text(json.dumps(pack), encoding="utf-8")
+    assert tool.import_reread(path) == 0
+    committed = json.loads(tool.REREAD.read_text("utf-8"))
+    assert committed["minimum_delay_policy"] == "NO_MANDATORY_DELAY"
+    assert (
+        committed["blind_to_model_outputs"] is False and committed["is_a_second_annotator"] is False
+    )
+    assert committed["attestation"]["prior_model_exposure_acknowledged"] is True
+    assert tool.check() == 0
     assert "quote" not in json.dumps(committed).replace("quote_sha256", "").replace(
         "quote_length", ""
     )
@@ -219,10 +286,8 @@ def test_a_complete_reread_commits_as_a_same_operator_reading_not_blind_to_the_m
 @pytest.mark.parametrize(
     ("mutate", "code"),
     [
-        (
-            lambda p: p.update(annotation_started_at="2026-09-19T12:00:00+04:00"),
-            "REREAD_STARTED_BEFORE_THE_MINIMUM_DELAY",
-        ),
+        (lambda p: p.update(annotation_started_at=None), "TIMESTAMPS_INVALID"),
+        (lambda p: p.update(annotation_started_at="2026-09-20T09:00:00"), "TIMESTAMPS_INVALID"),
         (
             lambda p: p["attestation"].update(prior_model_exposure_acknowledged=False),
             "ATTESTATION_INCOMPLETE",
