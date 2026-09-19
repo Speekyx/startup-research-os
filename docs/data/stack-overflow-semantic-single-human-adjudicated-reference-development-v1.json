@@ -1,0 +1,2348 @@
+{
+ "$comment": "SINGLE-HUMAN ADJUDICATED REFERENCE (Mission 1.85.15). Built by the only human available from their original blind labels, their delayed reread and, where they disagreed, their adjudication after seeing every reading and the model's answer. NOT consensus, NOT inter-human, NOT blind, NOT certification; the original blind annotation is unchanged and remains the reference every preregistered reading used. States, offsets and digests only.",
+ "reference_id": "stack-overflow-semantic-single-human-adjudicated-reference-development",
+ "version": "1.0.0",
+ "inputs": {
+  "original_sha256": "449ff10f8a60217bbf4b7887254cf81b492fdba962b39283f39d2acdf1a9fa3c",
+  "reread_sha256": "fe4ffb95fe3ca71d6d041ac7b3c1feae65ac3a8f06d3298596b404477e9d11eb",
+  "reviews_sha256": [
+   "390caadaaaacd8dd45b11e6a1ce837de76c83449f767cf001a53b580f4caa093",
+   "1a4164270f5d26b06e6bb68b904d25e3c7ecb00f7775723b1adeee37d85855cc"
+  ]
+ },
+ "reference_strength": "SINGLE_HUMAN_ADJUDICATED_REFERENCE",
+ "protocol": "single-operator-adjudication-protocol@1.1.0",
+ "is_consensus": false,
+ "is_inter_human": false,
+ "is_blind": false,
+ "replaces_original_blind_annotation": false,
+ "certification": false,
+ "labels_covered": [
+  "REPORTED_FAILED_ATTEMPT",
+  "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION"
+ ],
+ "state_counts": {
+  "REPORTED_FAILED_ATTEMPT": {
+   "PRESENT": 36,
+   "ABSENT": 10,
+   "UNCERTAIN": 0
+  },
+  "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+   "PRESENT": 15,
+   "ABSENT": 31,
+   "UNCERTAIN": 0
+  }
+ },
+ "cells_adjudicated": 39,
+ "cells_consistent": 53,
+ "records": [
+  {
+   "normalized_record_id": "02dd341e-30e8-538b-986a-5d4c26a5791f",
+   "surface_sha256": "5a4706b9be78428bdb66eda744b6ce205ee6d67d674c1d34a4a5f9bdd3dafb3a",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "03dc37e7-8e12-5d4b-87f4-2bb7461b1510",
+   "surface_sha256": "9917a1e8ac8dab289c86883ca96796e471ab874375dd8fea8e2d0c035644498e",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "17064c93-71cf-5474-ba7f-39ccd516782f",
+   "surface_sha256": "70486f6802b1ca84a63e8c38d12b820d504210e5e0c96b6f7ac41822120a25c2",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 5680,
+       "end": 5764,
+       "quote_sha256": "655ae9626d1ebcd4ff504549ac2f64ceaf6afb5520a0a9c53fb131d4a180012d",
+       "quote_length": 84
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 1241,
+       "end": 1357,
+       "quote_sha256": "ea2fd017fbf937980967d9676771fe9db46c7e0ef46e94834921a7b180c75505",
+       "quote_length": 116
+      }
+     ],
+     "subject": {
+      "start": 1258,
+      "end": 1265,
+      "quote_sha256": "91d17428d146fdbc804cb441daf689de97679bf6aee2ba4fb9e5920d7e174664",
+      "quote_length": 7
+     }
+    }
+   }
+  },
+  {
+   "normalized_record_id": "19c64e71-5844-520d-844c-97c1f0aaa750",
+   "surface_sha256": "3fbdc56d7059242d0214958d1ede1f0149faf42c4b4767e2b4c63b47e139880f",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [
+      {
+       "start": 1915,
+       "end": 1985,
+       "occurrence": 1,
+       "quote_sha256": "96b0395aafedd7971f3bd35619e32642186cddc87860b83ae94b14fb577a4654",
+       "quote_length": 70
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 370,
+       "end": 506,
+       "quote_sha256": "d23bacaffa1e568c7cd8f594a339690278a9404264dd66e5f436a57f0ca1cf16",
+       "quote_length": 136
+      }
+     ],
+     "subject": {
+      "start": 0,
+      "end": 5,
+      "quote_sha256": "a9b4d0ddde84705949bb31a73a4781b3157ced6fefeffb397378e82dbd45de18",
+      "quote_length": 5
+     }
+    }
+   }
+  },
+  {
+   "normalized_record_id": "1a659352-390f-5c53-97de-0f725d017f46",
+   "surface_sha256": "dea3bf3d40f89c91348db8609ddf28c105024c2ffa46d0d542fc17a398626760",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 1490,
+       "end": 1539,
+       "quote_sha256": "b95a775a8d0a01a6b20f173396714df0fbb7b4e1ee9adedc0ee0f5faa783b4eb",
+       "quote_length": 49
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "1d65b04f-4da6-5d67-bb0a-d74ae98ad048",
+   "surface_sha256": "737a75ba473b167da74bc2bd7ea4f0256c805033e8df34f433cead07e37e8ae9",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "203268d4-baf6-5410-a001-cf77843e96e3",
+   "surface_sha256": "fdb6b5cfa87fc4d2a4ff4411e577e7c8525a0a0c8a72fea580966c71d428256a",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 1101,
+       "end": 1316,
+       "quote_sha256": "e09071f58f752da60a842f6eb0e6fd0cfe1df187afc8922430872e24bbd68b43",
+       "quote_length": 215
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "2c9e95be-2262-52d0-947f-e6a268020b71",
+   "surface_sha256": "a5a9c30048ac35613f3c210873016091207007d039d8bf1541e398dd10835bee",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 108,
+       "end": 184,
+       "quote_sha256": "49f2100602c79e435e87b16ade692bfc24e50aa80f03f42c7e600c051228fbc8",
+       "quote_length": 76
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 626,
+       "end": 680,
+       "quote_sha256": "89a1560a14cc21cc732401da10d89e0192ac5b467abcddf5caedc30c358866fd",
+       "quote_length": 54
+      }
+     ],
+     "subject": {
+      "start": 57,
+      "end": 65,
+      "quote_sha256": "76cd2c0d589e224531fc6af2c5850e3c9b2aca6902d813ce598833c7c1b28bee",
+      "quote_length": 8
+     }
+    }
+   }
+  },
+  {
+   "normalized_record_id": "3194f76d-a845-54c5-9a14-bd0520da6cbb",
+   "surface_sha256": "5b4d66acac3db1388f4c79ad9162a06a3074deb95666412548453683b6b500ab",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 1032,
+       "end": 1059,
+       "quote_sha256": "27d0303a42e7799d5d1b0952be44e2b0dbdee4854cab8f130b06781a82e20a28",
+       "quote_length": 27
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "37bf2146-b9fc-5e5a-b35b-d59f5f6bfc57",
+   "surface_sha256": "f56c63774966be50841cb31ef919535ea659f2851eb3b0622fd374466549b120",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 446,
+       "end": 541,
+       "quote_sha256": "b14dafea0e634cba0b65e51b6b1f996efd0831ef28dd2a6c3aba981ab8a123fd",
+       "quote_length": 95
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "3d0568c4-5876-5863-921b-2c0fc3d3e27a",
+   "surface_sha256": "607871301807c0d701b32dac674885c3336d963c284d766ab390d46254b49120",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 1555,
+       "end": 1656,
+       "quote_sha256": "eaef1b869872dbc7cd8a46d0571171ab8fdd71659b803262bcb45a2d2303ea72",
+       "quote_length": 101
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 1555,
+       "end": 1656,
+       "quote_sha256": "eaef1b869872dbc7cd8a46d0571171ab8fdd71659b803262bcb45a2d2303ea72",
+       "quote_length": 101
+      }
+     ],
+     "subject": {
+      "start": 1601,
+      "end": 1607,
+      "quote_sha256": "a4e7ca760018f9a5cc43601641e593b2763ab34bf85aebbea9762ca27530907e",
+      "quote_length": 6
+     }
+    }
+   }
+  },
+  {
+   "normalized_record_id": "3d224ece-4791-550e-8a47-352f9c568b92",
+   "surface_sha256": "14161c731b72c1c848a71f7cd7684241155af33d9edd4e985be08333dca49c2b",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "42642469-23b7-5a7a-b897-5052012d9fd3",
+   "surface_sha256": "f852337be8c3b078696ceaf19ad98c30ed9368417bfc529615419cb21d9313e7",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 4460,
+       "end": 4539,
+       "quote_sha256": "b12f7f87b8ac969a6b3c9134aaae9d765b2e0b44124d2cb2c9e58e73a106cea2",
+       "quote_length": 79
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 4782,
+       "end": 4860,
+       "quote_sha256": "60564b26f894d1a438c3c1f033eac5114152702be62b23e84b5b4ab1e1249f29",
+       "quote_length": 78
+      }
+     ],
+     "subject": {
+      "start": 4818,
+      "end": 4827,
+      "quote_sha256": "81c967731c83ea1cebb984ce13dffe47026d5d267df4a03146306f5e0a9ccab3",
+      "quote_length": 9
+     }
+    }
+   }
+  },
+  {
+   "normalized_record_id": "47b3c6ea-dff4-50c4-b9fd-15874b743288",
+   "surface_sha256": "d543fdfd8ab6d45f2b216b0dbf83fbc15a20e7ef26a90e5490311363f0894b7a",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [
+      {
+       "start": 130,
+       "end": 199,
+       "occurrence": 1,
+       "quote_sha256": "f52ef8ea5b99f589d18fd338f005954acb628d5b66e03dd08433dd95fb108ad0",
+       "quote_length": 69
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "4a3fc738-bb4a-5992-bb2e-2e422b9f4a00",
+   "surface_sha256": "7ae8f3dfb8d97e4ae786443896fcbb90de5cd561b6adfe310e888625a4b6e48e",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [
+      {
+       "start": 617,
+       "end": 826,
+       "occurrence": 1,
+       "quote_sha256": "7ef8ac626a3027195501a919280a16c362ec4a4ef204025cf650342946f985c4",
+       "quote_length": 209
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 60,
+       "end": 166,
+       "quote_sha256": "818745dfef9fc787a0a5da58442b27126a9f43a86097c9cdfaa5faa1a96ddb0e",
+       "quote_length": 106
+      }
+     ],
+     "subject": {
+      "start": 3,
+      "end": 13,
+      "quote_sha256": "a478b4566be5cb007a5d8ae532c7eeac2cd3be26ad639a65c1dd11b3bf95c51b",
+      "quote_length": 10
+     }
+    }
+   }
+  },
+  {
+   "normalized_record_id": "58966c7e-425d-59de-85ce-116ae98309ab",
+   "surface_sha256": "1dbc8f33af7913b2b033211f8858d5181d165fd4354782316679eda8e2298845",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 3037,
+       "end": 3153,
+       "quote_sha256": "87d1172a75bd562af3355d0d9144f2348757be76473d8f7dd8369f89adda43e3",
+       "quote_length": 116
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "5d0a1e34-7eeb-5820-89f2-7cf9706a8fb8",
+   "surface_sha256": "80dfb088801df3eb77bcdcafdf28452a0f0bd546a02e2c3789340700a54d33a8",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 41,
+       "end": 192,
+       "quote_sha256": "47a189e0bb6a5e16251200b1742af280f58486033713551d7a0545c3fca5b06f",
+       "quote_length": 151
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "6bd78806-211b-5d3b-b10a-d60f4fe2bca3",
+   "surface_sha256": "aad5998d4119d07de229709c51f0576091cc51d6a6f6a5a60f8e5b88aff1a2ad",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [
+      {
+       "start": 208,
+       "end": 574,
+       "occurrence": 1,
+       "quote_sha256": "1b012e0a573a3411bfd50273bb8e6b6305ddb4e29bfda07ff06bdc2d23787db9",
+       "quote_length": 366
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 346,
+       "end": 574,
+       "quote_sha256": "5fc2a128e97ec9e242257f4c9051223e9016b8bbb1cb2786765c952164f07baf",
+       "quote_length": 228
+      }
+     ],
+     "subject": {
+      "start": 7,
+      "end": 15,
+      "quote_sha256": "91f060a9ad4b39eb228d9537292fab19d252faed06c169d0fdcb4a90560f5676",
+      "quote_length": 8
+     }
+    }
+   }
+  },
+  {
+   "normalized_record_id": "6dfbef0a-3a64-5fd1-9433-21f7cdb01402",
+   "surface_sha256": "d9d115c55d066b08190b197771a77c3b457eb126b7ca280ed089ebd2b7c8e93b",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 2116,
+       "end": 2263,
+       "quote_sha256": "25ad86b09b15b6c9a12c41fce213d2ee16b08cdcc187aa0eca5f38462fa911d6",
+       "quote_length": 147
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 2116,
+       "end": 2263,
+       "quote_sha256": "25ad86b09b15b6c9a12c41fce213d2ee16b08cdcc187aa0eca5f38462fa911d6",
+       "quote_length": 147
+      }
+     ],
+     "subject": {
+      "start": 209,
+      "end": 223,
+      "quote_sha256": "b0a8281e9466910e5f09502e5d0d3ca720c7390e160dac5e6f4c38eeed54be54",
+      "quote_length": 14
+     }
+    }
+   }
+  },
+  {
+   "normalized_record_id": "71928de8-fd31-5c35-8f80-187d2bb7ed05",
+   "surface_sha256": "f62226684ace5e5974c3cac56b716a8864213a002fe13633d0d328468e46630c",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "7c8a2ac5-1fdd-5c72-bdb5-4422a11e4084",
+   "surface_sha256": "f6bb50bc692e787e206bf74e97174eec940c6e323c152d2fe4ed910932d0ca05",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [
+      {
+       "start": 258,
+       "end": 355,
+       "occurrence": 1,
+       "quote_sha256": "062ab4b0cb6012565dbe0329e7a5be0e453f0fc81a77814d7ad8faa13087a89f",
+       "quote_length": 97
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "7eed79ff-81d0-50c1-94c2-3a1b6fa3b4a8",
+   "surface_sha256": "055d126455b6543d93e34ebca213942a301488fe6cb177bf7822dcc9f489c9cb",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 2640,
+       "end": 2829,
+       "quote_sha256": "9294b08fff8d36fcbb03c677523811684cd23a05238bdfed272ac4ddcf211fe3",
+       "quote_length": 189
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 1433,
+       "end": 1506,
+       "quote_sha256": "566d317b917aa706aa80adc3ea13bab02e548c90ab13d5daa73a3b67194011d9",
+       "quote_length": 73
+      }
+     ],
+     "subject": {
+      "start": 111,
+      "end": 117,
+      "quote_sha256": "d548c5b83fa61d8e3bd86ad42a7ffea9b7c86e3f9d8095c1577d3e1270bb9420",
+      "quote_length": 6
+     }
+    }
+   }
+  },
+  {
+   "normalized_record_id": "88376fa5-5cd3-58f9-b099-bad69077b0f7",
+   "surface_sha256": "a6bd410f4e0bcaf3d9a04c028a8d17570965f4dd7b4c7ad8a7962c664a6d6d91",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 131,
+       "end": 276,
+       "quote_sha256": "7abb472227ee47448a5fbdc810bc98b6c16a0f88253b4767847d0a41f87a64dd",
+       "quote_length": 145
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "96054702-3d78-55b0-b5b9-ed63e611c6d7",
+   "surface_sha256": "70ab4463876798f80a4620ddb0e873e735dc39d9221e6ffaffaeb4bf37e49e56",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [
+      {
+       "start": 51,
+       "end": 338,
+       "occurrence": 1,
+       "quote_sha256": "e7372add99e2e15ddc261ce7e1a0af3abce30c6be7d923132768d8a4b6118bfd",
+       "quote_length": 287
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "99bdc4b0-959d-541e-bc59-7aa5706cf282",
+   "surface_sha256": "0ef5cd1230f183d6039c0224d600e021cd706690297ac38f0c203eac960269b7",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "9f91eeea-25e6-5a9e-89e6-54d4490ecd7c",
+   "surface_sha256": "f2cd0a74c2f667995730fe2fa64ea5f9b7abed0d16c8a830abaa0f0f0f6b8edd",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 628,
+       "end": 844,
+       "quote_sha256": "7c7580c569b827e734a080c063190744d630f3c13ad518f56a075c59e59ea9b6",
+       "quote_length": 216
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "a561974f-fc12-564d-9cb5-51c5bd59c40e",
+   "surface_sha256": "12b0b01e55ac520507a4af70550eaa117adff9606db8096b87e34d526a29dd5e",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [
+      {
+       "start": 90,
+       "end": 166,
+       "occurrence": 1,
+       "quote_sha256": "fc1ee582d37cfb8115d41431028153ec75099e51b8a7818eb81221dccf0db973",
+       "quote_length": 76
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 626,
+       "end": 726,
+       "quote_sha256": "e0c6ff5a40b71035bcdb624e0062e7c2aab38a9c9188b6f667376a362b6e6399",
+       "quote_length": 100
+      }
+     ],
+     "subject": {
+      "start": 647,
+      "end": 654,
+      "quote_sha256": "50a4122943273ad2f00ea92bff9c7cb6235e199f745321cb4272aa1857840463",
+      "quote_length": 7
+     }
+    }
+   }
+  },
+  {
+   "normalized_record_id": "ac423fe4-a4b4-589d-ac49-96932ed51d54",
+   "surface_sha256": "1865020f0cba48dbed4f3d7533ae4ec3633b4f69364bea9a5397cbd9efae5bfa",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 471,
+       "end": 543,
+       "quote_sha256": "f4d569899bdf0491efb3a6c4a70a6a0686efc879020bc57b638c5dc5bd43f9e9",
+       "quote_length": 72
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "b7996f9d-72fe-5544-a30a-ce9270edfe09",
+   "surface_sha256": "db96588f1b73824f99547c706dbea2ef416f5e5d7e90ebe8e40279958bbbaefe",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [
+      {
+       "start": 61,
+       "end": 209,
+       "occurrence": 1,
+       "quote_sha256": "b427d80e57f82d47249fa1af091a3c326bbf46a951f1be41bbbf645dd04f3768",
+       "quote_length": 148
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "bf04af60-1364-5fd0-8f4f-a8104d131aff",
+   "surface_sha256": "1d6221ff1e8223c9f3d226f9ad624fed04442ea36a390a7c697c67e600627d2d",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 974,
+       "end": 1050,
+       "quote_sha256": "69c3a524ff7a014919f0de9c23ca4bda82c1b4208c542dd6dfe29f33c33b477d",
+       "quote_length": 76
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "c1180149-42cd-5088-ab01-b3ff8694d73d",
+   "surface_sha256": "1883df68d59d70f0441f875a9071ce81a4606ce9b48e278d52c38a20e64795ec",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "c128f807-cbdf-512b-bbde-30a00a9fdb39",
+   "surface_sha256": "8bafba2a959e1a7f065f4332c3a75f2f85fe52c02d67cb1894a0ec8df19a9b25",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 2442,
+       "end": 2560,
+       "quote_sha256": "028d585a9c1f40e85c9bf740fc86e6e470af88bdda738d738ef873676e30ac54",
+       "quote_length": 118
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "c4d96f4e-c766-5c79-a8c9-1f023647618b",
+   "surface_sha256": "2f4248c77fa6c60108f00039a2b713972af97c358e2c9d86dd811c7c4e91833e",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 386,
+       "end": 532,
+       "quote_sha256": "b10c62808f5a2ff027c930cb750884f519462e6beb587e0d6d031db3f352e556",
+       "quote_length": 146
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "c98a64a0-0940-5835-a617-c26220a5d9a2",
+   "surface_sha256": "04eaf997346f5c52a5e5078ea6e6904f369e95a2e44cdfe7e35ea16476513be7",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "d6bff833-780d-55d3-a5ad-1effebb8a328",
+   "surface_sha256": "a6903fb7063e9c164636d8e32f35d48accc316cd07204e0d4e5d0d40d26b0f19",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 348,
+       "end": 484,
+       "quote_sha256": "575e85adb36f07afee3c0e715be01a5619432fb57b95afe2c13d5f7da13e9b62",
+       "quote_length": 136
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "db663e12-3ffd-59e5-b31f-1de31f41acbb",
+   "surface_sha256": "b3acf08341726096958ebb8a827d83351e513de8fbb1b28073aa273fde84e8f8",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 2102,
+       "end": 2194,
+       "quote_sha256": "09a78a43cf08c47f56fa2c5e2e838aa996c5c4a6722f7525bf19e57114ec7ca3",
+       "quote_length": 92
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 2554,
+       "end": 2723,
+       "quote_sha256": "2104909306ea29934086eb681e6856ac080c6f2d4a7de9c5838661cc2b1d72eb",
+       "quote_length": 169
+      }
+     ],
+     "subject": {
+      "start": 61,
+      "end": 77,
+      "quote_sha256": "e69ec4a22269aa62b8f60b8f33c45d2a65474b2bd51c46218b94d700ecc8b75a",
+      "quote_length": 16
+     }
+    }
+   }
+  },
+  {
+   "normalized_record_id": "dbf8a356-e318-566d-8ce4-327ac6b45166",
+   "surface_sha256": "a488d47c54f1c5a9623980a89b22fc3fcdc995909d1cd6a8ee6f7815f1872b5e",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "e2162aae-f496-58d4-b905-73e4b0164a66",
+   "surface_sha256": "ebd146372d4dda73d58f59306b2feb1f0adf0937be21cdfcf7a7b2b26cb3f5b9",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [
+      {
+       "start": 46,
+       "end": 210,
+       "occurrence": 1,
+       "quote_sha256": "0f0870eee019b15edfa16cb66d416bab4319476dbc3ad9c6f182d9084c7f3b81",
+       "quote_length": 164
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "e35f990d-117a-59d1-b54e-5165632378bf",
+   "surface_sha256": "ddc7381ca99362070f28df277580cf3af67ed752f227ddd4754227d4707f210f",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 326,
+       "end": 350,
+       "quote_sha256": "30a19b613608ba2a14137cb502db45f9327117ae9d499d9a0c67e6dcb3b8fe97",
+       "quote_length": 24
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 202,
+       "end": 310,
+       "quote_sha256": "72bc5f98e900cb009e82c80e69bebb6becd9f321662c6f9be5f36de9cd1d2466",
+       "quote_length": 108
+      }
+     ],
+     "subject": {
+      "start": 224,
+      "end": 234,
+      "quote_sha256": "9aa6f7943c1bd1858139cc92e95e3d3c923c5d5f2144d4fbab15b839d62148b2",
+      "quote_length": 10
+     }
+    }
+   }
+  },
+  {
+   "normalized_record_id": "e3d79e11-9064-5f15-ac93-929e08114601",
+   "surface_sha256": "1ce7a105b16a9e5d28b64d0e937d10ed785d4910ce4a1fb360b5173ffd3e9888",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "e9edbbaa-5331-5584-8d3e-847c8f759551",
+   "surface_sha256": "12ee26a430ba565d443e1e40fc896fa653d95532fe7e897620f3e17f2839c9bb",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 0,
+       "end": 62,
+       "quote_sha256": "65974fa40eb2234aea1e76c4f6cca9df732e6881b3d1985489503f258cc3e256",
+       "quote_length": 62
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "f269e805-7ccf-5a79-a765-e68f31e7b1bd",
+   "surface_sha256": "dcef1665ff17fbff260e8604e4a3cae0387a755fc608d53505b1101cd1eb157c",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [
+      {
+       "start": 73,
+       "end": 133,
+       "occurrence": 1,
+       "quote_sha256": "0a316dc9ee7e247c26b881cceb6af7611fe100eefc89e78e35e42c73b540b05c",
+       "quote_length": 60
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "f53c6872-b340-5e5b-845c-e8b2bd3147d8",
+   "surface_sha256": "ee4ce6bcde0f4491d12363d1628136344a9f98b2180d70496aa134d94808ae25",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 1639,
+       "end": 1846,
+       "quote_sha256": "3884476a55b59c7fe27a7bf4894464d638f8b24f0c8baa6ee51987feed5584a5",
+       "quote_length": 207
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 49,
+       "end": 105,
+       "quote_sha256": "c9d2c48ec43edcb725f4a816718b1cf203d2374c2c9785a813f04c63776936c3",
+       "quote_length": 56
+      }
+     ],
+     "subject": {
+      "start": 37,
+      "end": 47,
+      "quote_sha256": "cc52d03280b7034c8e3653d2748ebd489a873ef4bbc89cb187fbfcabfbbf6873",
+      "quote_length": 10
+     }
+    }
+   }
+  },
+  {
+   "normalized_record_id": "f876b0be-fa18-5b60-9fdd-b505e7529413",
+   "surface_sha256": "37c3125a495d0264df8c4d12fc21cecd500d86b39bb88eb96823807c98180577",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [
+      {
+       "start": 62,
+       "end": 175,
+       "occurrence": 1,
+       "quote_sha256": "1c2150835c4bf4390229ffc6da753c492f9cb6317baf1c71822c84ef75ac7a48",
+       "quote_length": 113
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 177,
+       "end": 311,
+       "quote_sha256": "51f6a3b24fff474022b0f7189eb1e6fbc3a583c112ce76a031740b0eced11c89",
+       "quote_length": 134
+      }
+     ],
+     "subject": {
+      "start": 16,
+      "end": 23,
+      "quote_sha256": "597992364235f0462f20e8347dffb83844944f7f4f29b4631cd6330f03e6b2fe",
+      "quote_length": 7
+     }
+    }
+   }
+  },
+  {
+   "normalized_record_id": "f98ff185-01b0-5612-9c36-07b1fe5dea5f",
+   "surface_sha256": "39264eb4993ee2f0c951aa867b0e606744180a4ab3880c270655f09ac2372bab",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 902,
+       "end": 968,
+       "quote_sha256": "86fc651e7728cde3ef97a016694f367c6d908220194d790d1b222a1d6e41d3c0",
+       "quote_length": 66
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "ABSENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [],
+     "subject": null
+    }
+   }
+  },
+  {
+   "normalized_record_id": "fa1a8536-4624-5386-b814-c829932cb1ab",
+   "surface_sha256": "f7a68a5b08f0745a181bfb96495623a9f6099a707d2ecb25c8c39a3c8c581442",
+   "labels": {
+    "REPORTED_FAILED_ATTEMPT": {
+     "state": "PRESENT",
+     "basis": "CONSISTENT_ORIGINAL_REREAD_AND_REVIEW",
+     "spans": [
+      {
+       "start": 2132,
+       "end": 2244,
+       "occurrence": 1,
+       "quote_sha256": "128b505f70724a1a7779af5b28b53653496ebd3ddc7f02e5b5aa311ce787e547",
+       "quote_length": 112
+      }
+     ],
+     "subject": null
+    },
+    "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+     "state": "PRESENT",
+     "basis": "ADJUDICATED_BY_THE_SINGLE_OPERATOR",
+     "spans": [
+      {
+       "start": 2246,
+       "end": 2329,
+       "quote_sha256": "cc2a4ab633e634c6beeb99ea9a7810277908a858b26b5e29df96e9d53cccb92f",
+       "quote_length": 83
+      }
+     ],
+     "subject": {
+      "start": 2258,
+      "end": 2267,
+      "quote_sha256": "757ac4545801ef4eb983cd4d5db6bc3a1caab8e31c99155949c2403cc6557ce8",
+      "quote_length": 9
+     }
+    }
+   }
+  }
+ ],
+ "intra_rater_agreement": {
+  "kind": "INTRA_RATER_DELAYED_REREAD",
+  "is_inter_human_reliability": false,
+  "caveat": "one person read twice; the second reading was blind to the first labels but not to model output seen in the reviews",
+  "labels": {
+   "REPORTED_FAILED_ATTEMPT": {
+    "records": 46,
+    "confusion": {
+     "ORIGINAL_PRESENT__REREAD_PRESENT": 12,
+     "ORIGINAL_PRESENT__REREAD_ABSENT": 3,
+     "ORIGINAL_PRESENT__REREAD_UNCERTAIN": 0,
+     "ORIGINAL_ABSENT__REREAD_PRESENT": 19,
+     "ORIGINAL_ABSENT__REREAD_ABSENT": 10,
+     "ORIGINAL_ABSENT__REREAD_UNCERTAIN": 0,
+     "ORIGINAL_UNCERTAIN__REREAD_PRESENT": 2,
+     "ORIGINAL_UNCERTAIN__REREAD_ABSENT": 0,
+     "ORIGINAL_UNCERTAIN__REREAD_UNCERTAIN": 0
+    },
+    "raw_agreement_three_state": 0.478261,
+    "cohen_kappa_three_state": 0.11254,
+    "cohen_kappa_present_absent": 0.115174,
+    "krippendorff_alpha_three_state": 0.005464
+   },
+   "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION": {
+    "records": 46,
+    "confusion": {
+     "ORIGINAL_PRESENT__REREAD_PRESENT": 0,
+     "ORIGINAL_PRESENT__REREAD_ABSENT": 0,
+     "ORIGINAL_PRESENT__REREAD_UNCERTAIN": 0,
+     "ORIGINAL_ABSENT__REREAD_PRESENT": 14,
+     "ORIGINAL_ABSENT__REREAD_ABSENT": 31,
+     "ORIGINAL_ABSENT__REREAD_UNCERTAIN": 0,
+     "ORIGINAL_UNCERTAIN__REREAD_PRESENT": 1,
+     "ORIGINAL_UNCERTAIN__REREAD_ABSENT": 0,
+     "ORIGINAL_UNCERTAIN__REREAD_UNCERTAIN": 0
+    },
+    "raw_agreement_three_state": 0.673913,
+    "cohen_kappa_three_state": 0.042996,
+    "cohen_kappa_present_absent": 0.0,
+    "krippendorff_alpha_three_state": -0.108855
+   }
+  }
+ },
+ "adjudications": [
+  {
+   "normalized_record_id": "17064c93-71cf-5474-ba7f-39ccd516782f",
+   "label_id": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 1241,
+     "end": 1357,
+     "quote_sha256": "ea2fd017fbf937980967d9676771fe9db46c7e0ef46e94834921a7b180c75505",
+     "quote_length": 116
+    }
+   ],
+   "subject": {
+    "start": 1258,
+    "end": 1265,
+    "quote_sha256": "91d17428d146fdbc804cb441daf689de97679bf6aee2ba4fb9e5920d7e174664",
+    "quote_length": 7
+   },
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:25:17+04:00",
+   "blind": false,
+   "operator_note_sha256": "3a5088295708d3304f06de0499b9243bfbd68d14878615c531f0e346f47b389d",
+   "operator_note_length": 4
+  },
+  {
+   "normalized_record_id": "19c64e71-5844-520d-844c-97c1f0aaa750",
+   "label_id": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 370,
+     "end": 506,
+     "quote_sha256": "d23bacaffa1e568c7cd8f594a339690278a9404264dd66e5f436a57f0ca1cf16",
+     "quote_length": 136
+    }
+   ],
+   "subject": {
+    "start": 0,
+    "end": 5,
+    "quote_sha256": "a9b4d0ddde84705949bb31a73a4781b3157ced6fefeffb397378e82dbd45de18",
+    "quote_length": 5
+   },
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:25:49+04:00",
+   "blind": false,
+   "operator_note_sha256": "d23bacaffa1e568c7cd8f594a339690278a9404264dd66e5f436a57f0ca1cf16",
+   "operator_note_length": 136
+  },
+  {
+   "normalized_record_id": "2c9e95be-2262-52d0-947f-e6a268020b71",
+   "label_id": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 626,
+     "end": 680,
+     "quote_sha256": "89a1560a14cc21cc732401da10d89e0192ac5b467abcddf5caedc30c358866fd",
+     "quote_length": 54
+    }
+   ],
+   "subject": {
+    "start": 57,
+    "end": 65,
+    "quote_sha256": "76cd2c0d589e224531fc6af2c5850e3c9b2aca6902d813ce598833c7c1b28bee",
+    "quote_length": 8
+   },
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:26:08+04:00",
+   "blind": false,
+   "operator_note_sha256": "a6e9326ff34c5a2e783f0563dd625e5e35e898b9ac24daac3af6fdc02a5927b4",
+   "operator_note_length": 53
+  },
+  {
+   "normalized_record_id": "3d0568c4-5876-5863-921b-2c0fc3d3e27a",
+   "label_id": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 1555,
+     "end": 1656,
+     "quote_sha256": "eaef1b869872dbc7cd8a46d0571171ab8fdd71659b803262bcb45a2d2303ea72",
+     "quote_length": 101
+    }
+   ],
+   "subject": {
+    "start": 1601,
+    "end": 1607,
+    "quote_sha256": "a4e7ca760018f9a5cc43601641e593b2763ab34bf85aebbea9762ca27530907e",
+    "quote_length": 6
+   },
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:26:25+04:00",
+   "blind": false,
+   "operator_note_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "42642469-23b7-5a7a-b897-5052012d9fd3",
+   "label_id": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 4782,
+     "end": 4860,
+     "quote_sha256": "60564b26f894d1a438c3c1f033eac5114152702be62b23e84b5b4ab1e1249f29",
+     "quote_length": 78
+    }
+   ],
+   "subject": {
+    "start": 4818,
+    "end": 4827,
+    "quote_sha256": "81c967731c83ea1cebb984ce13dffe47026d5d267df4a03146306f5e0a9ccab3",
+    "quote_length": 9
+   },
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:27:12+04:00",
+   "blind": false,
+   "operator_note_sha256": "60564b26f894d1a438c3c1f033eac5114152702be62b23e84b5b4ab1e1249f29",
+   "operator_note_length": 78
+  },
+  {
+   "normalized_record_id": "4a3fc738-bb4a-5992-bb2e-2e422b9f4a00",
+   "label_id": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 60,
+     "end": 166,
+     "quote_sha256": "818745dfef9fc787a0a5da58442b27126a9f43a86097c9cdfaa5faa1a96ddb0e",
+     "quote_length": 106
+    }
+   ],
+   "subject": {
+    "start": 3,
+    "end": 13,
+    "quote_sha256": "a478b4566be5cb007a5d8ae532c7eeac2cd3be26ad639a65c1dd11b3bf95c51b",
+    "quote_length": 10
+   },
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:27:30+04:00",
+   "blind": false,
+   "operator_note_sha256": "818745dfef9fc787a0a5da58442b27126a9f43a86097c9cdfaa5faa1a96ddb0e",
+   "operator_note_length": 106
+  },
+  {
+   "normalized_record_id": "6bd78806-211b-5d3b-b10a-d60f4fe2bca3",
+   "label_id": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 346,
+     "end": 574,
+     "quote_sha256": "5fc2a128e97ec9e242257f4c9051223e9016b8bbb1cb2786765c952164f07baf",
+     "quote_length": 228
+    }
+   ],
+   "subject": {
+    "start": 7,
+    "end": 15,
+    "quote_sha256": "91f060a9ad4b39eb228d9537292fab19d252faed06c169d0fdcb4a90560f5676",
+    "quote_length": 8
+   },
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:27:46+04:00",
+   "blind": false,
+   "operator_note_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "6dfbef0a-3a64-5fd1-9433-21f7cdb01402",
+   "label_id": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 2116,
+     "end": 2263,
+     "quote_sha256": "25ad86b09b15b6c9a12c41fce213d2ee16b08cdcc187aa0eca5f38462fa911d6",
+     "quote_length": 147
+    }
+   ],
+   "subject": {
+    "start": 209,
+    "end": 223,
+    "quote_sha256": "b0a8281e9466910e5f09502e5d0d3ca720c7390e160dac5e6f4c38eeed54be54",
+    "quote_length": 14
+   },
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:27:58+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "7eed79ff-81d0-50c1-94c2-3a1b6fa3b4a8",
+   "label_id": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 1433,
+     "end": 1506,
+     "quote_sha256": "566d317b917aa706aa80adc3ea13bab02e548c90ab13d5daa73a3b67194011d9",
+     "quote_length": 73
+    }
+   ],
+   "subject": {
+    "start": 111,
+    "end": 117,
+    "quote_sha256": "d548c5b83fa61d8e3bd86ad42a7ffea9b7c86e3f9d8095c1577d3e1270bb9420",
+    "quote_length": 6
+   },
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:28:15+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "a561974f-fc12-564d-9cb5-51c5bd59c40e",
+   "label_id": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 626,
+     "end": 726,
+     "quote_sha256": "e0c6ff5a40b71035bcdb624e0062e7c2aab38a9c9188b6f667376a362b6e6399",
+     "quote_length": 100
+    }
+   ],
+   "subject": {
+    "start": 647,
+    "end": 654,
+    "quote_sha256": "50a4122943273ad2f00ea92bff9c7cb6235e199f745321cb4272aa1857840463",
+    "quote_length": 7
+   },
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:28:24+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "db663e12-3ffd-59e5-b31f-1de31f41acbb",
+   "label_id": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "readings": {
+    "ORIGINAL_BLIND": "UNCERTAIN",
+    "DELAYED_REREAD": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 2554,
+     "end": 2723,
+     "quote_sha256": "2104909306ea29934086eb681e6856ac080c6f2d4a7de9c5838661cc2b1d72eb",
+     "quote_length": 169
+    }
+   ],
+   "subject": {
+    "start": 61,
+    "end": 77,
+    "quote_sha256": "e69ec4a22269aa62b8f60b8f33c45d2a65474b2bd51c46218b94d700ecc8b75a",
+    "quote_length": 16
+   },
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:28:39+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "e35f990d-117a-59d1-b54e-5165632378bf",
+   "label_id": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 202,
+     "end": 310,
+     "quote_sha256": "72bc5f98e900cb009e82c80e69bebb6becd9f321662c6f9be5f36de9cd1d2466",
+     "quote_length": 108
+    }
+   ],
+   "subject": {
+    "start": 224,
+    "end": 234,
+    "quote_sha256": "9aa6f7943c1bd1858139cc92e95e3d3c923c5d5f2144d4fbab15b839d62148b2",
+    "quote_length": 10
+   },
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:28:50+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "f53c6872-b340-5e5b-845c-e8b2bd3147d8",
+   "label_id": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 49,
+     "end": 105,
+     "quote_sha256": "c9d2c48ec43edcb725f4a816718b1cf203d2374c2c9785a813f04c63776936c3",
+     "quote_length": 56
+    }
+   ],
+   "subject": {
+    "start": 37,
+    "end": 47,
+    "quote_sha256": "cc52d03280b7034c8e3653d2748ebd489a873ef4bbc89cb187fbfcabfbbf6873",
+    "quote_length": 10
+   },
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:29:01+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "f876b0be-fa18-5b60-9fdd-b505e7529413",
+   "label_id": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 177,
+     "end": 311,
+     "quote_sha256": "51f6a3b24fff474022b0f7189eb1e6fbc3a583c112ce76a031740b0eced11c89",
+     "quote_length": 134
+    }
+   ],
+   "subject": {
+    "start": 16,
+    "end": 23,
+    "quote_sha256": "597992364235f0462f20e8347dffb83844944f7f4f29b4631cd6330f03e6b2fe",
+    "quote_length": 7
+   },
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:29:15+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "fa1a8536-4624-5386-b814-c829932cb1ab",
+   "label_id": "NEGATIVE_EVALUATION_OF_NAMED_SOLUTION",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 2246,
+     "end": 2329,
+     "quote_sha256": "cc2a4ab633e634c6beeb99ea9a7810277908a858b26b5e29df96e9d53cccb92f",
+     "quote_length": 83
+    }
+   ],
+   "subject": {
+    "start": 2258,
+    "end": 2267,
+    "quote_sha256": "757ac4545801ef4eb983cd4d5db6bc3a1caab8e31c99155949c2403cc6557ce8",
+    "quote_length": 9
+   },
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:29:31+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "17064c93-71cf-5474-ba7f-39ccd516782f",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT",
+    "POST_MODEL_REVIEW": "ABSENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 5680,
+     "end": 5764,
+     "quote_sha256": "655ae9626d1ebcd4ff504549ac2f64ceaf6afb5520a0a9c53fb131d4a180012d",
+     "quote_length": 84
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:29:34+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "1a659352-390f-5c53-97de-0f725d017f46",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT",
+    "POST_MODEL_REVIEW": "ABSENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 1490,
+     "end": 1539,
+     "quote_sha256": "b95a775a8d0a01a6b20f173396714df0fbb7b4e1ee9adedc0ee0f5faa783b4eb",
+     "quote_length": 49
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:29:42+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "203268d4-baf6-5410-a001-cf77843e96e3",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT",
+    "POST_MODEL_REVIEW": "ABSENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 1101,
+     "end": 1316,
+     "quote_sha256": "e09071f58f752da60a842f6eb0e6fd0cfe1df187afc8922430872e24bbd68b43",
+     "quote_length": 215
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:29:47+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "2c9e95be-2262-52d0-947f-e6a268020b71",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "PRESENT",
+    "DELAYED_REREAD": "ABSENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 108,
+     "end": 184,
+     "quote_sha256": "49f2100602c79e435e87b16ade692bfc24e50aa80f03f42c7e600c051228fbc8",
+     "quote_length": 76
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:29:54+04:00",
+   "blind": false,
+   "operator_note_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "3194f76d-a845-54c5-9a14-bd0520da6cbb",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT",
+    "POST_MODEL_REVIEW": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 1032,
+     "end": 1059,
+     "quote_sha256": "27d0303a42e7799d5d1b0952be44e2b0dbdee4854cab8f130b06781a82e20a28",
+     "quote_length": 27
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:29:57+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "37bf2146-b9fc-5e5a-b35b-d59f5f6bfc57",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT",
+    "POST_MODEL_REVIEW": "ABSENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 446,
+     "end": 541,
+     "quote_sha256": "b14dafea0e634cba0b65e51b6b1f996efd0831ef28dd2a6c3aba981ab8a123fd",
+     "quote_length": 95
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:30:06+04:00",
+   "blind": false,
+   "operator_note_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "3d0568c4-5876-5863-921b-2c0fc3d3e27a",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT",
+    "POST_MODEL_REVIEW": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 1555,
+     "end": 1656,
+     "quote_sha256": "eaef1b869872dbc7cd8a46d0571171ab8fdd71659b803262bcb45a2d2303ea72",
+     "quote_length": 101
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:30:10+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "42642469-23b7-5a7a-b897-5052012d9fd3",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT",
+    "POST_MODEL_REVIEW": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 4460,
+     "end": 4539,
+     "quote_sha256": "b12f7f87b8ac969a6b3c9134aaae9d765b2e0b44124d2cb2c9e58e73a106cea2",
+     "quote_length": 79
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:30:14+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "58966c7e-425d-59de-85ce-116ae98309ab",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT",
+    "POST_MODEL_REVIEW": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 3037,
+     "end": 3153,
+     "quote_sha256": "87d1172a75bd562af3355d0d9144f2348757be76473d8f7dd8369f89adda43e3",
+     "quote_length": 116
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:30:18+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "5d0a1e34-7eeb-5820-89f2-7cf9706a8fb8",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "UNCERTAIN",
+    "DELAYED_REREAD": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 41,
+     "end": 192,
+     "quote_sha256": "47a189e0bb6a5e16251200b1742af280f58486033713551d7a0545c3fca5b06f",
+     "quote_length": 151
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:30:23+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "6dfbef0a-3a64-5fd1-9433-21f7cdb01402",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT",
+    "POST_MODEL_REVIEW": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 2116,
+     "end": 2263,
+     "quote_sha256": "25ad86b09b15b6c9a12c41fce213d2ee16b08cdcc187aa0eca5f38462fa911d6",
+     "quote_length": 147
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:30:26+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "7eed79ff-81d0-50c1-94c2-3a1b6fa3b4a8",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT",
+    "POST_MODEL_REVIEW": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 2640,
+     "end": 2829,
+     "quote_sha256": "9294b08fff8d36fcbb03c677523811684cd23a05238bdfed272ac4ddcf211fe3",
+     "quote_length": 189
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:30:30+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "88376fa5-5cd3-58f9-b099-bad69077b0f7",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT",
+    "POST_MODEL_REVIEW": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 131,
+     "end": 276,
+     "quote_sha256": "7abb472227ee47448a5fbdc810bc98b6c16a0f88253b4767847d0a41f87a64dd",
+     "quote_length": 145
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:30:35+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "9f91eeea-25e6-5a9e-89e6-54d4490ecd7c",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT",
+    "POST_MODEL_REVIEW": "ABSENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 628,
+     "end": 844,
+     "quote_sha256": "7c7580c569b827e734a080c063190744d630f3c13ad518f56a075c59e59ea9b6",
+     "quote_length": 216
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:30:38+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "ac423fe4-a4b4-589d-ac49-96932ed51d54",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT",
+    "POST_MODEL_REVIEW": "ABSENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 471,
+     "end": 543,
+     "quote_sha256": "f4d569899bdf0491efb3a6c4a70a6a0686efc879020bc57b638c5dc5bd43f9e9",
+     "quote_length": 72
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:30:43+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "bf04af60-1364-5fd0-8f4f-a8104d131aff",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT",
+    "POST_MODEL_REVIEW": "ABSENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 974,
+     "end": 1050,
+     "quote_sha256": "69c3a524ff7a014919f0de9c23ca4bda82c1b4208c542dd6dfe29f33c33b477d",
+     "quote_length": 76
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:30:46+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "c128f807-cbdf-512b-bbde-30a00a9fdb39",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT",
+    "POST_MODEL_REVIEW": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 2442,
+     "end": 2560,
+     "quote_sha256": "028d585a9c1f40e85c9bf740fc86e6e470af88bdda738d738ef873676e30ac54",
+     "quote_length": 118
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:30:49+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "c4d96f4e-c766-5c79-a8c9-1f023647618b",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 386,
+     "end": 532,
+     "quote_sha256": "b10c62808f5a2ff027c930cb750884f519462e6beb587e0d6d031db3f352e556",
+     "quote_length": 146
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:30:52+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "d6bff833-780d-55d3-a5ad-1effebb8a328",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT",
+    "POST_MODEL_REVIEW": "ABSENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 348,
+     "end": 484,
+     "quote_sha256": "575e85adb36f07afee3c0e715be01a5619432fb57b95afe2c13d5f7da13e9b62",
+     "quote_length": 136
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:30:54+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "db663e12-3ffd-59e5-b31f-1de31f41acbb",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "UNCERTAIN",
+    "DELAYED_REREAD": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 2102,
+     "end": 2194,
+     "quote_sha256": "09a78a43cf08c47f56fa2c5e2e838aa996c5c4a6722f7525bf19e57114ec7ca3",
+     "quote_length": 92
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:30:57+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "e35f990d-117a-59d1-b54e-5165632378bf",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT",
+    "POST_MODEL_REVIEW": "ABSENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 326,
+     "end": 350,
+     "quote_sha256": "30a19b613608ba2a14137cb502db45f9327117ae9d499d9a0c67e6dcb3b8fe97",
+     "quote_length": 24
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:30:59+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "e9edbbaa-5331-5584-8d3e-847c8f759551",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "PRESENT",
+    "DELAYED_REREAD": "ABSENT",
+    "POST_MODEL_REVIEW": "ABSENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 0,
+     "end": 62,
+     "quote_sha256": "65974fa40eb2234aea1e76c4f6cca9df732e6881b3d1985489503f258cc3e256",
+     "quote_length": 62
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:31:02+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "f53c6872-b340-5e5b-845c-e8b2bd3147d8",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "ABSENT",
+    "DELAYED_REREAD": "PRESENT",
+    "POST_MODEL_REVIEW": "PRESENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 1639,
+     "end": 1846,
+     "quote_sha256": "3884476a55b59c7fe27a7bf4894464d638f8b24f0c8baa6ee51987feed5584a5",
+     "quote_length": 207
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:31:04+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  },
+  {
+   "normalized_record_id": "f98ff185-01b0-5612-9c36-07b1fe5dea5f",
+   "label_id": "REPORTED_FAILED_ATTEMPT",
+   "readings": {
+    "ORIGINAL_BLIND": "PRESENT",
+    "DELAYED_REREAD": "ABSENT"
+   },
+   "final_state": "PRESENT",
+   "spans": [
+    {
+     "start": 902,
+     "end": 968,
+     "quote_sha256": "86fc651e7728cde3ef97a016694f367c6d908220194d790d1b222a1d6e41d3c0",
+     "quote_length": 66
+    }
+   ],
+   "subject": null,
+   "decided_by": "operator-a",
+   "decided_at": "2026-09-19T15:31:08+04:00",
+   "blind": false,
+   "operator_note_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "operator_note_length": 1
+  }
+ ]
+}

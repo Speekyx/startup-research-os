@@ -45,6 +45,7 @@ from sros_semantic_extraction_contract.single_operator_adjudication import (  # 
     AdjudicationRefusedError,
     build_reference,
     cells_to_adjudicate,
+    committed_adjudication,
     implied_state,
     intra_rater_agreement,
     make_adjudication,
@@ -458,6 +459,7 @@ def _committed_span(surface: str, start: int, end: int) -> dict[str, Any]:
 
 
 def render(decisions: list[dict[str, Any]]) -> tuple[dict[str, Any], bytes]:
+    decisions = [committed_adjudication(d) for d in decisions]
     states, _ = post_model_states()
     first, second = original(), load(REREAD)
     reference = build_reference(first, second, states, decisions)
