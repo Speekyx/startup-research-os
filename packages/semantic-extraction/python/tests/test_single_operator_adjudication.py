@@ -442,6 +442,13 @@ def test_the_committed_reference_reproduces_and_carries_no_text(tool) -> None:
     assert tool.check() == 0
     text = tool.REFERENCE.read_text("utf-8")
     assert '"quote"' not in text and '"surface"' not in text
+    assert '"operator_note"' not in text, (
+        "a reason may quote the source; only its digest is committed"
+    )
+    first = json.loads(text)["adjudications"][0]
+    assert (
+        first["operator_note_sha256"] == digest("my reason") and first["operator_note_length"] == 9
+    )
     tampered = json.loads(text)
     tampered["adjudications"][0]["final_state"] = "PRESENT"
     tool.REFERENCE.write_bytes(tool.dump(tampered))

@@ -49,6 +49,7 @@ __all__ = [
     "REREAD_LABELS",
     "AdjudicationRefusedError",
     "build_reference",
+    "committed_adjudication",
     "cells_to_adjudicate",
     "earliest_reread",
     "implied_state",
@@ -378,6 +379,20 @@ def make_adjudication(
         "decided_at": decided_at,
         "blind": False,
     }
+
+
+def committed_adjudication(decision: dict[str, Any]) -> dict[str, Any]:
+    """The committed form of an adjudication: the reason is kept as a digest and a length, never as text.
+
+    A reason is the operator's own words and may quote the source; the full text stays in the local working
+    file (Mission 1.85.17). Idempotent, so a committed decision passes through unchanged."""
+    if "operator_note" not in decision:
+        return decision
+    committed = {k: v for k, v in decision.items() if k != "operator_note"}
+    note = decision["operator_note"]
+    committed["operator_note_sha256"] = hashlib.sha256(note.encode("utf-8")).hexdigest()
+    committed["operator_note_length"] = len(note)
+    return committed
 
 
 def intra_rater_agreement(original: dict[str, Any], reread: dict[str, Any]) -> dict[str, Any]:

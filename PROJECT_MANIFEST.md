@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.181
+Version: 1.182
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-19 (Sprint 1 / Mission 1.85.16)
+Last amended: 2026-09-19 (Sprint 1 / Mission 1.85.17)
 
 ---
 
@@ -13,6 +13,17 @@ Last amended: 2026-09-19 (Sprint 1 / Mission 1.85.16)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.182 - 2026-09-19 (Sprint 1 / Mission 1.85.17)
+
+**Single-human adjudicated reference recorded (N08-B-PILOT), SINGLE_HUMAN_ADJUDICATED_REFERENCE_RECORDED.**
+operator-a reread all 46 records under protocol 1.1.0 (intra-rater raw agreement 0.48 and 0.67, the reread reading
+PRESENT far more often) and adjudicated the 39 cells whose readings differed or were UNCERTAIN, 36 to the reread
+state and 3 to the original. The reference (REPORTED_FAILED_ATTEMPT 36/10, NEGATIVE_EVALUATION 15/31) is labelled
+SINGLE_HUMAN_ADJUDICATED_REFERENCE, not consensus, inter-human, blind or certification; the original blind
+annotation is unchanged. A defect was fixed before commit: 4 adjudication reasons quoted the source, so reasons are
+now committed as digest and length only. No evaluation re-run; 0 provider calls.
+`docs/reports/mission-1.85.17-report.md`.
 
 ## 1.181 - 2026-09-19 (Sprint 1 / Mission 1.85.16)
 
