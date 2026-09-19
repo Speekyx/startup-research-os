@@ -1,10 +1,10 @@
 # PROJECT MANIFEST — Startup Research OS
 
-Version: 1.180
+Version: 1.181
 Status: Foundation
 Owner: Speekyx (GitHub: `@Speekyx`)
 Repository: startup-research-os
-Last amended: 2026-09-19 (Sprint 1 / Mission 1.85.15)
+Last amended: 2026-09-19 (Sprint 1 / Mission 1.85.16)
 
 ---
 
@@ -13,6 +13,18 @@ Last amended: 2026-09-19 (Sprint 1 / Mission 1.85.15)
 This manifest is amended in place with an explicit version bump and a changelog
 entry. Git history plus this section provide the traceability that
 `docs/CLAUDE.md` §Change control requires.
+
+## 1.181 - 2026-09-19 (Sprint 1 / Mission 1.85.16)
+
+**Single-operator reread without a mandatory delay (N08-B-PILOT), SINGLE_OPERATOR_REREAD_READY_NO_MANDATORY_DELAY.**
+The operator removed the 24-hour delay that `single-operator-adjudication-protocol@1.0.0` required before the
+reread: it only guarded against memory, it has no effect on any model, and for this DEVELOPMENT workflow the
+operator judges waiting costlier than it is worth. `@1.1.0` records `minimum_delay_policy: NO_MANDATORY_DELAY` and
+the attributed decision in the committed reread, and claims no stronger blindness. 1.0.0 stays historical and its
+delay rule still validates its own packs; a pack prepared under 1.0.0 is refused and regenerated, never patched.
+Every other reread control is unchanged, including the prior-model-exposure disclosure, and the output is still
+SINGLE_HUMAN_ADJUDICATED_REFERENCE. 0 provider calls, 0 HOLDOUT, 0 canonical writes; no prompt, contract, packet,
+approval or rule change. `docs/reports/mission-1.85.16-report.md`.
 
 ## 1.180 - 2026-09-19 (Sprint 1 / Mission 1.85.15)
 

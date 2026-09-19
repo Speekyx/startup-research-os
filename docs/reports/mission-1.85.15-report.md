@@ -2,6 +2,11 @@
 
 **Outcome: `WAITING_FOR_SINGLE_OPERATOR_DELAYED_REREAD`.**
 
+> **Superseded in part by Mission 1.85.16.** `single-operator-adjudication-protocol@1.1.0` supersedes the
+> mandatory 24-hour delay of 1.0.0 for future rereads, by the operator's decision recorded in
+> `docs/reports/mission-1.85.16-report.md`. Everything else below still holds. This report describes 1.0.0 as it
+> was, and the delay it required is not rewritten away.
+
 Mission 1.85.14 prepared a second blind annotation for operator-b, a different person who has seen neither the
 model nor operator-a's labels. The operator confirmed that no such person exists. The operator cannot fill that
 role: they have seen their own blind labels, the model's outputs and both post-model reviews, and the importer
